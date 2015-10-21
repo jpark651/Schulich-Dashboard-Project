@@ -16,10 +16,9 @@ class Parser
         string filename;
         ifstream file;
         list <string> columns;
+        list <list<string>> rows;
         list <list<string>> contents;
-        list <list<string>> organized;
         list <list<string>>:: iterator listIterator;
-        list <string> :: iterator itemIterator;
     public:
 //Parser constructor
         Parser (string file);
@@ -39,24 +38,10 @@ class Parser
         int getNumCols();
 //returns the number of rows after the column headers
         int getNumRowsAfter();
-//returns the list at a specific index in the contents list of lists
+//returns the list at a specific index
         list <string> getList(int index);
-//returns the list at a specific index in the organized list of lists
-        list <string> getList2(int index);
-//updates the current list being accessed in the contents list of lists
+//updates the current list being accessed
         void updateList (list <string> listing, int index);
-//updates the current list being accessed in the organized list of lists
-        void updateList2 (list <string> listing, int index);
-//checks the number of commas between each item in the line
-        int commaChecker (string word, int index);
-//Organizes all the rows in the content list into lists corresponding to the individual columns
-        void organizeRows();
-//Returns an item at a specific index
-        string getItem(int index, list <string> listing);
-//Returns the contents list
-        list <list<string>> getContents();
-//Returns the organized list
-        list <list<string>> getOrganized();
 };
 
 
