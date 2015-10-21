@@ -17,6 +17,8 @@ class Parser
         ifstream file;
         list <string> columns;
         list <list<string>> rows;
+        list <list<string>> contents;
+        list <list<string>>:: iterator listIterator;
     public:
 //Parser constructor
         Parser (string file);
@@ -32,7 +34,16 @@ class Parser
         void closeFile();
 //checks to see if the string contained in a cell is just a bunch of spaces
         bool allSpacing(string word);
+//returns the number of columns in the file
+        int getNumCols();
+//returns the number of rows after the column headers
+        int getNumRowsAfter();
+//returns the list at a specific index
+        list <string> getList(int index);
+//updates the current list being accessed
+        void updateList (list <string> listing, int index);
 };
 
 
 #endif // PARSER_H_INCLUDED
+
