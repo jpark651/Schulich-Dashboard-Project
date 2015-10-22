@@ -1,3 +1,2 @@
 *.user
-GUI/GUI.pro
-GUI/GUI.pro.user
+*.pro*
