@@ -16,9 +16,9 @@ class Parser
         string filename;
         ifstream file;
         list <string> columns;
-        list <list<string>> contents;
-        list <list<string>> organized;
-        list <list<string>>:: iterator listIterator;
+        list <list<string> > contents;
+        list <list<string> > organized;
+        list <list<string> >:: iterator listIterator;
         list <string> :: iterator itemIterator;
     public:
 //Parser constructor
@@ -54,9 +54,9 @@ class Parser
 //Returns an item at a specific index
         string getItem(int index, list <string> listing);
 //Returns the contents list
-        list <list<string>> getContents();
+        list <list<string> > getContents();
 //Returns the organized list
-        list <list<string>> getOrganized();
+        list <list<string> > getOrganized();
 };
 
 

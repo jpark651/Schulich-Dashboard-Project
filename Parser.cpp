@@ -17,9 +17,9 @@ Parser:: Parser (string name)
 {
     filename = name;
     createColumns();
-    list <list<string>> temp (getNumCols());
+    list <list<string> > temp (getNumCols());
     organized = temp;
-    list <list<string>> temp2 (getNumRowsAfter());
+    list <list<string> > temp2 (getNumRowsAfter());
     contents = temp2;
     createRows();
     organizeRows();
@@ -27,12 +27,14 @@ Parser:: Parser (string name)
 //Loops through the first line of the csv file and extracts all strings that are not empty and puts them in a list
 void Parser:: createColumns()
 {
-    file.open(filename);
+    const char * ctemp = filename.c_str();
+    file.open(ctemp);
+    file.clear();
     string value;
     string item;
     getline (file,value, '\n');
     char temp;
-    for (int i =0; i < value.length(); i++)
+    for (unsigned int i =0; i < value.length(); i++)
     {
         temp = value.at(i);
         if (temp == '"')
@@ -70,7 +72,9 @@ list<string> Parser:: getColumns()
 //still need to figure out how to properly organize lists to correspond to column headers
 void Parser:: createRows()
 {
-    file.open(filename);
+    const char * ctemp = filename.c_str();
+    file.open(ctemp);
+    file.clear();
     string value;
     string item;
     int lineNum = 0;
@@ -80,7 +84,7 @@ void Parser:: createRows()
     while (getline(file, value, '\n'))
     {
         list <string> tempList = getList(lineNum);
-        for (int i =0; i < value.length(); i++)
+        for (unsigned int i =0; i < value.length(); i++)
         {
             temp = value.at(i);
             if (temp == '"')
@@ -145,7 +149,7 @@ void Parser:: createRows()
 bool Parser:: allSpacing(string word)
 {
     bool flag = true;
-    for (int i = 0; i < word.length(); i++)
+    for (unsigned int i = 0; i < word.length(); i++)
     {
         if (isspace(word.at(i)) == false)
         {
@@ -159,10 +163,12 @@ int Parser:: getNumCols()
 {
     return columns.size();
 }
-//returns the number of
+//returns the number of rows after the column headers
 int Parser:: getNumRowsAfter()
 {
-    file.open(filename);
+    const char * ctemp = filename.c_str();
+    file.open(ctemp);
+    file.clear();
     string value;
     int i =0;
     while (getline(file,value, '\n'))
@@ -286,13 +292,13 @@ list <string> Parser:: getList2(int index)
  }
 
 //Returns the contents list
- list <list<string>> Parser:: getContents()
+ list <list<string> > Parser:: getContents()
  {
     return contents;
  }
 
  //Returns the organized list
- list <list<string>> Parser:: getOrganized()
+ list <list<string> > Parser:: getOrganized()
  {
     return organized;
  }
