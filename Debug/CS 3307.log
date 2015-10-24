@@ -1,0 +1,18 @@
+﻿Build started 24/10/2015 5:09:41 PM.
+     1>Project "C:\Users\Jonathan\Documents\University\CS 3307\CS3307\CS 3307.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt "build-gui-desktop_qt_5_5_1_clang_64bit-debug\moc_mainwindow.cpp" main.cpp mainwindow.cpp Parser.cpp
+         Parser.cpp
+     1>Parser.cpp(241): warning C4018: '<': signed/unsigned mismatch
+         mainwindow.cpp
+     1>c:\users\jonathan\documents\university\cs 3307\cs3307\mainwindow.h(4): fatal error C1083: Cannot open include file: 'QMainWindow': No such file or directory
+         main.cpp
+     1>c:\users\jonathan\documents\university\cs 3307\cs3307\mainwindow.h(4): fatal error C1083: Cannot open include file: 'QMainWindow': No such file or directory
+         moc_mainwindow.cpp
+     1>c:\users\jonathan\documents\university\cs 3307\cs3307\build-gui-desktop_qt_5_5_1_clang_64bit-debug\../mainwindow.h(4): fatal error C1083: Cannot open include file: 'QMainWindow': No such file or directory
+         Generating Code...
+     1>Done Building Project "C:\Users\Jonathan\Documents\University\CS 3307\CS3307\CS 3307.vcxproj" (Rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:04.55
