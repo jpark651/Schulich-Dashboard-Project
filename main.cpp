@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     MainWindow w;
+    w.setFixedHeight(720);
+    w.setFixedWidth(1280);
     w.show();
 
 	//TO DO, GUI gets file name input and sends back
