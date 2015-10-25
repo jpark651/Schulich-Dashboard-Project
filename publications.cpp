@@ -1,5 +1,5 @@
 /**
-* This class implements the methods in publications.h
+* Header file for the publications class and its associated methods
 */
 #include <string>
 #include <iostream>
