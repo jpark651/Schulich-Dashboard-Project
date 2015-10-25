@@ -357,7 +357,7 @@ list<int> Parser:: getItemCount()
     return itemCount;
 }
 
-//returns the number of items sotred in a specified list index
+//returns the number of items sorted in a specified list index
 int Parser:: getNumberOfItems(int index)
 {
     int i =0;
@@ -372,5 +372,3 @@ int Parser:: getNumberOfItems(int index)
     }
     return counter;
 }
-
-
