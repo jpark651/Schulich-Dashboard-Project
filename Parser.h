@@ -57,6 +57,8 @@ class Parser
         list <list<string> > getContents();
 //Returns the organized list
         list <list<string> > getOrganized();
+//Converts removes all '/' characters from dates and adds 0101 to all dates without '/'
+        void parseDate(list <string>dates);
 };
 
 

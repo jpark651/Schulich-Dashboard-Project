@@ -22,7 +22,10 @@ Parser:: Parser (string name)
     list <list<string> > temp2 (getNumRowsAfter());
     contents = temp2;
     createRows();
+    list <list<string> > temp3 (getNumCols());
+    organized = temp3;
     organizeRows();
+    parseDate(getList2(6));
 }
 //Loops through the first line of the csv file and extracts all strings that are not empty and puts them in a list
 void Parser:: createColumns()
@@ -105,7 +108,7 @@ void Parser:: createRows()
                     }
                     tempList.push_back(item);
             }
-            else if (temp != ',' && isspace(temp) == false && temp != '"')
+            else if (temp != ',') //&& isspace(temp) == false && //temp != '"')
             {
                 item = "";
                 while (1)
@@ -301,6 +304,28 @@ list <string> Parser:: getList2(int index)
  list <list<string> > Parser:: getOrganized()
  {
     return organized;
+ }
+
+ void Parser:: parseDate(list<string> dates)
+ {
+    for (itemIterator = dates.begin(); itemIterator!= dates.end(); itemIterator++)
+    {
+        string item = (*itemIterator);
+        string temp = "";
+        if (item.compare(" ") != 0)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                temp += item.at(i);
+            }
+        }
+        else
+        {
+            temp = "0";
+        }
+        (*itemIterator) = temp;
+    }
+    updateList2(dates, 6);
  }
 
 
