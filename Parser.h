@@ -65,10 +65,9 @@ class Parser
         list<int> getNumItems();
 //returns the itemCount list
         list<int> getItemCount();
-//returns the number of items sotred in a specified list index
+//returns the number of items sorted in a specified list index
         int getNumberOfItems(int index);
 };
 
 
 #endif // PARSER_H_INCLUDED
-
