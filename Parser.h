@@ -20,8 +20,6 @@ class Parser
         list <list<string> > organized;
         list <list<string> >:: iterator listIterator;
         list <string> :: iterator itemIterator;
-        list <int>:: iterator countIterator;
-        list <int> itemCount;
     public:
 //Parser constructor
         Parser (string file);
@@ -59,14 +57,6 @@ class Parser
         list <list<string> > getContents();
 //Returns the organized list
         list <list<string> > getOrganized();
-//Gives years for all dates
-        void parseDate(list <string>dates);
-//get number of non-empty items in a list
-        list<int> getNumItems();
-//returns the itemCount list
-        list<int> getItemCount();
-//returns the number of items sorted in a specified list index
-        int getNumberOfItems(int index);
 };
 
 
