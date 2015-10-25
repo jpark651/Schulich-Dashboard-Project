@@ -14,45 +14,94 @@
    <string>Team Honeydew</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTreeWidget" name="publicationTree">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>311</width>
-      <height>665</height>
-     </rect>
-    </property>
-    <property name="sizeAdjustPolicy">
-     <enum>QAbstractScrollArea::AdjustIgnored</enum>
-    </property>
-    <column>
-     <property name="text">
-      <string>Summary</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Total</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="QFrame" name="sidebarFrame">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>311</width>
-      <height>665</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-   </widget>
+   <property name="minimumSize">
+    <size>
+     <width>400</width>
+     <height>500</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QWidget" name="sidebar" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>500</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QTreeWidget" name="publicationTree">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>400</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>500</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+         </property>
+         <column>
+          <property name="text">
+           <string>Summary</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Total</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+      <zorder>publicationTree</zorder>
+      <zorder>publicationTree</zorder>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="graph">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="minimumSize">
+          <size>
+           <width>450</width>
+           <height>400</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -68,16 +117,11 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionCloseFile"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -87,7 +131,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
@@ -96,6 +139,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionCloseFile">
+   <property name="text">
+    <string>Close File</string>
    </property>
   </action>
  </widget>
