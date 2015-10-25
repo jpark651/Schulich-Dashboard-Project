@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>311</width>
-      <height>671</height>
+      <height>665</height>
      </rect>
     </property>
     <property name="sizeAdjustPolicy">
@@ -36,6 +36,22 @@
       <string>Total</string>
      </property>
     </column>
+   </widget>
+   <widget class="QFrame" name="sidebarFrame">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>311</width>
+      <height>665</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
