@@ -28,8 +28,8 @@ public:
 	//method for creating a window which displays a bar graph from the Publications summary
 	void createBarPublications(string name, int num_publications, int xaxis[], string xlabel[]);
 
-	//method for creating a windpw which displays a line graph from the Publications summary
-	void createLinePublicatons(string name, int num_publications, int xaxis[], string xlabel[]);
+	//method for creating a window which displays a line graph from the Publications summary
+	void createLinePublications(string name, int num_publications, int xaxis[], string xlabel[]);
 
 	//method for creating a window which display a pie chart from the Publications summary
 	void createPiePublications(string name, int num_publications, int xaxis[], string xlabel[]);

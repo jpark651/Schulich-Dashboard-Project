@@ -18,7 +18,7 @@ graph::graph()
 
 /*Prepares the data needed to graph from the publications summary.
 */
-void preparePublications(string name, list<string> types, list<int> years, int diff_types, int begin, int end, int graphtype)
+void graph:: preparePublications(string name, list<string> types, list<int> years, int diff_types, int begin, int end, int graphtype)
 {
 	list<string> t = types;	//create a copy to manipulate
 	list<int> y = years;	//create a copy to manipulate
@@ -90,15 +90,15 @@ void preparePublications(string name, list<string> types, list<int> years, int d
 	if (graphtype == 1)
 		createBarPublications(name, num_publications, xaxis, xlabel);
 	else if (graphtype == 2)
-		creatPiePublications();
+		createPiePublications(name, num_publications, xaxis, xlabel);
 	else      //(graphtype == 3)
-		createLinePublications();
+		createLinePublications(name, num_publications, xaxis, xlabel);
 }
 
 
 
-//method for creating a windpw which displays a bar graph from the Publications summary
-void createBarPublications(string name, int num_publications, int xaxis[], string xlabel[])
+//method for creating a window which displays a bar graph from the Publications summary
+void graph:: createBarPublications(string name, int num_publications, int xaxis[], string xlabel[])
 {
 	
 	//TO DO: tick loop
@@ -108,14 +108,14 @@ void createBarPublications(string name, int num_publications, int xaxis[], strin
 	//TO DO: loop for the actual bar data using xaxis[]
 }
 
-//method for creating a windpw which displays a line graph from the Publications summary
-void createLinePublicatons(string name, int num_publications, int xaxis[], string xlabel[])
+//method for creating a window which displays a line graph from the Publications summary
+void graph:: createLinePublications(string name, int num_publications, int xaxis[], string xlabel[])
 {
 
 }
 
 //method for creating a window which display a pie chart from the Publications summary
-void createPiePublications(string name, int num_publications, int xaxis[], string xlabel[])
+void graph:: createPiePublications(string name, int num_publications, int xaxis[], string xlabel[])
 {
 
 }
