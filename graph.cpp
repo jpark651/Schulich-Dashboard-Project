@@ -16,11 +16,9 @@ graph::graph()
 {
 }
 
-/*The method takes a person's name, the list of their publications that are ordered by type, the list
-* of years corresponding to the list of publications, and the user specified date range which is 
-  split into beginning and end date.
+/*Prepares the data needed to graph from the publications summary.
 */
-void createBarPublications(string name, list<string> types, list<int> years, int diff_types, int begin, int end)
+void preparePublications(string name, list<string> types, list<int> years, int diff_types, int begin, int end, int graphtype)
 {
 	list<string> t = types;	//create a copy to manipulate
 	list<int> y = years;	//create a copy to manipulate
@@ -34,7 +32,7 @@ void createBarPublications(string name, list<string> types, list<int> years, int
 	string xlabel[diff_types];	//string array for x-axis tick labels
 
 
-	//initialize the array values to 0 to prepare for counting
+								//initialize the array values to 0 to prepare for counting
 	for (int count = 0; count < diff_types; count++)
 	{
 		xaxis[count] = 0;
@@ -44,8 +42,8 @@ void createBarPublications(string name, list<string> types, list<int> years, int
 	compare = t.front();	//the first publication type
 	xlabel[0] = t.front();	//record the first label
 
-	//This loop goes through the list of publications and counts how many are of each type.
-	for (int count = 0; count < size; count++) 
+							//This loop goes through the list of publications and counts how many are of each type.
+	for (int count = 0; count < size; count++)
 	{
 		//check if the publications is in the date range
 		if ((y.front() >= begin) && (y.front() <= end))
@@ -84,7 +82,25 @@ void createBarPublications(string name, list<string> types, list<int> years, int
 	}
 
 
+	/* THE TYPE OF GRAPH THAT THE USER WANTS TO DISPLAY
+	*    1 = bar
+	*    2 = pie
+	*    3 = line
+	*/
+	if (graphtype == 1)
+		createBarPublications(name, num_publications, xaxis, xlabel);
+	else if (graphtype == 2)
+		creatPiePublications();
+	else      //(graphtype == 3)
+		createLinePublications();
+}
 
+
+
+//method for creating a windpw which displays a bar graph from the Publications summary
+void createBarPublications(string name, int num_publications, int xaxis[], string xlabel[])
+{
+	
 	//TO DO: tick loop
 
 	//TO DO: x-axis label loop using xlabel[]
@@ -93,13 +109,13 @@ void createBarPublications(string name, list<string> types, list<int> years, int
 }
 
 //method for creating a windpw which displays a line graph from the Publications summary
-void createLinePublicatons(string name, list<string> types, list<int> years)
+void createLinePublicatons(string name, int num_publications, int xaxis[], string xlabel[])
 {
 
 }
 
 //method for creating a window which display a pie chart from the Publications summary
-void createPiePublications(string name, list<string> types, list<int> years)
+void createPiePublications(string name, int num_publications, int xaxis[], string xlabel[])
 {
 
 }

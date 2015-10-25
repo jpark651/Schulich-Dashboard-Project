@@ -22,14 +22,17 @@ public:
 	//constructor
 	graph();
 
+	//processes info for Publications and calls one of the 3 graph creating functions 
+	void preparePublications(string name, list<string> types, list<int> years, int diff_types, int begin, int end, int graphtype);
+
 	//method for creating a window which displays a bar graph from the Publications summary
-	void createBarPublications(string name, list<string> types, list<int> years);
+	void createBarPublications(string name, int num_publications, int xaxis[], string xlabel[]);
 
 	//method for creating a windpw which displays a line graph from the Publications summary
-	void createLinePublicatons(string name, list<string> types, list<int> years);
+	void createLinePublicatons(string name, int num_publications, int xaxis[], string xlabel[]);
 
 	//method for creating a window which display a pie chart from the Publications summary
-	void createPiePublications(string name, list<string> types, list<int> years);
+	void createPiePublications(string name, int num_publications, int xaxis[], string xlabel[]);
 };
 
 #endif //GRAPH_H_INCLUDED
