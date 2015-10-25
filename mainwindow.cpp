@@ -51,18 +51,21 @@ MainWindow::MainWindow(QWidget *parent) :
         fundingSummary->setText(0,tr("Grants and Clinical Funding"));
     }
     else {
-        QLabel *noActiveFile = new QLabel(ui->publicationTree); //Label to let the user know to open a file
-        noActiveFile->setText("No file has been loaded.\nTo open a file go to File > Open.");
-        noActiveFile->setAlignment(Qt::AlignCenter);
-        noActiveFile->setGeometry(50,180,210,210);
-        ui->label->setAlignment(Qt::AlignCenter);
-        ui->label->setText("No Data to Display.");
+        unactive();
     }
-
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::unactive() {
+    QLabel *noActiveFile = new QLabel(ui->publicationTree); //Label to let the user know to open a file
+    noActiveFile->setText("No file has been loaded.\nTo open a file go to File > Open.");
+    noActiveFile->setAlignment(Qt::AlignCenter);
+    noActiveFile->setGeometry(50,180,210,210);
+    ui->label->setAlignment(Qt::AlignCenter);
+    ui->label->setText("No Data to Display.");
 }
 
