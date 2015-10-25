@@ -22,7 +22,11 @@ Parser:: Parser (string name)
     list <list<string> > temp2 (getNumRowsAfter());
     contents = temp2;
     createRows();
+    list <list<string> > temp3 (getNumCols());
+    organized = temp3;
     organizeRows();
+    parseDate(getList2(6));
+    itemCount = getNumItems();
 }
 //Loops through the first line of the csv file and extracts all strings that are not empty and puts them in a list
 void Parser:: createColumns()
@@ -105,7 +109,7 @@ void Parser:: createRows()
                     }
                     tempList.push_back(item);
             }
-            else if (temp != ',' && isspace(temp) == false && temp != '"')
+            else if (temp != ',') //&& isspace(temp) == false && //temp != '"')
             {
                 item = "";
                 while (1)
@@ -302,5 +306,71 @@ list <string> Parser:: getList2(int index)
  {
     return organized;
  }
+
+//Gives years for all dates
+ void Parser:: parseDate(list<string> dates)
+ {
+    for (itemIterator = dates.begin(); itemIterator!= dates.end(); itemIterator++)
+    {
+        string item = (*itemIterator);
+        string temp = "";
+        if (item.compare(" ") != 0)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                temp += item.at(i);
+            }
+        }
+        else
+        {
+            temp = "0";
+        }
+        (*itemIterator) = temp;
+    }
+    updateList2(dates, 6);
+ }
+
+ //returns the number of items in each list that are not empty which are stored in a list
+ list <int> Parser:: getNumItems()
+ {
+    list <int> numItems;
+    for (listIterator = organized.begin(); listIterator != organized.end(); listIterator++)
+    {
+            list<string> temp = (*listIterator);
+            int num = 0;
+            for (itemIterator = temp.begin(); itemIterator != temp.end(); itemIterator++)
+            {
+                string item = (*itemIterator);
+                if (item.compare(" ") != 0 && item.compare("0") != 0)
+                {
+                    num++;
+                }
+            }
+            numItems.push_back(num);
+    }
+    return numItems;
+ }
+
+ //returns the itemCount list
+list<int> Parser:: getItemCount()
+{
+    return itemCount;
+}
+
+//returns the number of items sorted in a specified list index
+int Parser:: getNumberOfItems(int index)
+{
+    int i =0;
+    int counter;
+    string item;
+    for (countIterator = itemCount.begin(); i <= index; countIterator++, i++)
+    {
+        if (i == index)
+        {
+            counter = (*countIterator);
+        }
+    }
+    return counter;
+}
 
 
