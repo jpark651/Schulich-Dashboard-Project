@@ -26,6 +26,7 @@ Parser:: Parser (string name)
     organized = temp3;
     organizeRows();
     parseDate(getList2(6));
+    itemCount = getNumItems();
 }
 //Loops through the first line of the csv file and extracts all strings that are not empty and puts them in a list
 void Parser:: createColumns()
@@ -306,6 +307,7 @@ list <string> Parser:: getList2(int index)
     return organized;
  }
 
+//Gives years for all dates
  void Parser:: parseDate(list<string> dates)
  {
     for (itemIterator = dates.begin(); itemIterator!= dates.end(); itemIterator++)
@@ -327,5 +329,48 @@ list <string> Parser:: getList2(int index)
     }
     updateList2(dates, 6);
  }
+
+ //returns the number of items in each list that are not empty which are stored in a list
+ list <int> Parser:: getNumItems()
+ {
+    list <int> numItems;
+    for (listIterator = organized.begin(); listIterator != organized.end(); listIterator++)
+    {
+            list<string> temp = (*listIterator);
+            int num = 0;
+            for (itemIterator = temp.begin(); itemIterator != temp.end(); itemIterator++)
+            {
+                string item = (*itemIterator);
+                if (item.compare(" ") != 0 && item.compare("0") != 0)
+                {
+                    num++;
+                }
+            }
+            numItems.push_back(num);
+    }
+    return numItems;
+ }
+
+ //returns the itemCount list
+list<int> Parser:: getItemCount()
+{
+    return itemCount;
+}
+
+//returns the number of items sotred in a specified list index
+int Parser:: getNumberOfItems(int index)
+{
+    int i =0;
+    int counter;
+    string item;
+    for (countIterator = itemCount.begin(); i <= index; countIterator++, i++)
+    {
+        if (i == index)
+        {
+            counter = (*countIterator);
+        }
+    }
+    return counter;
+}
 
 
