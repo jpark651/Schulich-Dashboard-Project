@@ -4,18 +4,25 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
-#include <string>
-#include <iostream>
+#include <list>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "publications.h"
 using namespace std;
 
-void publications{
-	publications::publications()
-		{
-		}
+//publications constructor
+publications:: publications (string file)
+{
+	filename = file;
+}
 
+//filters out rows with mandatory data that is missing or incorrect
+list<list<string> > publications:: filterErrors(list<list<string> > organized)
+{
+	list<list<string> > filtered;
 
-	publications::~publications()
-		{
-		}
+	/* code goes here */
 
+	return filtered;
 }
