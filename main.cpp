@@ -4,6 +4,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "Parser.h"
+#include "publications.h"
+#include "graph.h"
 #include <string>
 #include <iostream>
 
