@@ -51,7 +51,7 @@ void MainWindow::on_pushButton_clicked()
 }
 
 void MainWindow::createParser(QString filePath) {
-    csvParser = new Parser((string)filePath);
+    csvParser = new Parser(filePath.toStdString());
     active(filePath);
 }
 
@@ -69,7 +69,6 @@ void MainWindow::active(QString filePath) {
     books->setText(0, tr("Books"));
     bookChapters->setText(0,tr("Book Chapters"));
     letters->setText(0, tr("Letters to Editors"));
-
 
     //TO DO: Get totals
 

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include "Parser.h"
 #include <QMainWindow>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class MainWindow;
@@ -26,7 +27,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    Parser csvParser;
+    Parser *csvParser;
     void createParser(QString);
 };
 
