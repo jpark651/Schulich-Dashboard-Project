@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <vector>
 #include "graph.h"
 using namespace std;
 
@@ -28,8 +29,8 @@ void graph:: preparePublications(string name, list<string> types, list<int> year
 	int size = types.size(); //get the size of the list
 	int num_publications = 0;//number of publications that fit the date range. used for y-axis
 
-	int xaxis[diff_types];		//array for the number of publications of each publication type
-	string xlabel[diff_types];	//string array for x-axis tick labels
+	vector<int> xaxis;		//array for the number of publications of each publication type
+	vector<string> xlabel;	//string array for x-axis tick labels
 
 
 								//initialize the array values to 0 to prepare for counting
@@ -98,7 +99,7 @@ void graph:: preparePublications(string name, list<string> types, list<int> year
 
 
 //method for creating a window which displays a bar graph from the Publications summary
-void graph:: createBarPublications(string name, int num_publications, int xaxis[], string xlabel[])
+void graph:: createBarPublications(string name, int num_publications, vector<int> xaxis, vector<string> xlabel)
 {
 	
 	//TO DO: tick loop
@@ -109,13 +110,13 @@ void graph:: createBarPublications(string name, int num_publications, int xaxis[
 }
 
 //method for creating a window which displays a line graph from the Publications summary
-void graph:: createLinePublications(string name, int num_publications, int xaxis[], string xlabel[])
+void graph:: createLinePublications(string name, int num_publications, vector<int> xaxis, vector<string> xlabel)
 {
 
 }
 
 //method for creating a window which display a pie chart from the Publications summary
-void graph:: createPiePublications(string name, int num_publications, int xaxis[], string xlabel[])
+void graph:: createPiePublications(string name, int num_publications, vector<int> xaxis, vector<string> xlabel)
 {
 
 }
