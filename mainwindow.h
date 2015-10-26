@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include "Parser.h"
+#include "publications.h"
 #include <QMainWindow>
 #include <QTreeWidgetItem>
 
@@ -19,15 +19,16 @@ public:
     ~MainWindow();
     bool activeFile;    //value which tells if a file has been loaded or not
     void unactive();    //Method if user closes
-    void active(QString);
+    void active();
     QString filePath;
+    publications *pub;
+
 
 private slots:
     void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
-    Parser *csvParser;
     void createParser(QString);
 };
 

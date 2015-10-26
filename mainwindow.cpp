@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Parser.h"
+#include "publications.h"
 #include <QMessageBox>
 #include <iostream>
 #include <QStandardItemModel>
@@ -22,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Adding expandable items for Publications
     if (activeFile==true) {
-        active(filePath);
+        active();
     }
     else {
         unactive();
@@ -47,23 +48,28 @@ void MainWindow::unactive() {
 void MainWindow::on_pushButton_clicked()
 {
     filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", "csv files (*.csv)");
-    createParser(filePath);
+    if (filePath.toStdString() != "") {
+        createParser(filePath);
+    }
 }
 
 void MainWindow::createParser(QString filePath) {
-    csvParser = new Parser(filePath.toStdString());
-    active(filePath);
+
+    string path;
+    path = filePath.toStdString();
+    pub = new publications(path,1970,2020);
+    active();
 }
 
-void MainWindow::active(QString filePath) {
-    QTreeWidgetItem *publications = new QTreeWidgetItem();
+void MainWindow::active() {
+    QTreeWidgetItem *publicat = new QTreeWidgetItem();
     QTreeWidgetItem *publishedAbstracts = new QTreeWidgetItem();
     QTreeWidgetItem *journalArticles = new QTreeWidgetItem();
     QTreeWidgetItem *books = new QTreeWidgetItem();
     QTreeWidgetItem *bookChapters = new QTreeWidgetItem();
     QTreeWidgetItem *letters = new QTreeWidgetItem();
-    ui->publicationTree->addTopLevelItem(publications);
-    publications->setText(0, tr("Publications"));
+    ui->publicationTree->addTopLevelItem(publicat);
+    publicat->setText(0, tr("Publications"));
     publishedAbstracts->setText(0, tr("Published Abstracts"));
     journalArticles->setText(0, tr("Journal Articles"));
     books->setText(0, tr("Books"));
@@ -73,10 +79,10 @@ void MainWindow::active(QString filePath) {
     //TO DO: Get totals
 
 
-    publications->addChild(publishedAbstracts);
-    publications->addChild(journalArticles);
-    publications->addChild(books);
-    publications->addChild(letters);
+    publicat->addChild(publishedAbstracts);
+    publicat->addChild(journalArticles);
+    publicat->addChild(books);
+    publicat->addChild(letters);
 
 
     //Adding expandable items for Grants and Clinical Funding Summary

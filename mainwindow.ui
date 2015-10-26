@@ -152,6 +152,9 @@
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Meta+Q</string>
+   </property>
   </action>
   <action name="actionCloseFile">
    <property name="text">
@@ -163,15 +166,20 @@
     <string>Fullscreen</string>
    </property>
   </action>
+  <action name="actionExit_Fullscreen">
+   <property name="text">
+    <string>Exit Fullscreen</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections>
   <connection>
-   <sender>actionExit</sender>
+   <sender>actionFullscreen</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>close()</slot>
+   <slot>showFullScreen()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -184,10 +192,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionFullscreen</sender>
+   <sender>actionExit</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>showFullScreen()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
