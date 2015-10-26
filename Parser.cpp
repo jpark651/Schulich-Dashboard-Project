@@ -12,6 +12,12 @@
 #include <stdbool.h>
 #include "Parser.h"
 using namespace std;
+
+//Empty Parser constructor
+Parser::Parser() {
+
+}
+
 //Parser constructor
 Parser:: Parser (string name)
 {

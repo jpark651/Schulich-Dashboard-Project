@@ -23,6 +23,8 @@ class Parser
         list <int>:: iterator countIterator;
         list <int> itemCount;
     public:
+//Empty Parser constructor
+        Parser ();
 //Parser constructor
         Parser (string file);
 //generates a list containing all the column headers
