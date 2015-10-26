@@ -15,7 +15,7 @@ using namespace std;
 
 //Empty Parser constructor
 Parser::Parser() {
-    filename = NULL;
+
 }
 
 //Parser constructor
