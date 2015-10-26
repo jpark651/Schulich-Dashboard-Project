@@ -3,6 +3,7 @@
 */
 #ifndef PUBLICATIONS_H_INCLUDED
 #define PUBLICATIONS_H_INCLUDED
+#include "Parser.h"
 #include <iostream>
 #include <list>
 #include <stdbool.h>
