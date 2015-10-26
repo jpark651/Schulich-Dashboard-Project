@@ -246,12 +246,12 @@ void publications:: sortForGui (list<list<string> > filteredLists)
 
         vector<vector<string> > dataNamesList;
         vector<vector<int> > dataCountList;
-		vector<string> title;
-		title[0] = "Publications";
-		dataNamesList.push_back(title);
-		vector<int> total;
-		total[0] = 0;
-		dataCountList.push_back(total);
+        vector<string> title;
+        title[0] = "Publications";
+        dataNamesList.push_back(title);
+        vector<int> total;
+        total[0] = 0;
+        dataCountList.push_back(total);
         while (!typesList.empty())
         {
             string typeTest = typesList.front();
@@ -273,7 +273,7 @@ void publications:: sortForGui (list<list<string> > filteredLists)
                         compare = tempName.compare(nameTest);
                         if (compare == 0)
                         {
-							dataCountList[0][0]++;
+                            dataCountList[0][0]++;
                             dataCountList[i][0]++;
                             dataCountList[i][j]++;
                             nameExists = true;
@@ -282,7 +282,7 @@ void publications:: sortForGui (list<list<string> > filteredLists)
                     if (!nameExists)
                     {
                         dataNamesList[i].push_back(nameTest);
-						dataCountList[0][0]++;
+                        dataCountList[0][0]++;
                         dataCountList[i][0]++;
                         dataCountList[i].push_back(1);
                     }
@@ -298,7 +298,7 @@ void publications:: sortForGui (list<list<string> > filteredLists)
                 newNameList.push_back(namesList.front());
                 namesList.pop_front();
                 newCountList.push_back(1);
-				dataCountList[0][0]++;
+                dataCountList[0][0]++;
                 dataNamesList.push_back(newNameList);
                 dataCountList.push_back(newCountList);
             }
@@ -339,7 +339,7 @@ list<string> publications:: guiTypeData ()
             string hyphen = "-";
             guiData.push_back(hyphen);
         }
-		counter++;
+        counter++;
         while (!namesList.empty())
         {
             guiData.push_back(namesList.front());
