@@ -21,8 +21,8 @@ publications:: publications (string file, int firstYear, int lastYear)
     filename = file;
     startYear = firstYear;
     endYear = lastYear;
-    Parser parsed(file);
-    organized = parsed.getOrganized();
+    parse = new Parser(file);
+    organized = parse->getOrganized();
     selection = selectColumns(organized);
     filtered = filterByDate(selection, startYear, endYear);
     sortForGraph(filtered);
@@ -376,3 +376,10 @@ int publications:: getEntryTotal()
 {
     return names.size();
 }
+
+//returns a reference to the parser object
+Parser *publications:: getParse()
+{
+    return parse;
+}
+

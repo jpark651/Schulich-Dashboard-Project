@@ -27,6 +27,7 @@ class publications
 		list<list<int> > years;
 		list<list<string> > namesByType;
 		list<list<int> > countByType;
+		Parser *parse;
 
 	public:
 		//constructor
@@ -52,6 +53,10 @@ class publications
 
 		//get the total number of entries
 		int getEntryTotal();
+
+		//return a referene to the Parser object
+		Parser *getParse();
 };
 
 #endif //PUBLICATIONS_H_INCLUDED
+

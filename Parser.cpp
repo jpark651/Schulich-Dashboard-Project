@@ -12,26 +12,18 @@
 #include <stdbool.h>
 #include "Parser.h"
 using namespace std;
-
-//Empty Parser constructor
-Parser::Parser() {
-
-}
-
 //Parser constructor
 Parser:: Parser (string name)
 {
     filename = name;
     createColumns();
-    list <list<string> > temp (getNumCols());
-    organized = temp;
-    list <list<string> > temp2 (getNumRowsAfter());
-    contents = temp2;
+    list <list<string> > temp (getNumRowsAfter());
+    contents = temp;
     createRows();
-    list <list<string> > temp3 (getNumCols());
-    organized = temp3;
+    list <list<string> > temp2 (getNumCols());
+    organized = temp2;
     organizeRows();
-    parseDate(getList2(6));
+    parseDate(getList2(10));
     itemCount = getNumItems();
 }
 //Loops through the first line of the csv file and extracts all strings that are not empty and puts them in a list
@@ -104,7 +96,7 @@ void Parser:: createRows()
                     {
                         i++;
                         temp = value.at(i);
-                        if (temp =='"')
+                        if (temp =='"'||i + 1 >= value.length())
                         {
                             break;
                         }
@@ -120,6 +112,10 @@ void Parser:: createRows()
                 item = "";
                 while (1)
                 {
+                    if (i >= value.length())
+                    {
+                        break;
+                    }
                     temp = value.at(i);
                     if (temp==',')
                     {
@@ -132,7 +128,6 @@ void Parser:: createRows()
                 int commas = commaChecker(value, i);
                 for (int k = 0; k < commas; i++, k++)
                 {
-
                     tempList.push_back(" ");
                 }
             }
@@ -141,7 +136,6 @@ void Parser:: createRows()
                 int commas = commaChecker(value, i);
                 for (int k = 0; k < commas; i++, k++)
                 {
-
                     tempList.push_back(" ");
                 }
             }
@@ -333,7 +327,7 @@ list <string> Parser:: getList2(int index)
         }
         (*itemIterator) = temp;
     }
-    updateList2(dates, 6);
+    updateList2(dates, 10);
  }
 
  //returns the number of items in each list that are not empty which are stored in a list
@@ -363,7 +357,7 @@ list<int> Parser:: getItemCount()
     return itemCount;
 }
 
-//returns the number of items sorted in a specified list index
+//returns the number of items sotred in a specified list index
 int Parser:: getNumberOfItems(int index)
 {
     int i =0;
@@ -378,3 +372,5 @@ int Parser:: getNumberOfItems(int index)
     }
     return counter;
 }
+
+
