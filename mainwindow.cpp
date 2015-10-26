@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-
     ui->setupUi(this);
     ui->menuBar->setNativeMenuBar(false);
     activeFile=false;
@@ -36,10 +35,11 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::unactive() {
-    QLabel *noActiveFile = new QLabel(ui->publicationTree); //Label to let the user know to open a file
+    noActiveFile = new QLabel(ui->publicationTree);
     noActiveFile->setText("No file has been loaded.\nTo open a file go to File > Open.");
     noActiveFile->setAlignment(Qt::AlignCenter);
     noActiveFile->setGeometry(50,180,210,210);
+    noActiveFile->show();
     ui->label->setAlignment(Qt::AlignCenter);
     ui->label->setText("No Data to Display.");
 }
@@ -48,6 +48,7 @@ void MainWindow::unactive() {
 void MainWindow::on_pushButton_clicked()
 {
     filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", "csv files (*.csv)");
+    cout<<"Path: "<<filePath.toStdString();
     if (filePath.toStdString() != "") {
         createParser(filePath);
     }
@@ -62,6 +63,7 @@ void MainWindow::createParser(QString filePath) {
 }
 
 void MainWindow::active() {
+    noActiveFile->hide();
     QTreeWidgetItem *publicat = new QTreeWidgetItem();
     QTreeWidgetItem *publishedAbstracts = new QTreeWidgetItem();
     QTreeWidgetItem *journalArticles = new QTreeWidgetItem();
@@ -69,25 +71,81 @@ void MainWindow::active() {
     QTreeWidgetItem *bookChapters = new QTreeWidgetItem();
     QTreeWidgetItem *letters = new QTreeWidgetItem();
     ui->publicationTree->addTopLevelItem(publicat);
-    publicat->setText(0, tr("Publications"));
-    publishedAbstracts->setText(0, tr("Published Abstracts"));
-    journalArticles->setText(0, tr("Journal Articles"));
-    books->setText(0, tr("Books"));
-    bookChapters->setText(0,tr("Book Chapters"));
-    letters->setText(0, tr("Letters to Editors"));
 
-    //TO DO: Get totals
+    parsedData = pub->guiTypeData();        //Getting the parsedData from publications
+
+    //Publications
+    publicat->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Publications"
+    parsedData.pop_front();
+    publicat->setText(1, QString::fromStdString(parsedData.front()));   //Setting # of publications
+    parsedData.pop_front();
 
 
+    //Published Abstracts
+    publishedAbstracts->setText(0, QString::fromStdString(parsedData.front()));    //Setting "Published Abstracts"
+    parsedData.pop_front();
+    publishedAbstracts->setText(1, QString::fromStdString(parsedData.front()));    //Setting # of published abstracts
+    parsedData.pop_front();
+    publicat->addChild(publishedAbstracts);                //Add to publication tree
+
+    //Insert the author's names
+    insertNames(publishedAbstracts);
+
+
+    //Journal Articles
+    journalArticles->setText(0, QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
+    journalArticles->setText(1, QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
     publicat->addChild(publishedAbstracts);
-    publicat->addChild(journalArticles);
+
+    //Insert the author's names
+    insertNames(journalArticles);
+
+
+    //Books
+    books->setText(0, QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
+    books->setText(1, QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
     publicat->addChild(books);
+
+    //Insert the author's names
+    insertNames(books);
+
+
+    //Book Chapters
+    bookChapters->setText(0,QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
+    bookChapters->setText(1,QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
+    publicat->addChild(bookChapters);
+
+    //Insert Author's names
+    insertNames(bookChapters);
+
+
+    //Letters to Editors
+    letters->setText(0, QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
+    letters->setText(1, QString::fromStdString(parsedData.front()));
+    parsedData.pop_front();
     publicat->addChild(letters);
 
+    //Insert names
+    insertNames(letters);
+    publicat->addChild(letters);
+}
 
-    //Adding expandable items for Grants and Clinical Funding Summary
-    QTreeWidgetItem *fundingSummary = new QTreeWidgetItem();
-    QTreeWidgetItem *peerReviewed = new QTreeWidgetItem();
-    peerReviewed->setText(0,tr("Peer Reviewed"));
-    fundingSummary->setText(0,tr("Grants and Clinical Funding"));
+
+void MainWindow::insertNames(QTreeWidgetItem *parent) {
+    //While current item isn't a "-" and isn't empty do
+    while (parsedData.front()!="-" && parsedData.empty()!=true) {
+        QTreeWidgetItem *newItem = new QTreeWidgetItem();       //Create a new tree widget item
+        newItem->setText(0, QString::fromStdString(parsedData.front()));                //Set it's name to the next item in the parsed data
+        parsedData.pop_front();                                 //Pop the item off the list
+        newItem->setText(1, QString::fromStdString(parsedData.front()));                //Set the # to the next item in the list
+        parsedData.pop_front();
+        parent->addChild(newItem);
+    }
 }

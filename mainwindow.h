@@ -3,6 +3,7 @@
 #include "publications.h"
 #include <QMainWindow>
 #include <QTreeWidgetItem>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +23,9 @@ public:
     void active();
     QString filePath;
     publications *pub;
-
+    QLabel *noActiveFile; //Label to let the user know to open a file
+    list<string> parsedData;
+    void insertNames(QTreeWidgetItem*);
 
 private slots:
     void on_pushButton_clicked();

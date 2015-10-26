@@ -5,3 +5,4 @@ build*
 *~
 *.o
 ui_mainwindow.h
+*.csv
