@@ -246,13 +246,19 @@ void publications:: sortForGui (list<list<string> > filteredLists)
 
         vector<vector<string> > dataNamesList;
         vector<vector<int> > dataCountList;
+		vector<string> title;
+		title[0] = "Publications";
+		dataNamesList.push_back(title);
+		vector<int> total;
+		total[0] = 0;
+		dataCountList.push_back(total);
         while (!typesList.empty())
         {
             string typeTest = typesList.front();
             typesList.pop_front();
             int iMax = dataNamesList.size();
             bool exists = false;
-            for (int i = 0; i < iMax && !exists; i++)
+            for (int i = 1; i < iMax && !exists; i++)
             {
                 string tempType = dataNamesList[i][0];
                 int compare = tempType.compare(typeTest);
@@ -267,6 +273,7 @@ void publications:: sortForGui (list<list<string> > filteredLists)
                         compare = tempName.compare(nameTest);
                         if (compare == 0)
                         {
+							dataCountList[0][0]++;
                             dataCountList[i][0]++;
                             dataCountList[i][j]++;
                             nameExists = true;
@@ -275,6 +282,7 @@ void publications:: sortForGui (list<list<string> > filteredLists)
                     if (!nameExists)
                     {
                         dataNamesList[i].push_back(nameTest);
+						dataCountList[0][0]++;
                         dataCountList[i][0]++;
                         dataCountList[i].push_back(1);
                     }
@@ -290,6 +298,7 @@ void publications:: sortForGui (list<list<string> > filteredLists)
                 newNameList.push_back(namesList.front());
                 namesList.pop_front();
                 newCountList.push_back(1);
+				dataCountList[0][0]++;
                 dataNamesList.push_back(newNameList);
                 dataCountList.push_back(newCountList);
             }
@@ -318,19 +327,19 @@ void publications:: sortForGui (list<list<string> > filteredLists)
 list<string> publications:: guiTypeData ()
 {
     list<string> guiData;
-    bool first = true;
+    int counter = 0;
     while (!namesByType.empty())
     {
         list<string> namesList = namesByType.front();
         list<int> countList = countByType.front();
         namesList.pop_front();
         countList.pop_front();
-        if (!first)
+        if (counter > 1)
         {
             string hyphen = "-";
             guiData.push_back(hyphen);
         }
-        first = false;
+		counter++;
         while (!namesList.empty())
         {
             guiData.push_back(namesList.front());
