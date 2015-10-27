@@ -22,7 +22,7 @@ publications:: publications (string file, int firstYear, int lastYear)
     startYear = firstYear;
     endYear = lastYear;
     parse = new Parser(file);
-    organized = parse->getOrganized();
+    organized = parse->getOrganizedH();
     selection = selectColumns(organized);
     filtered = filterByDate(selection, startYear, endYear);
     sortForGraph(filtered);
@@ -41,10 +41,11 @@ list<list<string> > publications:: selectColumns(list<list<string> > organizedLi
     while (!columnList.empty() && !done)
     {
         list <string> columnRows = columnList.front();
-        columnRows.pop_front();
+        columnList.pop_front();
         if (!columnRows.empty())
         {
             string header = columnRows.front();
+            columnRows.pop_front();
             int compare;
             if (!name)
             {

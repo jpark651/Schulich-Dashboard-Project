@@ -36,17 +36,32 @@ void Parser:: createColumns()
     string item;
     getline (file,value, '\n');
     char temp;
+    bool first = true;
     for (unsigned int i =0; i < value.length(); i++)
     {
-        temp = value.at(i);
-        if (temp == '"')
+        if (first)
+        {
+            temp = ',';
+            first = false;
+            i--;
+        }
+        else
+        {
+            i--;
+            temp = value.at(i);
+        }
+        if (temp == ',')
         {
                 item = "";
                 while (1)
                 {
                     i++;
+                    if (i >= value.length())
+                    {
+                        break;
+                    }
                     temp = value.at(i);
-                    if (temp =='"')
+                    if (temp == ',')
                     {
                         break;
                     }
@@ -86,26 +101,26 @@ void Parser:: createRows()
     while (getline(file, value, '\n'))
     {
         list <string> tempList = getList(lineNum);
-        for (unsigned int i =0; i < value.length(); i++)
+        for (unsigned int i = 0; i < value.length(); i++)
         {
             temp = value.at(i);
             if (temp == '"')
             {
-                    item = "";
-                    while (1)
+                item = "";
+                while (1)
+                {
+                    i++;
+                    temp = value.at(i);
+                    if (temp == '"' || i + 1 >= value.length())
                     {
-                        i++;
-                        temp = value.at(i);
-                        if (temp =='"'||i + 1 >= value.length())
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            item += temp;
-                        }
+                        break;
                     }
-                    tempList.push_back(item);
+                    else
+                    {
+                        item += temp;
+                    }
+                }
+                tempList.push_back(item);
             }
             else if (temp != ',') //&& isspace(temp) == false && //temp != '"')
             {
@@ -117,11 +132,11 @@ void Parser:: createRows()
                         break;
                     }
                     temp = value.at(i);
-                    if (temp==',')
+                    if (temp == ',')
                     {
                         break;
                     }
-                    item+=temp;
+                    item += temp;
                     i++;
                 }
                 tempList.push_back(item);
@@ -147,7 +162,7 @@ void Parser:: createRows()
         updateList(tempList, lineNum);
         lineNum++;
     }
-   file.close();
+    file.close();
 }
 //returns true if a string only contains spaces, false otherwise
 bool Parser:: allSpacing(string word)
@@ -187,7 +202,7 @@ list <string> Parser:: getList(int index)
 {
     list<string> found;
     int i =0;
-    for (listIterator = contents.begin(); i <= index; i++, listIterator++)
+    for (listIterator = contents.begin(); i <= index, listIterator != contents.end(); i++, listIterator++)
     {
         if (i== index)
         {
@@ -201,7 +216,7 @@ list <string> Parser:: getList2(int index)
 {
     list<string> found;
     int i =0;
-    for (listIterator = organized.begin(); i <= index; i++, listIterator++)
+    for (listIterator = organized.begin(); i <= index, listIterator != organized.end(); i++, listIterator++)
     {
         if (i== index)
         {
@@ -214,7 +229,7 @@ list <string> Parser:: getList2(int index)
  void Parser:: updateList (list <string> listing, int index)
  {
     int i =0;
-    for (listIterator = contents.begin(); i <= index; i++, listIterator++)
+    for (listIterator = contents.begin(); i <= index, listIterator != contents.end(); i++, listIterator++)
     {
         if (i == index)
         {
@@ -227,7 +242,7 @@ list <string> Parser:: getList2(int index)
  void Parser:: updateList2 (list <string> listing, int index)
  {
     int i =0;
-    for (listIterator = organized.begin(); i <= index; i++, listIterator++)
+    for (listIterator = organized.begin(); i <= index, listIterator != organized.end(); i++, listIterator++)
     {
         if (i == index)
         {
@@ -267,10 +282,12 @@ list <string> Parser:: getList2(int index)
  {
     list <string>temp;
     list <string>temp2;
-    for (int i =0; i < getNumCols(); i++)
+    int numCols = getNumCols();
+    for (int i =0; i < numCols; i++)
     {
         temp = getList2(i);
-        for (int k =0; k < getNumRowsAfter(); k++)
+        int numRowsAfter = getNumRowsAfter();
+        for (int k =0; k < numRowsAfter; k++)
         {
             temp2 = getList(k);
             temp.push_back(getItem(i, temp2));
@@ -285,7 +302,7 @@ list <string> Parser:: getList2(int index)
  {
     int i =0;
     string item;
-    for (itemIterator = listing.begin(); i <= index; itemIterator++, i++)
+    for (itemIterator = listing.begin(); i <= index && itemIterator != listing.end(); itemIterator++, i++)
     {
         if (i == index)
         {
@@ -307,6 +324,24 @@ list <string> Parser:: getList2(int index)
     return organized;
  }
 
+ //Returns the organized list with column headers
+ list <list<string> > Parser::getOrganizedH()
+ {
+     list<list<string> > tempOrganized = organized;
+     list<list<string> > finalOrganized;
+     list<string> headersList = columns;
+     while (!tempOrganized.empty())
+     {
+         list<string> column = tempOrganized.front();
+         tempOrganized.pop_front();
+         string header = headersList.front();
+         headersList.pop_front();
+         column.push_front(header);
+         finalOrganized.push_back(column);
+     }
+     return finalOrganized;
+ }
+
 //Gives years for all dates
  void Parser:: parseDate(list<string> dates)
  {
@@ -316,7 +351,7 @@ list <string> Parser:: getList2(int index)
         string temp = "";
         if (item.compare(" ") != 0)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4 && i < item.length(); i++)
             {
                 temp += item.at(i);
             }
@@ -357,7 +392,7 @@ list<int> Parser:: getItemCount()
     return itemCount;
 }
 
-//returns the number of items sotred in a specified list index
+//returns the number of items sorted in a specified list index
 int Parser:: getNumberOfItems(int index)
 {
     int i =0;
