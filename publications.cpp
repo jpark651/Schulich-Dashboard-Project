@@ -32,7 +32,7 @@ publications:: publications (string file, int firstYear, int lastYear)
 //creates a selection of columns based on header names
 list<list<string> > publications:: selectColumns(list<list<string> > organizedLists)
 {
-    bool name, type, year, done = false;
+    bool name = false, type = false, year = false, done = false;
     string nameTest = "Member Name";
     string typeTest = "Type";
     string yearTest = "Status Date";
@@ -247,10 +247,10 @@ void publications:: sortForGui (list<list<string> > filteredLists)
         vector<vector<string> > dataNamesList;
         vector<vector<int> > dataCountList;
 		vector<string> title;
-		title[0] = "Publications";
+		title.push_back("Publications");
 		dataNamesList.push_back(title);
 		vector<int> total;
-		total[0] = 0;
+		total.push_back(0);
 		dataCountList.push_back(total);
         while (!typesList.empty())
         {
@@ -328,12 +328,14 @@ list<string> publications:: guiTypeData ()
 {
     list<string> guiData;
     int counter = 0;
-    while (!namesByType.empty())
+	list<list<string> > tempNamesType = namesByType;
+	list<list<int> > tempCountType = countByType;
+    while (!tempCountType.empty())
     {
-        list<string> namesList = namesByType.front();
-        list<int> countList = countByType.front();
-        namesList.pop_front();
-        countList.pop_front();
+		list<string> namesList = tempNamesType.front();
+		list<int> countList = tempCountType.front();
+		tempNamesType.pop_front();
+		tempCountType.pop_front();
         if (counter > 1)
         {
             string hyphen = "-";
