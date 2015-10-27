@@ -3,6 +3,12 @@
 */
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
+//
+//#ifndef GRAPH_H
+//#define GRAPH_H
+
+#include <QMainWindow>
+//
 #include <string>
 #include <iostream>
 #include <stdlib.h>
@@ -35,5 +41,24 @@ public:
 	//method for creating a window which display a pie chart from the Publications summary
 	void createPiePublications(string name, int num_publications, vector<int> xaxis, vector<string> xlabel);
 };
+
+//
+namespace Ui {
+    class graph;
+}
+
+class graph : public QMainWindow
+{
+    Q_OBJECT
+    
+public:
+    explicit graph(QWidget *parent = 0);
+    ~graph();
+    
+    private slots:
+private:
+    Ui::graph *ui;
+};
+//
 
 #endif //GRAPH_H_INCLUDED
