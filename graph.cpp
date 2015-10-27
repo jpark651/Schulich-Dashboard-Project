@@ -143,14 +143,14 @@ void graph:: createBarPublications(string name, int num_publications, vector<int
     QVector<QString> labels;
     for (int i = 0 ; i <= xaxis ; i++)
     {
-        ticks << array[i];  //a loop to print out the ticks
+        ticks << xaxis[i];  //a loop to print out the ticks
     }
     
     // loop to print the labels
     int len = xlabel.length();
     for(int i = 0; i < len; i++)
     {
-        labels <<stars[i] << ;
+        labels << xlabel[i];
     }
     
 }
@@ -221,7 +221,7 @@ void graph:: createLinePublications(string name, int num_publications, vector<in
     QVector<double> year, value;
     for (int i = 0 ; i <= xaxis ; i++)
     {
-        year << array[i];  //a loop to print out the ticks
+        year << xaxis[i];  //a loop to print out the ticks
     }
     
     value << 2.17 << 3.42 << 4.94 << 10.38 << 15.86 << 29.33;
