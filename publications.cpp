@@ -4,75 +4,80 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <sstream>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <vector>
-#include <sstream>
 #include "graph.h"
 #include "Parser.h"
 #include "publications.h"
 using namespace std;
 
-//publications constructor
-publications:: publications (string file, int firstYear, int lastYear)
+//publications constructor (sets first/last year to the earlier/latest year in the file)
+publications::publications(string file)
 {
-    filename = file;
+    initializeObject(file, 0, 0, false);
+}
+//publications constructor
+publications::publications(string file, int firstYear, int lastYear)
+{
+    initializeObject(file, firstYear, lastYear, true);
+}
+
+//initializes the publications object
+void publications::initializeObject(string file, int firstYear, int lastYear, bool hasDates)
+{
+    pathname = file;
     startYear = firstYear;
     endYear = lastYear;
     parse = new Parser(file);
-    organized = parse->getOrganizedH();
+    organized = nestedListToVector(parse->getOrganizedH());
     selection = selectColumns(organized);
-    filtered = filterByDate(selection, startYear, endYear);
+    parseYears();
+    if (!hasDates)
+    {
+        setDates();
+        filtered = removeFirstStrings(selection);
+    }
+    else
+    {
+        filtered = filterByDate(selection, startYear, endYear);
+    }
     sortForGraph(filtered);
     sortForGui(filtered);
 }
 
 //creates a selection of columns based on header names
-list<list<string> > publications:: selectColumns(list<list<string> > organizedLists)
+vector<vector<string> > publications::selectColumns(vector<vector<string> > organizedVects)
 {
     bool name = false, type = false, year = false, done = false;
     string nameTest = "Member Name";
     string typeTest = "Type";
     string yearTest = "Status Date";
-    list<string> nameList, typeList, yearList;
-    list<list<string> > columnList = organized;
-    while (!columnList.empty() && !done)
+    vector<string> nameVect, typeVect, yearVect;
+    vector<vector<string> > columnVect = organized;
+    for (int i = 0, iMax = columnVect.size(); i < iMax && !done; i++)
     {
-        list <string> columnRows = columnList.front();
-        columnList.pop_front();
+        vector<string> columnRows = columnVect[i];
         if (!columnRows.empty())
         {
-            string header = columnRows.front();
-            columnRows.pop_front();
-            int compare;
-            if (!name)
+            string header = columnRows[0];
+            if (!name && header.compare(nameTest) == 0)
             {
-                compare = header.compare(nameTest);
-                if (compare == 0)
-                {
-                    nameList = columnRows;
-                    name = true;
-                }
+                nameVect = columnRows;
+                name = true;
             }
-            if (!type)
+            if (!type && header.compare(typeTest) == 0)
             {
-                compare = header.compare(typeTest);
-                if (compare == 0)
-                {
-                    typeList = columnRows;
-                    type = true;
-                }
+                typeVect = columnRows;
+                type = true;
             }
-            if (!year)
+            if (!year && header.compare(yearTest) == 0)
             {
-                compare = header.compare(yearTest);
-                if (compare == 0)
-                {
-                    yearList = columnRows;
-                    year = true;
-                }
+                yearVect = columnRows;
+                year = true;
             }
         }
         if (name && type && year)
@@ -80,91 +85,132 @@ list<list<string> > publications:: selectColumns(list<list<string> > organizedLi
             done = true;
         }
     }
-    list<list<string> > selectionList;
-    selectionList.push_back(nameList);
-    selectionList.push_back(typeList);
-    selectionList.push_back(yearList);
-    return selectionList;
+    vector<vector<string> > selectionVect;
+    selectionVect.push_back(nameVect);
+    selectionVect.push_back(typeVect);
+    selectionVect.push_back(yearVect);
+    return selectionVect;
+}
+
+//parses the vector of strings into a vector of integers ("selectYears")
+void publications::parseYears()
+{
+    if (selection.size() == 3)
+    {
+        vector<int> intYears;
+        vector<string> yearsVect = selection[2];
+        intYears.push_back(0);
+        for (int i = 1, iMax = yearsVect.size(); i < iMax; i++)
+        {
+            intYears.push_back(stringToInt(yearsVect[i]));
+        }
+        selectYears = intYears;
+    }
+}
+
+//sets "startYear"/"endYear" based on earliest/latest years in the file
+void publications::setDates()
+{
+    int selectYearsSize = selectYears.size();
+    if (selectYearsSize > 2)
+    {
+        int firstYear = selectYears[1], lastYear = selectYears[2];
+        if (lastYear < firstYear)
+        {
+            int tempInt = firstYear;
+            firstYear = lastYear;
+            lastYear = tempInt;
+        }
+        for (int i = 3, iMax = selectYearsSize; i < iMax; i++)
+        {
+            int testInt = selectYears[i];
+            if (testInt < firstYear)
+            {
+                firstYear = testInt;
+            }
+            else if (testInt > lastYear)
+            {
+                lastYear = testInt;
+            }
+        }
+        startYear = firstYear;
+        endYear = lastYear;
+    }
+    else if (selectYearsSize == 2)
+    {
+        startYear = endYear = selectYears[1];
+    }
+}
+
+//removes first string from each vector nested in the vector
+vector<vector<string> > publications::removeFirstStrings(vector<vector<string> > selectedVects)
+{
+    vector<vector<string> > filteredVects;
+    int selectedVectsSize = selectedVects.size();
+    if (selectedVectsSize == 3 && selectedVects[0].size() > 1)
+    {
+        for (int i = 0, iMax = selectedVectsSize; i < iMax; i++)
+        {
+            vector<string> currentVector(selectedVects[i].begin() + 1, selectedVects[i].end());
+            filteredVects.push_back(currentVector);
+        }
+    }
+    return filteredVects;
 }
 
 //filters out entries (from the selection) which are outside the given date range
-list<list<string> > publications:: filterByDate(list<list<string> > selectedLists, int startYear, int endYear)
+vector<vector<string> > publications::filterByDate(vector<vector<string> > selectedVects, int startYear, int endYear)
 {
-    list<string> nameListFilt, typeListFilt, yearListFilt;
-    if (selectedLists.size() == 3)
+    vector<string> nameVectFilt, typeVectFilt, yearVectFilt;
+    if (selectedVects.size() == 3)
     {
-        list<string> nameList, typeList, yearList;
-        nameList = selectedLists.front();
-        selectedLists.pop_front();
-        typeList = selectedLists.front();
-        selectedLists.pop_front();
-        yearList = selectedLists.front();
-        if (!yearList.empty())
+        vector<string> nameVect, typeVect, yearVect;
+        nameVect = selectedVects[0];
+        typeVect = selectedVects[1];
+        yearVect = selectedVects[2];
+        for (int i = 1, iMax = selectYears.size(); i < iMax; i++)
         {
-            nameList.pop_front();
-            typeList.pop_front();
-            yearList.pop_front();
-        }
-        while (!yearList.empty())
-        {
-            string next = yearList.front();
-            yearList.pop_front();
-            const char * ctemp = next.c_str();
-            int year = atoi(ctemp);
+            int year = selectYears[i];
             if (year >= startYear && year <= endYear)
             {
-                string tempName, tempType, tempYear;
-                tempName = nameList.front();
-                tempType = typeList.front();
-                tempYear = next;
-                nameListFilt.push_back(tempName);
-                typeListFilt.push_back(tempType);
-                yearListFilt.push_back(tempYear);
+                nameVectFilt.push_back(nameVect[i]);
+                typeVectFilt.push_back(typeVect[i]);
+                yearVectFilt.push_back(yearVect[i]);
             }
-            nameList.pop_front();
-            typeList.pop_front();
         }
     }
-    list<list<string> > filtered;
-    filtered.push_back(nameListFilt);
-    filtered.push_back(typeListFilt);
-    filtered.push_back(yearListFilt);
+    vector<vector<string> > filtered;
+    filtered.push_back(nameVectFilt);
+    filtered.push_back(typeVectFilt);
+    filtered.push_back(yearVectFilt);
     return filtered;
 }
 
-//sorts filtered data into "names"/"types"/"years"
-void publications:: sortForGraph (list<list<string> > filteredLists)
+//sorts filtered data into "names"/"types"/"uniqueTypes"/"years"
+void publications::sortForGraph(vector<vector<string> > filteredVects)
 {
-    if (filteredLists.size() == 3)
+    if (filteredVects.size() == 3)
     {
-        list<string> namesList, typesList, yearsList;
-        namesList = filteredLists.front();
-        filteredLists.pop_front();
-        typesList = filteredLists.front();
-        filteredLists.pop_front();
-        yearsList = filteredLists.front();
+        vector<string> namesVect, typesVect, yearsVect;
+        namesVect = filteredVects[0];
+        typesVect = filteredVects[1];
+        yearsVect = filteredVects[2];
 
-        list<string> namesListSort;
-        list<int> uniqueTypesList;
-        vector<list<string> > typesListSort;
-        vector<list<int> > yearsListSort;
-        while (!namesList.empty())
+        vector<string> namesVectSort;
+        vector<int> uniqueTypesVect;
+        vector<vector<string> > typesVectSort;
+        vector<vector<int> > yearsVectSort;
+        for (int i = 0, iMax = namesVect.size(); i < iMax; i++)
         {
-            string nextName = namesList.front();
-            string nextType = typesList.front();
-            string nextYear = yearsList.front();
-            namesList.pop_front();
-            typesList.pop_front();
-            yearsList.pop_front();
-            list<string> tempNames = namesListSort;
+            string nextName = namesVect[i];
+            string nextType = typesVect[i];
+            string nextYear = yearsVect[i];
             bool exists = false;
             int count = -1;
-            while (!tempNames.empty() && !exists)
+            for (int j = 0, jMax = namesVectSort.size(); j < jMax && !exists; j++)
             {
-                string testString = tempNames.front();
-                tempNames.pop_front();
-                int compare = testString.compare(nextName);
-                if (compare == 0)
+                string testString = namesVectSort[j];
+                if (testString.compare(nextName) == 0)
                 {
                     exists = true;
                 }
@@ -172,225 +218,221 @@ void publications:: sortForGraph (list<list<string> > filteredLists)
             }
             if (!exists)
             {
-                namesListSort.push_back(nextName);
-                list<string> newTypesList;
-                list<int> newYearsList;
-                typesListSort.push_back(newTypesList);
-                yearsListSort.push_back(newYearsList);
+                namesVectSort.push_back(nextName);
+                vector<string> newTypesVect;
+                vector<int> newYearsVect;
+                typesVectSort.push_back(newTypesVect);
+                yearsVectSort.push_back(newYearsVect);
                 count++;
             }
-            typesListSort[count].push_back(nextType);
+            typesVectSort[count].push_back(nextType);
             const char * ctemp = nextYear.c_str();
             int nextYearInt = atoi(ctemp);
-            yearsListSort[count].push_back(nextYearInt);
+            yearsVectSort[count].push_back(nextYearInt);
         }
 
-        int totalLists = namesListSort.size();
-        for (int i = 0; i < totalLists; i++)
+        for (int i = 0, totalVects = namesVectSort.size(); i < totalVects; i++)
         {
-            list<string> tempTypesList = typesListSort[i];
-            list<int> tempYearsList = yearsListSort[i];
-            vector<string> newTypesList;
-            vector<int> newYearsList;
+            vector<string> tempTypesVect = typesVectSort[i];
+            vector<int> tempYearsVect = yearsVectSort[i];
+            vector<string> newTypesVect;
+            vector<int> newYearsVect;
             int count = 0;
-            while (!tempTypesList.empty())
+            for (int j = 0, jMax = tempTypesVect.size(); j < jMax; j++)
             {
-                string testType = tempTypesList.front();
-                int testYear = tempYearsList.front();
-                tempTypesList.pop_front();
-                tempYearsList.pop_front();
-                int jMax = newTypesList.size();
+                string testType = tempTypesVect[j];
+                int testYear = tempYearsVect[j];
                 bool exists = false;
-                for (int j = 0; j < jMax && !exists; j++)
+                for (int k = 0, kMax = newTypesVect.size(); k < kMax && !exists; k++)
                 {
-                    int compare = testType.compare(newTypesList[j]);
-                    if (compare == 0)
+                    if (testType.compare(newTypesVect[k]) == 0)
                     {
-                        vector<string>::iterator typesBegin = newTypesList.begin() + j;
-                        vector<int>::iterator yearsBegin = newYearsList.begin() + j;
-                        newTypesList.insert(typesBegin, testType);
-                        newYearsList.insert(yearsBegin, testYear);
+                        vector<string>::iterator typesBegin = newTypesVect.begin() + k;
+                        vector<int>::iterator yearsBegin = newYearsVect.begin() + k;
+                        newTypesVect.insert(typesBegin, testType);
+                        newYearsVect.insert(yearsBegin, testYear);
                         exists = true;
                     }
                 }
                 if (!exists)
                 {
-                    newTypesList.push_back(testType);
-                    newYearsList.push_back(testYear);
+                    newTypesVect.push_back(testType);
+                    newYearsVect.push_back(testYear);
                     count++;
                 }
             }
-            list<string> stringList(newTypesList.begin(), newTypesList.end());
-            typesListSort[i] = stringList;
-            list<int> intList(newYearsList.begin(), newYearsList.end());
-            yearsListSort[i] = intList;
-            uniqueTypesList.push_back(count);
+            typesVectSort[i] = newTypesVect;
+            yearsVectSort[i] = newYearsVect;
+            uniqueTypesVect.push_back(count);
         }
-        names = namesListSort;
-        uniqueTypes = uniqueTypesList;
-        list<list<string> > typesSorted(typesListSort.begin(), typesListSort.end());
-        types = typesSorted;
-        list<list<int> > yearsSorted(yearsListSort.begin(), yearsListSort.end());
-        years = yearsSorted;
+        names = namesVectSort;
+        uniqueTypes = uniqueTypesVect;
+        types = typesVectSort;
+        years = yearsVectSort;
     }
 }
 
 //sorts filtered data into "namesByType"/"countByType"
-void publications:: sortForGui (list<list<string> > filteredLists)
+void publications::sortForGui(vector<vector<string> > filteredVects)
 {
-    if (filteredLists.size() == 3)
+    if (filteredVects.size() == 3)
     {
-        list<string> namesList, typesList;
-        namesList = filteredLists.front();
-        filteredLists.pop_front();
-        typesList = filteredLists.front();
+        vector<string> namesVect, typesVect;
+        namesVect = filteredVects[0];
+        typesVect = filteredVects[1];
 
-        vector<vector<string> > dataNamesList;
-        vector<vector<int> > dataCountList;
+        vector<vector<string> > dataNamesVect;
+        vector<vector<int> > dataCountVect;
         vector<string> title;
         title.push_back("Publications");
-        dataNamesList.push_back(title);
+        dataNamesVect.push_back(title);
         vector<int> total;
         total.push_back(0);
-        dataCountList.push_back(total);
-        while (!typesList.empty())
+        dataCountVect.push_back(total);
+        for (int i = 0, iMax = typesVect.size(); i < iMax; i++)
         {
-            string typeTest = typesList.front();
-            typesList.pop_front();
-            int iMax = dataNamesList.size();
+            string typeTest = typesVect[i];
+            string nameTest = namesVect[i];
             bool exists = false;
-            for (int i = 1; i < iMax && !exists; i++)
+            for (int j = 1, jMax = dataNamesVect.size(); j < jMax && !exists; j++)
             {
-                string tempType = dataNamesList[i][0];
-                int compare = tempType.compare(typeTest);
-                if (compare == 0)
+                string tempType = dataNamesVect[j][0];
+                if (tempType.compare(typeTest) == 0)
                 {
-                    string nameTest = namesList.front();
-                    namesList.pop_front();
                     bool nameExists = false;
-                    for (int j = 1; j < dataNamesList[i].size() && !nameExists; j++)
+                    for (int k = 1, kMax = dataNamesVect[j].size(); k < kMax && !nameExists; k++)
                     {
-                        string tempName = dataNamesList[i][j];
-                        compare = tempName.compare(nameTest);
-                        if (compare == 0)
+                        string tempName = dataNamesVect[j][k];
+                        if (tempName.compare(nameTest) == 0)
                         {
-                            dataCountList[0][0]++;
-                            dataCountList[i][0]++;
-                            dataCountList[i][j]++;
+                            dataCountVect[0][0]++;
+                            dataCountVect[j][0]++;
+                            dataCountVect[j][k]++;
                             nameExists = true;
                         }
                     }
                     if (!nameExists)
                     {
-                        dataNamesList[i].push_back(nameTest);
-                        dataCountList[0][0]++;
-                        dataCountList[i][0]++;
-                        dataCountList[i].push_back(1);
+                        dataNamesVect[j].push_back(nameTest);
+                        dataCountVect[0][0]++;
+                        dataCountVect[j][0]++;
+                        dataCountVect[j].push_back(1);
                     }
                     exists = true;
                 }
             }
             if (!exists)
             {
-                vector<string> newNameList;
-                vector<int> newCountList;
-                newNameList.push_back(typeTest);
-                newCountList.push_back(1);
-                newNameList.push_back(namesList.front());
-                namesList.pop_front();
-                newCountList.push_back(1);
-                dataCountList[0][0]++;
-                dataNamesList.push_back(newNameList);
-                dataCountList.push_back(newCountList);
+                vector<string> newNameVect;
+                vector<int> newCountVect;
+                newNameVect.push_back(typeTest);
+                newNameVect.push_back(nameTest);
+                newCountVect.push_back(1);
+                newCountVect.push_back(1);
+                dataCountVect[0][0]++;
+                dataNamesVect.push_back(newNameVect);
+                dataCountVect.push_back(newCountVect);
             }
         }
-
-        vector<list<string> > namesToListVect;
-        vector<list<int> > countToListVect;
-        for (int i = 0; i < dataNamesList.size(); i++)
-        {
-            list<string> newNamesList(dataNamesList[i].begin(), dataNamesList[i].end());
-            namesToListVect.push_back(newNamesList);
-        }
-        for (int i = 0; i < dataCountList.size(); i++)
-        {
-            list<int> newCountList(dataCountList[i].begin(), dataCountList[i].end());
-            countToListVect.push_back(newCountList);
-        }
-        list<list<string> > namesToList(namesToListVect.begin(), namesToListVect.end());
-        namesByType = namesToList;
-        list<list<int> > countToList(countToListVect.begin(), countToListVect.end());
-        countByType = countToList;
+        namesByType = dataNamesVect;
+        countByType = dataCountVect;
     }
 }
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
-list<string> publications:: guiTypeData ()
+vector<string> publications::guiTypeData()
 {
-    list<string> guiData;
-    int counter = 0;
-    list<list<string> > tempNamesType = namesByType;
-    list<list<int> > tempCountType = countByType;
-    while (!tempCountType.empty())
+    vector<string> guiData;
+    for (int i = 0, iMax = countByType.size(); i < iMax; i++)
     {
-        list<string> namesList = tempNamesType.front();
-        list<int> countList = tempCountType.front();
-        tempNamesType.pop_front();
-        tempCountType.pop_front();
-        if (counter > 1)
+        vector<string> namesVect = namesByType[i];
+        vector<int> countVect = countByType[i];
+        if (i > 1)
         {
             string hyphen = "-";
             guiData.push_back(hyphen);
         }
-        counter++;
-        while (!namesList.empty())
+        for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
         {
-            guiData.push_back(namesList.front());
+            guiData.push_back(namesVect[j]);
             stringstream ss;
-            ss << countList.front();
+            ss << countVect[j];
             string count = ss.str();
             guiData.push_back(count);
-            namesList.pop_front();
-            countList.pop_front();
         }
     }
     return guiData;
 }
 
-//shows a graph for the given person entry index
-void publications:: showGraph(int entryIndex, int graphType)
+//shows a graph for the given person
+void publications::showGraph(int personIndex, int graphType)
 {
-    if (entryIndex < getEntryTotal())
+    if (personIndex < getPersonTotal())
     {
-        list<string> tempNames = names;
-        list<list<string> > tempTypes = types;
-        list<list<int> > tempYears = years;
-        list<int> tempUniqueTypes = uniqueTypes;
-        for (int i = 0; i < entryIndex; i++)
-        {
-            tempNames.pop_front();
-            tempTypes.pop_front();
-            tempYears.pop_front();
-            tempUniqueTypes.pop_front();
-        }
-        string tName = tempNames.front();
-        list<string> tType = tempTypes.front();
-        list<int> tYear = tempYears.front();
-        int tUniqueType = tempUniqueTypes.front();
-
         graph newGraph;
-        newGraph.preparePublications(tName, tType, tYear, tUniqueType, startYear, endYear, graphType);
+        newGraph.preparePublications(names[personIndex], vectorToList(types[personIndex]), vectorToList(years[personIndex]),
+                                     uniqueTypes[personIndex], startYear, endYear, graphType);
     }
 }
 
-//get the total number of person entries
-int publications:: getEntryTotal()
+//returns a list representation of the input vector
+template <typename T>
+list<T> publications::vectorToList(vector<T> inputVector)
+{
+    list<T> result(inputVector.begin(), inputVector.end());
+    return result;
+}
+
+//returns a nested list representation of the input nested vector
+template <typename T>
+list<list<T> > publications::nestedVectorToList(vector<vector<T> > inputNestedVector)
+{
+    list<list<T> > result;
+    vector<list<T> > listVect;
+    for (int i = 0, iMax = inputNestedVector.size(); i < iMax; i++)
+    {
+        listVect.push_back(vectorToList(inputNestedVector[i]));
+    }
+    result = vectorToList(listVect);
+    return result;
+}
+
+//returns a vector representation of the input list
+template <typename T>
+vector<T> publications::listToVector(list<T> inputList)
+{
+    vector<T> result{make_move_iterator(begin(inputList)), make_move_iterator(end(inputList))};
+    return result;
+}
+
+//returns a nested vector representation of the input nested list
+template <typename T>
+vector<vector<T> > publications::nestedListToVector(list<list<T> > inputNestedList)
+{
+    vector<vector<T> > result;
+    vector<list<T> > listVect = listToVector(inputNestedList);
+    for (int i = 0, iMax = listVect.size(); i < iMax; i++)
+    {
+        result.push_back(listToVector(listVect[i]));
+    }
+    return result;
+}
+
+//parses a string and returns the integer
+int publications::stringToInt(string inputString)
+{
+    const char * ctemp = inputString.c_str();
+    return atoi(ctemp);
+}
+
+//get the total number of persons
+int publications::getPersonTotal()
 {
     return names.size();
 }
 
-//returns a reference to the parser object
-Parser *publications:: getParse()
+//returns a reference to the Parser object
+Parser *publications::getParse()
 {
     return parse;
 }

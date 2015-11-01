@@ -3,59 +3,103 @@
 */
 #ifndef PUBLICATIONS_H_INCLUDED
 #define PUBLICATIONS_H_INCLUDED
-#include "Parser.h"
 #include <iostream>
 #include <list>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <vector>
+#include "Parser.h"
 using namespace std;
 
 class publications
 {
     private:
-        //variables
-        string filename;
+        /*------ Variables ------*/
+
+        string pathname;
         int startYear;
         int endYear;
-        list<list<string> > organized;
-        list<list<string> > selection;
-        list<list<string> > filtered;
-        list<string> names;
-        list<list<string> > types;
-        list<int> uniqueTypes;
-        list<list<int> > years;
-        list<list<string> > namesByType;
-        list<list<int> > countByType;
+        vector<vector<string> > organized;
+        vector<vector<string> > selection;
+        vector<int> selectYears;
+        vector<vector<string> > filtered;
+        vector<string> names;
+        vector<vector<string> > types;
+        vector<int> uniqueTypes;
+        vector<vector<int> > years;
+        vector<vector<string> > namesByType;
+        vector<vector<int> > countByType;
         Parser *parse;
 
-    public:
-        //constructor
-        publications(string filename, int startYear, int endYear);
+
+        /*------ Methods ------*/
+
+        //initializes the publications object
+        void initializeObject(string file, int firstYear, int lastYear, bool hasDates);
 
         //creates a selection of columns based on header names
-        list<list<string> > selectColumns(list<list<string> > organizedLists);
+        vector<vector<string> > selectColumns(vector<vector<string> > organizedVects);
+
+        //parses the vector of strings into a vector of integers ("selectYears")
+        void parseYears();
+
+        //sets "startYear"/"endYear" based on earliest/latest years in the file
+        void setDates();
+
+        //removes first string from each vector nested in the vector
+        vector<vector<string> > removeFirstStrings(vector<vector<string> > selectedVects);
 
         //filters out entries which are outside the given date range
-        list<list<string> > filterByDate(list<list<string> > selectedLists, int startYear, int endYear);
+        vector<vector<string> > filterByDate(vector<vector<string> > selectedVects, int startYear, int endYear);
 
         //sorts filtered data into "names"/"types"/"years"
-        void sortForGraph(list<list<string> > filteredLists);
+        void sortForGraph(vector<vector<string> > filteredVects);
 
         //sorts filtered data into "namesByType"/"countByType"
-        void sortForGui(list<list<string> > filteredLists);
+        void sortForGui(vector<vector<string> > filteredVects);
+
+        //returns a list representation of the input vector
+        template <typename T>
+        list<T> vectorToList(vector<T> inputVector);
+
+        //returns a nested list representation of the input nested vector
+        template <typename T>
+        list<list<T> > nestedVectorToList(vector<vector<T> > inputNestedVector);
+
+        //returns a vector representation of the input list
+        template <typename T>
+        vector<T> listToVector(list<T> inputList);
+
+        //returns a nested vector representation of the input nested list
+        template <typename T>
+        vector<vector<T> > nestedListToVector(list<list<T> > inputNestedList);
+
+        //parses a string and returns the integer
+        int stringToInt(string inputString);
+
+
+    public:
+        /*------ Constructors ------*/
+
+        //first/last year is defaulted to the earliest/latest year in the file
+        publications(string file);
+        publications(string file, int startYear, int endYear);
+        
+
+        /*------ Methods ------*/
 
         //returns the information to be printed to the GUI, with each type's data separated by a single hyphen
-        list<string> guiTypeData();
+        vector<string> guiTypeData();
 
-        //shows a graph for the given entry index
-        void showGraph(int entryIndex, int graphType);
+        //shows a graph for the given person
+        void showGraph(int personIndex, int graphType);
 
-        //get the total number of entries
-        int getEntryTotal();
+        //get the total number of persons
+        int getPersonTotal();
 
-        //return a referene to the Parser object
+        //returns a reference to the Parser object
         Parser *getParse();
 };
 
