@@ -107,7 +107,7 @@ void graph:: preparePublications(string name, list<string> types, list<int> year
 	*/
 	if (graphtype == 1)
 		createBarPublications(name, num_publications, xaxis, xlabel);
-	else  (graphtype == 2)
+	else if (graphtype == 2)
 		createLinePublications(name, num_publications, xaxis, xlabel);
 	
 }
