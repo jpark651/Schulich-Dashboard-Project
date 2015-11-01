@@ -59,6 +59,8 @@ class Parser
         list <list<string> > getContents();
 //Returns the organized list
         list <list<string> > getOrganized();
+//Returns the organized list with column headers
+        list <list<string> > getOrganizedH();
 //Gives years for all dates
         void parseDate(list <string>dates);
 //get number of non-empty items in a list
@@ -71,3 +73,4 @@ class Parser
 
 
 #endif // PARSER_H_INCLUDED
+
