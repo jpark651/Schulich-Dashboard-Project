@@ -1,5 +1,5 @@
 /**
-* Source file for the publications class and its associated methods
+* Source file for the teaching class and its associated methods
 */
 #include <iostream>
 #include <iterator>
@@ -12,42 +12,42 @@
 #include <vector>
 #include "excelData.h"
 #include "Parser.h"
-#include "publications.h"
+#include "teaching.h"
 using namespace std;
 
-//publications constructor (first/last year is set to the earliest/latest year in the file)
-publications::publications(string file)
+//teaching constructor (first/last year is set to the earliest/latest year in the file)
+teaching::teaching(string file)
 {
-    excelData newData(file, 3);
+    excelData newData(file, 4);
     storedData = newData;
 }
-//publications constructor (first/last year is set using the given parameters)
-publications::publications(string file, int firstYear, int lastYear)
+//teaching constructor (first/last year is set using the given parameters)
+teaching::teaching(string file, int firstYear, int lastYear)
 {
-    excelData newData(file, firstYear, lastYear, 3);
+    excelData newData(file, firstYear, lastYear, 4);
     storedData = newData;
 }
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
-vector<string> publications::guiTypeData()
+vector<string> teaching::guiTypeData()
 {
     return storedData.guiTypeData();
 }
 
 //shows a graph for the given person
-void publications::showGraph(int personIndex, int graphType)
+void teaching::showGraph(int personIndex, int graphType)
 {
     storedData.showGraph(personIndex, graphType);
 }
 
 //get the total number of persons
-int publications::getPersonTotal()
+int teaching::getPersonTotal()
 {
     return storedData.getPersonTotal();
 }
 
 //returns a reference to the Parser object
-Parser *publications::getParse()
+Parser *teaching::getParse()
 {
     return storedData.getParse();
 }

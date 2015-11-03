@@ -1,8 +1,8 @@
 /**
-* Header file for the publications class and its associated methods
+* Header file for the funding class and its associated methods
 */
-#ifndef PUBLICATIONS_H_INCLUDED
-#define PUBLICATIONS_H_INCLUDED
+#ifndef FUNDING_H_INCLUDED
+#define FUNDING_H_INCLUDED
 #include <iostream>
 #include <list>
 #include <stdbool.h>
@@ -14,7 +14,7 @@
 #include "Parser.h"
 using namespace std;
 
-class publications
+class funding
 {
 private:
     /*------ Variables ------*/
@@ -26,9 +26,9 @@ public:
     /*------ Constructors ------*/
 
     //first/last year is set to the earliest/latest year in the file
-    publications(string file);
+    funding(string file);
     //first/last year is set using the given parameters
-    publications(string file, int startYear, int endYear);
+    funding(string file, int startYear, int endYear);
 
 
     /*------ Methods ------*/
@@ -46,5 +46,5 @@ public:
     Parser *getParse();
 };
 
-#endif //PUBLICATIONS_H_INCLUDED
+#endif //FUNDING_H_INCLUDED
 
