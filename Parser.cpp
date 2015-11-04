@@ -101,7 +101,7 @@ void Parser:: createRows()
     while (getline(file, value, '\n'))
     {
         list <string> tempList = getList(lineNum);
-        for (unsigned int i = 0; i < value.length(); i++)
+        for (unsigned int i = 0, valueLength = value.length(); i < valueLength; i++)
         {
             temp = value.at(i);
             if (temp == '"')
@@ -110,8 +110,11 @@ void Parser:: createRows()
                 while (1)
                 {
                     i++;
-                    temp = value.at(i);
-                    if (temp == '"' || i + 1 >= value.length())
+                    if (i < valueLength)
+                    {
+                        temp = value.at(i);
+                    }
+                    if (temp == '"' || i + 1 >= valueLength)
                     {
                         break;
                     }

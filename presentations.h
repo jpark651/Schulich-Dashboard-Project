@@ -1,8 +1,8 @@
 /**
-* Header file for the publications class and its associated methods
+* Header file for the presentations class and its associated methods
 */
-#ifndef PUBLICATIONS_H_INCLUDED
-#define PUBLICATIONS_H_INCLUDED
+#ifndef PRESENTATIONS_H_INCLUDED
+#define PRESENTATIONS_H_INCLUDED
 #include <iostream>
 #include <list>
 #include <stdbool.h>
@@ -14,7 +14,7 @@
 #include "Parser.h"
 using namespace std;
 
-class publications
+class presentations
 {
 private:
     /*------ Variables ------*/
@@ -26,9 +26,9 @@ public:
     /*------ Constructors ------*/
 
     //first/last year is set to the earliest/latest year in the file
-    publications(string file);
+    presentations(string file);
     //first/last year is set using the given parameters
-    publications(string file, int startYear, int endYear);
+    presentations(string file, int startYear, int endYear);
 
 
     /*------ Methods ------*/
@@ -46,5 +46,5 @@ public:
     Parser *getParse();
 };
 
-#endif //PUBLICATIONS_H_INCLUDED
+#endif //PRESENTATIONS_H_INCLUDED
 
