@@ -3,412 +3,235 @@
 */
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
+#include <string.h>
 #include <list>
 #include <iterator>
 #include <stdlib.h>
 #include <stdio.h>
 #include <algorithm>
 #include <stdbool.h>
+#include <vector>
 #include "Parser.h"
 using namespace std;
 //Parser constructor
 Parser:: Parser (string name)
 {
     filename = name;
-    createColumns();
-    list <list<string> > temp (getNumRowsAfter());
-    contents = temp;
-    createRows();
-    list <list<string> > temp2 (getNumCols());
-    organized = temp2;
-    organizeRows();
-    parseDate(getList2(10));
-    itemCount = getNumItems();
+    numCols = colCount(filename);
+    vector<vector<string>>temp(numCols);
+    rows = temp;
+    createCols(filename);
+    createRows(filename);
 }
-//Loops through the first line of the csv file and extracts all strings that are not empty and puts them in a list
-void Parser:: createColumns()
+
+//helps to handle situations where cells are missing at the end of a line
+int Parser:: countCommas(string s)
 {
-    const char * ctemp = filename.c_str();
-    file.open(ctemp);
-    file.clear();
-    string value;
-    string item;
-    getline (file,value, '\n');
-    char temp;
-    bool first = true;
-    for (unsigned int i =0; i < value.length(); i++)
+    int count =0;
+    for (int i=0; i < s.length(); i++)
     {
-        if (first)
+        if (s.at(i) == ',')
         {
-            temp = ',';
-            first = false;
-            i--;
+            count++;
+        }
+    }
+    return count;
+}
+int Parser:: colCount (string filename)
+{
+    ifstream file;
+    file.open(filename);
+    string line;
+    getline(file,line);
+    string cell;
+    int no = 0;
+    while (line.length()>0)
+    {
+        string temp = "";
+        if (line.at(0) == '"')
+        {
+            int i=0;
+            line.erase(0,1);
+            while (1)
+            {
+                if (line.at(i) == '"')
+                {
+                    if (i + 1 >= line.length())
+                    {
+                        break;
+                    }
+                    else if(line.at(i+1) == ',')
+                    {
+                        break;
+                    }
+                }
+                temp += line.at(i);
+                i++;
+            }
+            line.erase(0, temp.length()+1);
+            if (countCommas(line) != line.length())
+            {
+                line.erase(0,1);
+            }
+            no++;
+        }
+        else if (line.at(0) == ',')
+        {
+            line.erase(0, 1);
+            no++;
         }
         else
         {
-            i--;
-            temp = value.at(i);
-        }
-        if (temp == ',')
-        {
-                item = "";
-                while (1)
-                {
-                    i++;
-                    if (i >= value.length())
-                    {
-                        break;
-                    }
-                    temp = value.at(i);
-                    if (temp == ',')
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        item += temp;
-                    }
-                }
-                if (allSpacing(item) == false)
-                {
-                    columns.push_back(item);
-                }
+            stringstream linestream(line);
+            getline(linestream,cell, ',');
+            line.erase(0, cell.length());
+            if (countCommas(line) != line.length())
+            {
+                line.erase(0,1);
+            }
+            no++;
         }
     }
     file.close();
+    return no;
 }
-//returns the columns
-list<string> Parser:: getColumns()
-{
-    return columns;
-}
-//places all of the content held in the rows of the csv file into a list of lists
-//the number of lists in the list corresponds to the number of rows that exist after the column headers
-//all of the content from each row have been placed in their own list
-//still need to figure out how to properly organize lists to correspond to column headers
-void Parser:: createRows()
-{
-    const char * ctemp = filename.c_str();
-    file.open(ctemp);
-    file.clear();
-    string value;
-    string item;
-    int lineNum = 0;
-    char temp;
-    getline(file,value,'\n');
-    value = "";
-    while (getline(file, value, '\n'))
-    {
-        list <string> tempList = getList(lineNum);
-        for (unsigned int i = 0, valueLength = value.length(); i < valueLength; i++)
-        {
-            temp = value.at(i);
-            if (temp == '"')
-            {
-                item = "";
-                while (1)
-                {
-                    i++;
-                    if (i < valueLength)
-                    {
-                        temp = value.at(i);
-                    }
-                    if (temp == '"' || i + 1 >= valueLength)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        item += temp;
-                    }
-                }
-                tempList.push_back(item);
-            }
-            else if (temp != ',') //&& isspace(temp) == false && //temp != '"')
-            {
-                item = "";
-                while (1)
-                {
-                    if (i >= value.length())
-                    {
-                        break;
-                    }
-                    temp = value.at(i);
-                    if (temp == ',')
-                    {
-                        break;
-                    }
-                    item += temp;
-                    i++;
-                }
-                tempList.push_back(item);
-                int commas = commaChecker(value, i);
-                for (int k = 0; k < commas; i++, k++)
-                {
-                    tempList.push_back(" ");
-                }
-            }
-            else if (temp == ',')
-            {
-                int commas = commaChecker(value, i);
-                for (int k = 0; k < commas; i++, k++)
-                {
-                    tempList.push_back(" ");
-                }
-            }
-        }
-        if (tempList.size() != getNumCols())
-        {
-            tempList.push_back(" ");
-        }
-        updateList(tempList, lineNum);
-        lineNum++;
-    }
-    file.close();
-}
-//returns true if a string only contains spaces, false otherwise
-bool Parser:: allSpacing(string word)
-{
-    bool flag = true;
-    for (unsigned int i = 0; i < word.length(); i++)
-    {
-        if (isspace(word.at(i)) == false)
-        {
-            flag = false;
-        }
-    }
-    return flag;
-}
-//returns the number of columns in the csv file
-int Parser:: getNumCols()
-{
-    return columns.size();
-}
-//returns the number of rows after the column headers
-int Parser:: getNumRowsAfter()
-{
-    const char * ctemp = filename.c_str();
-    file.open(ctemp);
-    file.clear();
-    string value;
-    int i =0;
-    while (getline(file,value, '\n'))
-    {
-        i++;
-    }
-    file.close();
-    return i-1;
-}
-//returns the list at a specified index in the contents list of lists
-list <string> Parser:: getList(int index)
-{
-    list<string> found;
-    int i =0;
-    for (listIterator = contents.begin(); i <= index, listIterator != contents.end(); i++, listIterator++)
-    {
-        if (i== index)
-        {
-            found = (*listIterator);
-        }
-    }
-    return found;
-}
-//returns the list at a specified index in the organized list of lists
-list <string> Parser:: getList2(int index)
-{
-    list<string> found;
-    int i =0;
-    for (listIterator = organized.begin(); i <= index, listIterator != organized.end(); i++, listIterator++)
-    {
-        if (i== index)
-        {
-            found = (*listIterator);
-        }
-    }
-    return found;
-}
-//updates a list at a certain line in the contents list of lists
- void Parser:: updateList (list <string> listing, int index)
- {
-    int i =0;
-    for (listIterator = contents.begin(); i <= index, listIterator != contents.end(); i++, listIterator++)
-    {
-        if (i == index)
-        {
-            (*listIterator) = listing;
-        }
-    }
- }
 
- //updates a list at a certain line in the organized list of lists
- void Parser:: updateList2 (list <string> listing, int index)
- {
-    int i =0;
-    for (listIterator = organized.begin(); i <= index, listIterator != organized.end(); i++, listIterator++)
+//parse all CSV files and store all items in a vector of vectors
+void Parser:: createRows(string filename)
+{
+    ifstream myfile;
+    string line;
+    string temp;
+    string cell;
+    myfile.open(filename);
+    getline(myfile,line);
+    while (getline(myfile,line))
     {
-        if (i == index)
-        {
-            (*listIterator) = listing;
-        }
-    }
- }
+        int no = 0;
 
- //checks the number of commas between in a row in the line
- int Parser:: commaChecker(string word, int index)
- {
-    int i = 0;
-    while (1)
-    {
-       if (index + 1 < word.length())
-       {
-            index++;
-            if (word.at(index)== ',')
+        while (line.length()>0)
+        {
+            temp = "";
+            if (line.at(0) == '"')
             {
-                i++;
+                int i=0;
+                line.erase(0,1);
+                while (1)
+                {
+                    if (line.at(i) == '"')
+                    {
+                        if (i + 1 >= line.length())
+                        {
+                            break;
+                        }
+                        else if(line.at(i+1) == ',')
+                        {
+                            break;
+                        }
+                    }
+                    temp += line.at(i);
+                    i++;
+                }
+                line.erase(0, temp.length()+1);
+                if (countCommas(line) != line.length())
+                {
+                    line.erase(0,1);
+                }
+                rows[no].push_back(temp);
+                no++;
+            }
+            else if (line.at(0) == ',')
+            {
+                line.erase(0, 1);
+                no++;
             }
             else
             {
-                goto done;
+                stringstream linestream(line);
+                getline(linestream,cell, ',');
+                line.erase(0, cell.length());
+                if (countCommas(line) != line.length())
+                {
+                    line.erase(0,1);
+                }
+                rows[no].push_back(cell);
+                no++;
             }
-       }
-       else
-       {
-            break;
-       }
-    }
-    done: return i;
- }
-
- //Organizes all the rows in the content list into lists corresponding to the individual columns
- void Parser:: organizeRows()
- {
-    list <string>temp;
-    list <string>temp2;
-    int numCols = getNumCols();
-    for (int i =0; i < numCols; i++)
-    {
-        temp = getList2(i);
-        int numRowsAfter = getNumRowsAfter();
-        for (int k =0; k < numRowsAfter; k++)
-        {
-            temp2 = getList(k);
-            temp.push_back(getItem(i, temp2));
-        }
-        updateList2(temp, i);
-    }
- }
-
-
-//Returns an item at a specific index
- string Parser:: getItem(int index, list <string> listing)
- {
-    int i =0;
-    string item;
-    for (itemIterator = listing.begin(); i <= index && itemIterator != listing.end(); itemIterator++, i++)
-    {
-        if (i == index)
-        {
-            item = (*itemIterator);
         }
     }
-    return item;
- }
+    myfile.close();
+}
 
-//Returns the contents list
- list <list<string> > Parser:: getContents()
- {
-    return contents;
- }
-
- //Returns the organized list
- list <list<string> > Parser:: getOrganized()
- {
-    return organized;
- }
-
- //Returns the organized list with column headers
- list <list<string> > Parser::getOrganizedH()
- {
-     list<list<string> > tempOrganized = organized;
-     list<list<string> > finalOrganized;
-     list<string> headersList = columns;
-     while (!tempOrganized.empty())
-     {
-         list<string> column = tempOrganized.front();
-         tempOrganized.pop_front();
-         string header = headersList.front();
-         headersList.pop_front();
-         column.push_front(header);
-         finalOrganized.push_back(column);
-     }
-     return finalOrganized;
- }
-
-//Gives years for all dates
- void Parser:: parseDate(list<string> dates)
- {
-    for (itemIterator = dates.begin(); itemIterator!= dates.end(); itemIterator++)
+//Parse the CSV file and store all the column headers in a vector
+void Parser:: createCols(string filename)
+{
+    ifstream myfile;
+    string line;
+    string temp;
+    string cell;
+    myfile.open(filename);
+    getline(myfile,line);
+    while (line.length()>0)
     {
-        string item = (*itemIterator);
-        string temp = "";
-        if (item.compare(" ") != 0)
+        temp = "";
+        if (line.at(0) == '"')
         {
-            for (int i = 0; i < 4 && i < item.length(); i++)
+            int i=0;
+            line.erase(0,1);
+            while (1)
             {
-                temp += item.at(i);
+                if (line.at(i) == '"')
+                {
+                    if (i + 1 >= line.length())
+                    {
+                        break;
+                    }
+                    else if(line.at(i+1) == ',')
+                    {
+                        break;
+                    }
+                }
+                temp += line.at(i);
+                i++;
             }
+            line.erase(0, temp.length()+1);
+            if (countCommas(line) != line.length())
+            {
+                line.erase(0,1);
+            }
+            cols.push_back(temp);
+        }
+        else if (line.at(0) == ',')
+        {
+            line.erase(0, 1);
         }
         else
         {
-            temp = "0";
-        }
-        (*itemIterator) = temp;
-    }
-    updateList2(dates, 10);
- }
-
- //returns the number of items in each list that are not empty which are stored in a list
- list <int> Parser:: getNumItems()
- {
-    list <int> numItems;
-    for (listIterator = organized.begin(); listIterator != organized.end(); listIterator++)
-    {
-            list<string> temp = (*listIterator);
-            int num = 0;
-            for (itemIterator = temp.begin(); itemIterator != temp.end(); itemIterator++)
+            stringstream linestream(line);
+            getline(linestream,cell, ',');
+            line.erase(0, cell.length());
+            if (countCommas(line) != line.length())
             {
-                string item = (*itemIterator);
-                if (item.compare(" ") != 0 && item.compare("0") != 0)
-                {
-                    num++;
-                }
+                line.erase(0,1);
             }
-            numItems.push_back(num);
-    }
-    return numItems;
- }
-
- //returns the itemCount list
-list<int> Parser:: getItemCount()
-{
-    return itemCount;
-}
-
-//returns the number of items sorted in a specified list index
-int Parser:: getNumberOfItems(int index)
-{
-    int i =0;
-    int counter;
-    string item;
-    for (countIterator = itemCount.begin(); i <= index; countIterator++, i++)
-    {
-        if (i == index)
-        {
-            counter = (*countIterator);
+            cols.push_back(cell);
         }
     }
-    return counter;
+    myfile.close();
 }
+
+//Returns all rows in a CSV file
+vector<vector<string>> Parser:: getRows()
+{
+    return rows;
+}
+
+//Returns all the column headers in a CSV file
+vector<string> Parser:: getCols()
+{
+    return cols;
+}
+
 
 

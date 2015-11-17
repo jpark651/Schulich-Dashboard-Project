@@ -12,63 +12,33 @@
 using namespace std;
 class Parser
 {
-    private:
-        string filename;
-        ifstream file;
-        list <string> columns;
-        list <list<string> > contents;
-        list <list<string> > organized;
-        list <list<string> >:: iterator listIterator;
-        list <string> :: iterator itemIterator;
-        list <int>:: iterator countIterator;
-        list <int> itemCount;
-    public:
+//instance variables
+private:
+    string filename;
+    int numCols;
+    vector<vector<string>>rows;
+    vector<string> cols;
+public:
 //Parser constructor
-        Parser (string file);
-//generates a list containing all the column headers
-        void createColumns ();
-//creates a list of lists containing all the items under each column header
-        void createRows();
-//returns the columns list
-        list<string> getColumns();
-//returns the rows list
-        list <string> getOrganizedRows();
-//closes the ifstream file
-        void closeFile();
-//checks to see if the string contained in a cell is just a bunch of spaces
-        bool allSpacing(string word);
-//returns the number of columns in the file
-        int getNumCols();
-//returns the number of rows after the column headers
-        int getNumRowsAfter();
-//returns the list at a specific index in the contents list of lists
-        list <string> getList(int index);
-//returns the list at a specific index in the organized list of lists
-        list <string> getList2(int index);
-//updates the current list being accessed in the contents list of lists
-        void updateList (list <string> listing, int index);
-//updates the current list being accessed in the organized list of lists
-        void updateList2 (list <string> listing, int index);
-//checks the number of commas between each item in the line
-        int commaChecker (string word, int index);
-//Organizes all the rows in the content list into lists corresponding to the individual columns
-        void organizeRows();
-//Returns an item at a specific index
-        string getItem(int index, list <string> listing);
-//Returns the contents list
-        list <list<string> > getContents();
-//Returns the organized list
-        list <list<string> > getOrganized();
-//Returns the organized list with column headers
-        list <list<string> > getOrganizedH();
-//Gives years for all dates
-        void parseDate(list <string>dates);
-//get number of non-empty items in a list
-        list<int> getNumItems();
-//returns the itemCount list
-        list<int> getItemCount();
-//returns the number of items sorted in a specified list index
-        int getNumberOfItems(int index);
+    Parser (string file);
+
+//Gets the number of column headers in the file
+    int colCount (string filename);
+
+//stores all the items in rows in a vector of vectors
+    void createRows(string filename);
+
+//returns a vector of vectors containing all the items in the rows
+    vector<vector<string>>getRows();
+
+//stores all the column headers in a vector
+    void createCols(string filename);
+
+//gets all of the column headers
+    vector<string>getCols();
+
+//helps to handle  situations where empty cells occur at the end of a line
+    int countCommas(string s);
 };
 
 
