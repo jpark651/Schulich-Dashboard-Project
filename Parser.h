@@ -13,32 +13,42 @@ using namespace std;
 class Parser
 {
 //instance variables
-private:
-    string filename;
-    int numCols;
-    vector<vector<string>>rows;
-    vector<string> cols;
-public:
+    private:
+        string filename;
+        int numCols;
+        vector<vector<string>>rows;
+        vector<string> cols;
+        int dateIndex;
+    public:
 //Parser constructor
-    Parser (string file);
+        Parser (string file);
 
 //Gets the number of column headers in the file
-    int colCount (string filename);
+        int colCount (string filename);
 
 //stores all the items in rows in a vector of vectors
-    void createRows(string filename);
+        void createRows(string filename);
 
 //returns a vector of vectors containing all the items in the rows
-    vector<vector<string>>getRows();
+        vector<vector<string>>getRows();
 
 //stores all the column headers in a vector
-    void createCols(string filename);
+        void createCols(string filename);
 
 //gets all of the column headers
-    vector<string>getCols();
+        vector<string>getCols();
 
 //helps to handle  situations where empty cells occur at the end of a line
-    int countCommas(string s);
+        int countCommas(string s);
+
+//Gets the index of the in rows where dates are contained
+        int getDateIndex();
+
+//parses the dates and sets all of them to years
+        void parseDates(int dateIndex);
+
+//Returns a particular column stored at a particular index
+        vector <string> getColumn(int index);
 };
 
 
