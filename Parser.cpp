@@ -107,7 +107,6 @@ void Parser:: createRows(string filename)
     string temp;
     string cell;
     myfile.open(filename);
-    getline(myfile,line);
     while (getline(myfile,line))
     {
         int no = 0;
