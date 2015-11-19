@@ -15,13 +15,14 @@ class Parser
 //instance variables
     private:
         string filename;
+        int sheetType;
         int numCols;
         vector<vector<string>>rows;
         vector<string> cols;
         int dateIndex;
     public:
 //Parser constructor
-        Parser (string file);
+        Parser (string file, int type);
 
 //Gets the number of column headers in the file
         int colCount (string filename);

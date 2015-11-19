@@ -15,9 +15,10 @@
 #include "Parser.h"
 using namespace std;
 //Parser constructor
-Parser:: Parser (string name)
+Parser:: Parser (string name, int type)
 {
     filename = name;
+    sheetType = type; // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     numCols = colCount(filename);
     vector<vector<string>>temp(numCols);
     rows = temp;
@@ -106,66 +107,155 @@ void Parser:: createRows(string filename)
     string line;
     string temp;
     string cell;
+    int commas = 0;
     myfile.open(filename);
-    while (getline(myfile,line))
+    while (getline(myfile, line))
     {
-        int no = 0;
-done:
-        while (line.length()>0)
+        if (commas == 0)
         {
-            temp = "";
-            if (line.at(0) == '"')
+            commas = countCommas(line);
+        }
+        if (line.length() != commas)
+        {
+            int no = 0;
+            while (no < commas)
             {
-                int i=0;
-                line.erase(0,1);
-                if (line.length() == 0)
+                bool  quotes = false;
+                while (line.length() > 0)
                 {
-                    goto done;
-                }
-                while (1)
-                {
-                    if (line.at(i) == '"')
+                    temp = "";
+                    if (line.at(0) == '"')
                     {
-                        if (i + 1 >= line.length())
+                        int lineLength = line.length();
+                        if (quotes && lineLength > 1 && line.at(1) == '"')
                         {
-                            break;
+                            temp += "\"\"";
+                            line.erase(0, 1);
                         }
-                        else if(line.at(i+1) == ',')
+                        else if (quotes)
                         {
-                            break;
+                            quotes = false;
                         }
+                        else
+                        {
+                            quotes = true;
+                        }
+                        int i = 0;
+                        line.erase(0, 1);
+                        if (line.length() == 0)
+                        {
+                            if (no + 1 < rows.size())
+                            {
+                                rows[no].push_back("");
+                                no++;
+                            }
+                            goto done;
+                        }
+                        while (quotes)
+                        {
+                            if (line.at(i) == '"')
+                            {
+                                int lineLength = line.length();
+                                if (lineLength > i && line.at(i + 1) == '"')
+                                {
+                                    temp += "\"";
+                                    i++;
+                                }
+                                else
+                                {
+                                    quotes = false;
+                                    break;
+                                }
+                            }
+                            else if (i + 1 >= line.length())
+                            {
+                                temp += line.at(i);
+                                break;
+                            }
+                            temp += line.at(i);
+                            i++;
+                        }
+                        line.erase(0, temp.length() + 1);
+                        if (countCommas(line) != line.length())
+                        {
+                            line.erase(0, 1);
+                        }
+                        rows[no].push_back(temp);
+                        no++;
                     }
-                    else if (i + 1>= line.length())
+                    else if (line.at(0) == ',')
                     {
-                        break;
+                        line.erase(0, 1);
+                        rows[no].push_back(temp);
+                        no++;
                     }
-                    temp += line.at(i);
-                    i++;
+                    else
+                    {
+                        stringstream linestream(line);
+                        getline(linestream, cell, ',');
+                        line.erase(0, cell.length());
+                        if (countCommas(line) != line.length())
+                        {
+                            line.erase(0, 1);
+                        }
+                        rows[no].push_back(cell);
+                        no++;
+                    }
                 }
-                line.erase(0, temp.length()+1);
-                if (countCommas(line) != line.length())
+            done:
+                if (no < commas || quotes)
                 {
-                    line.erase(0,1);
+                    bool done = false;
+                    while (!done)
+                    {
+                        no--;
+                        string sameLine;
+                        getline(myfile, sameLine);
+                        string entry = rows[no].back();
+                        rows[no].pop_back();
+                        string entryEnd = "";
+                        for (int i = 0, iMax = sameLine.length(); i < iMax && !done; i++)
+                        {
+                            char nextChar = sameLine.at(i);
+                            if (nextChar != '"')
+                            {
+                                entryEnd += nextChar;
+                            }
+                            else if (quotes && i + 1 < iMax)
+                            {
+                                char afterNextChar = sameLine.at(i + 1);
+                                if (afterNextChar == '"')
+                                {
+                                    entryEnd += nextChar;
+                                    entryEnd += afterNextChar;
+                                    i++;
+                                }
+                                else
+                                {
+                                    quotes = false;
+                                    done = true;
+                                }
+                            }
+                            else if (quotes)
+                            {
+                                quotes = false;
+                                done = true;
+                            }
+                        }
+                        sameLine.erase(0, entryEnd.length());
+                        if (done)
+                        {
+                            sameLine.erase(0, 1);
+                            if (sameLine.length() > 0 && sameLine.at(0) == ',')
+                            {
+                                sameLine.erase(0, 1);
+                            }
+                            line = sameLine;
+                        }
+                        rows[no].push_back(entry + "\n" + entryEnd);
+                        no++;
+                    }
                 }
-                rows[no].push_back(temp);
-                no++;
-            }
-            else if (line.at(0) == ',')
-            {
-                line.erase(0, 1);
-                no++;
-            }
-            else
-            {
-                stringstream linestream(line);
-                getline(linestream,cell, ',');
-                line.erase(0, cell.length());
-                if (countCommas(line) != line.length())
-                {
-                    line.erase(0,1);
-                }
-                rows[no].push_back(cell);
-                no++;
             }
         }
     }
@@ -260,8 +350,27 @@ int Parser:: getDateIndex()
     vector<string>:: iterator coliterator;
     for (coliterator = cols.begin(); coliterator != cols.end(); ++coliterator)
     {
-        temp = *(coliterator);
-        found = temp.find("Date");
+        temp = *(coliterator); 
+        string searchTerm;
+        switch (sheetType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
+        {
+        case 1:
+            searchTerm = "Start Date";
+            break;
+        case 2:
+            searchTerm = "Date";
+            break;
+        case 3:
+            searchTerm = "Status Date";
+            break;
+        case 4:
+            searchTerm = "Start Date";
+            break;
+        }
+        if (temp.compare(searchTerm) == 0)
+        {
+            found = temp.find(searchTerm);
+        }
         if (found != -1)
         {
             break;
@@ -276,12 +385,11 @@ void Parser:: parseDates(int dateIndex)
 {
     vector <string> dates = rows[dateIndex];
     vector <string>:: iterator datesIterator;
-    string temp;
-    string year = "";
-    for (datesIterator = dates.begin(); datesIterator!= dates.end(); ++datesIterator)
+    for (datesIterator = ++dates.begin(); datesIterator!= dates.end(); ++datesIterator)
     {
-        temp = *(datesIterator);
-        for (int i = 5; i < 9; i++)
+        string temp = *(datesIterator);
+        string year = "";
+        for (int i = 0, iMax = min((int)temp.length(), 4); i < iMax; i++)
         {
             year += temp.at(i);
         }

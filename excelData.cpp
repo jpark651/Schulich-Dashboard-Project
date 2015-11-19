@@ -36,8 +36,8 @@ void excelData::initializeObject(string file, int firstYear, int lastYear, bool 
     pathname = file;
     startYear = firstYear;
     endYear = lastYear;
-    parse = new Parser(file);
-    organized = nestedListToVector(parse->getOrganizedH());
+    parse = new Parser(file, excelType);
+    organized = parse->getRows();
     selection = selectColumns(organized);
     parseYears();
     if (!hasDates)
