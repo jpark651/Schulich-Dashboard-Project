@@ -24,8 +24,8 @@ Parser:: Parser (string name, int type)
     rows = temp;
     createCols(filename);
     createRows(filename);
-    //dateIndex = getDateIndex();
-   // parseDates(dateIndex);
+    dateIndex = getDateIndex();
+    parseDates(dateIndex);
 }
 
 //helps to handle situations where cells are missing at the end of a line
