@@ -24,8 +24,8 @@ Parser:: Parser (string name, int type)
     rows = temp;
     createCols(filename);
     createRows(filename);
-    dateIndex = getDateIndex();
-    parseDates(dateIndex);
+    //dateIndex = getDateIndex();
+   // parseDates(dateIndex);
 }
 
 //helps to handle situations where cells are missing at the end of a line
@@ -120,7 +120,7 @@ void Parser:: createRows(string filename)
             int no = 0;
             while (no < commas)
             {
-                bool  quotes = false;
+                bool quotes = false;
                 while (line.length() > 0)
                 {
                     temp = "";
@@ -156,7 +156,7 @@ void Parser:: createRows(string filename)
                             if (line.at(i) == '"')
                             {
                                 int lineLength = line.length();
-                                if (lineLength > i && line.at(i + 1) == '"')
+                                if (lineLength > i + 1 && line.at(i + 1) == '"')
                                 {
                                     temp += "\"";
                                     i++;
@@ -350,7 +350,7 @@ int Parser:: getDateIndex()
     vector<string>:: iterator coliterator;
     for (coliterator = cols.begin(); coliterator != cols.end(); ++coliterator)
     {
-        temp = *(coliterator); 
+        temp = *(coliterator);
         string searchTerm;
         switch (sheetType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
         {
