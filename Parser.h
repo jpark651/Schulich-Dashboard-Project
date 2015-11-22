@@ -17,7 +17,7 @@ class Parser
         string filename;
         int sheetType;
         int numCols;
-        vector<vector<string>>rows;
+        vector<vector<string> >rows;
         vector<string> cols;
         int dateIndex;
     public:
@@ -31,7 +31,7 @@ class Parser
         void createRows(string filename);
 
 //returns a vector of vectors containing all the items in the rows
-        vector<vector<string>>getRows();
+        vector<vector<string> >getRows();
 
 //stores all the column headers in a vector
         void createCols(string filename);

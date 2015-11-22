@@ -32,6 +32,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    //graph graphn;
     void createParser(QString);
 };
 
