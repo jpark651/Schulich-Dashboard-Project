@@ -26,6 +26,8 @@ graph::~graph()
 {
     delete ui;
 }
+
+*/
 //
 
 /*Prepares the data needed to graph from the publications summary.

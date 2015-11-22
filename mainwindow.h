@@ -24,7 +24,7 @@ public:
     QString filePath;
     publications *pub;
     QLabel *noActiveFile; //Label to let the user know to open a file
-    list<string> parsedData;
+    vector<string> parsedData;
     void insertNames(QTreeWidgetItem*);
 
 private slots:

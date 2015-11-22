@@ -4,6 +4,7 @@
 #include "publications.h"
 #include <QMessageBox>
 #include <iostream>
+#include <vector>
 #include <QStandardItemModel>
 #include <QLabel>
 #include <QFileDialog>
@@ -76,16 +77,16 @@ void MainWindow::active() {
 
     //Publications
     publicat->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Publications"
-    parsedData.pop_front();
+    parsedData.erase(parsedData.begin());
     publicat->setText(1, QString::fromStdString(parsedData.front()));   //Setting # of publications
-    parsedData.pop_front();
+    parsedData.erase(parsedData.begin());
 
 
     //Published Abstracts
     publishedAbstracts->setText(0, QString::fromStdString(parsedData.front()));    //Setting "Published Abstracts"
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     publishedAbstracts->setText(1, QString::fromStdString(parsedData.front()));    //Setting # of published abstracts
-    parsedData.pop_front();
+   parsedData.erase(parsedData.begin());
     publicat->addChild(publishedAbstracts);                //Add to publication tree
 
     //Insert the author's names
@@ -94,9 +95,9 @@ void MainWindow::active() {
 
     //Journal Articles
     journalArticles->setText(0, QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     journalArticles->setText(1, QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     publicat->addChild(publishedAbstracts);
 
     //Insert the author's names
@@ -105,9 +106,9 @@ void MainWindow::active() {
 
     //Books
     books->setText(0, QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     books->setText(1, QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     publicat->addChild(books);
 
     //Insert the author's names
@@ -116,9 +117,9 @@ void MainWindow::active() {
 
     //Book Chapters
     bookChapters->setText(0,QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     bookChapters->setText(1,QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     publicat->addChild(bookChapters);
 
     //Insert Author's names
@@ -127,9 +128,9 @@ void MainWindow::active() {
 
     //Letters to Editors
     letters->setText(0, QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     letters->setText(1, QString::fromStdString(parsedData.front()));
-    parsedData.pop_front();
+     parsedData.erase(parsedData.begin());
     publicat->addChild(letters);
 
     //Insert names
@@ -143,9 +144,9 @@ void MainWindow::insertNames(QTreeWidgetItem *parent) {
     while (parsedData.front()!="-" && parsedData.empty()!=true) {
         QTreeWidgetItem *newItem = new QTreeWidgetItem();       //Create a new tree widget item
         newItem->setText(0, QString::fromStdString(parsedData.front()));                //Set it's name to the next item in the parsed data
-        parsedData.pop_front();                                 //Pop the item off the list
+        parsedData.erase(parsedData.begin());                                 //Pop the item off the list
         newItem->setText(1, QString::fromStdString(parsedData.front()));                //Set the # to the next item in the list
-        parsedData.pop_front();
+         parsedData.erase(parsedData.begin());
         parent->addChild(newItem);
     }
 }

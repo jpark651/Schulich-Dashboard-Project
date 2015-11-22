@@ -20,7 +20,7 @@ Parser:: Parser (string name, int type)
     filename = name;
     sheetType = type; // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     numCols = colCount(filename);
-    vector<vector<string>>temp(numCols);
+    vector<vector<string> >temp(numCols);
     rows = temp;
     createCols(filename);
     createRows(filename);
@@ -44,7 +44,7 @@ int Parser:: countCommas(string s)
 int Parser:: colCount (string filename)
 {
     ifstream file;
-    file.open(filename);
+    file.open(filename.c_str());
     string line;
     getline(file,line);
     string cell;
@@ -108,7 +108,7 @@ void Parser:: createRows(string filename)
     string temp;
     string cell;
     int commas = 0;
-    myfile.open(filename);
+    myfile.open(filename.c_str());
     while (getline(myfile, line))
     {
         if (commas == 0)
@@ -269,7 +269,7 @@ void Parser:: createCols(string filename)
     string line;
     string temp;
     string cell;
-    myfile.open(filename);
+    myfile.open(filename.c_str());
     getline(myfile,line);
 done:
     while (line.length()>0)
@@ -330,7 +330,7 @@ done:
 }
 
 //Returns all rows in a CSV file
-vector<vector<string>> Parser:: getRows()
+vector<vector<string> > Parser:: getRows()
 {
     return rows;
 }
