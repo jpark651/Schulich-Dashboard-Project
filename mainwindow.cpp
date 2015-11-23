@@ -79,7 +79,6 @@ void MainWindow::active() {
     publicat->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Publications"
     parsedData.erase(parsedData.begin());
 
-    printf("number of publications:%s", parsedData.front());
     publicat->setText(1, QString::fromStdString(parsedData.front()));   //Setting # of publications
     parsedData.erase(parsedData.begin());
 
