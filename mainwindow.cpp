@@ -78,15 +78,17 @@ void MainWindow::active() {
     //Publications
     publicat->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Publications"
     parsedData.erase(parsedData.begin());
+
+    printf("number of publications:%s", parsedData.front());
     publicat->setText(1, QString::fromStdString(parsedData.front()));   //Setting # of publications
     parsedData.erase(parsedData.begin());
 
 
     //Published Abstracts
     publishedAbstracts->setText(0, QString::fromStdString(parsedData.front()));    //Setting "Published Abstracts"
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     publishedAbstracts->setText(1, QString::fromStdString(parsedData.front()));    //Setting # of published abstracts
-   parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     publicat->addChild(publishedAbstracts);                //Add to publication tree
 
     //Insert the author's names
@@ -95,9 +97,9 @@ void MainWindow::active() {
 
     //Journal Articles
     journalArticles->setText(0, QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     journalArticles->setText(1, QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     publicat->addChild(publishedAbstracts);
 
     //Insert the author's names
@@ -106,9 +108,9 @@ void MainWindow::active() {
 
     //Books
     books->setText(0, QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     books->setText(1, QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     publicat->addChild(books);
 
     //Insert the author's names
@@ -117,9 +119,9 @@ void MainWindow::active() {
 
     //Book Chapters
     bookChapters->setText(0,QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     bookChapters->setText(1,QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     publicat->addChild(bookChapters);
 
     //Insert Author's names
@@ -128,9 +130,9 @@ void MainWindow::active() {
 
     //Letters to Editors
     letters->setText(0, QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     letters->setText(1, QString::fromStdString(parsedData.front()));
-     parsedData.erase(parsedData.begin());
+    parsedData.erase(parsedData.begin());
     publicat->addChild(letters);
 
     //Insert names

@@ -442,7 +442,7 @@ list<list<T> > excelData::nestedVectorToList(vector<vector<T> > inputNestedVecto
 template <typename T>
 vector<T> excelData::listToVector(list<T> inputList)
 {
-    vector<T> result{ make_move_iterator(begin(inputList)), make_move_iterator(end(inputList)) };
+    vector<T> result = { make_move_iterator(begin(inputList)), make_move_iterator(end(inputList)) };
     return result;
 }
 
