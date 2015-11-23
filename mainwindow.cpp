@@ -149,4 +149,8 @@ void MainWindow::insertNames(QTreeWidgetItem *parent) {
          parsedData.erase(parsedData.begin());
         parent->addChild(newItem);
     }
+    if (parsedData.empty() != true)
+    {
+        parsedData.erase(parsedData.begin());
+    }
 }
