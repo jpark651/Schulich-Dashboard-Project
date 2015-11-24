@@ -27,6 +27,8 @@ Parser:: Parser (string name, int type)
     dateIndex = getDateIndex();
     parseDates(dateIndex);
 }
+//uninitiated Parser constructor
+Parser:: Parser () {}
 
 //helps to handle situations where cells are missing at the end of a line
 int Parser:: countCommas(string s)
@@ -335,10 +337,20 @@ vector<vector<string> > Parser:: getRows()
     return rows;
 }
 
-//Returns all the column headers in a CSV file
+//gets all of the column headers for the given file
 vector<string> Parser:: getCols()
 {
     return cols;
+}
+
+//Returns all of the column headers for the given file
+vector<string> Parser:: getCols(string filepath)
+{
+    vector<string> temp = cols;
+    createCols(filepath);
+    vector<string> columns = cols;
+    cols = temp;
+    return columns;
 }
 
 //gets index of the dates vector

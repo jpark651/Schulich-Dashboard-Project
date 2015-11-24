@@ -27,6 +27,8 @@ presentations::presentations(string file, int firstYear, int lastYear)
     excelData newData(file, firstYear, lastYear, 2);
     storedData = newData;
 }
+//uninitiated constructor
+presentations::presentations() {}
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> presentations::guiTypeData()

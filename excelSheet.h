@@ -1,8 +1,8 @@
 /**
-* Header file for the teaching class and its associated methods
+* Header file for the excelSheet class and its associated methods
 */
-#ifndef TEACHING_H_INCLUDED
-#define TEACHING_H_INCLUDED
+#ifndef EXCELSHEET_H_INCLUDED
+#define EXCELSHEET_H_INCLUDED
 #include <iostream>
 #include <list>
 #include <stdbool.h>
@@ -10,27 +10,38 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
-#include "excelData.h"
+#include "funding.h"
+#include "presentations.h"
+#include "publications.h"
+#include "teaching.h"
 #include "Parser.h"
 using namespace std;
 
-class teaching
+class excelSheet
 {
 private:
     /*------ Variables ------*/
 
-    excelData storedData;
+    int sheetType;
+    funding sheetType1;
+    presentations sheetType2;
+    publications sheetType3;
+    teaching sheetType4;
+
+
+    /*------ Methods ------*/
+
+    //returns the type of Excel file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+    int getExcelType(string filename);
 
 
 public:
     /*------ Constructors ------*/
 
     //first/last year is set to the earliest/latest year in the file
-    teaching(string file);
+    excelSheet(string file);
     //first/last year is set using the given parameters
-    teaching(string file, int startYear, int endYear);
-    //uninitiated constructor
-    teaching();
+    excelSheet(string file, int startYear, int endYear);
 
 
     /*------ Methods ------*/
@@ -48,5 +59,5 @@ public:
     Parser *getParse();
 };
 
-#endif //TEACHING_H_INCLUDED
+#endif //EXCELSHEET_H_INCLUDED
 

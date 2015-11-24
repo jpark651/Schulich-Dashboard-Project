@@ -27,6 +27,8 @@ teaching::teaching(string file, int firstYear, int lastYear)
     excelData newData(file, firstYear, lastYear, 4);
     storedData = newData;
 }
+//uninitiated constructor
+teaching::teaching() {}
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> teaching::guiTypeData()

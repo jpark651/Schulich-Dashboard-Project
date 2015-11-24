@@ -23,6 +23,8 @@ class Parser
     public:
 //Parser constructor
         Parser (string file, int type);
+//uninitiated Parser constructor
+        Parser ();
 
 //Gets the number of column headers in the file
         int colCount (string filename);
@@ -38,6 +40,9 @@ class Parser
 
 //gets all of the column headers
         vector<string>getCols();
+
+//gets all of the column headers for the given file
+        vector<string>getCols(string filepath);
 
 //helps to handle  situations where empty cells occur at the end of a line
         int countCommas(string s);
