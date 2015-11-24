@@ -337,13 +337,13 @@ vector<vector<string> > Parser:: getRows()
     return rows;
 }
 
-//gets all of the column headers for the given file
+//Returns all the column headers in a CSV file
 vector<string> Parser:: getCols()
 {
     return cols;
 }
 
-//Returns all of the column headers for the given file
+//gets all of the column headers for the given file
 vector<string> Parser:: getCols(string filepath)
 {
     vector<string> temp = cols;
