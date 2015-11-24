@@ -20,7 +20,7 @@ graph::graph(QMainWindow *parent) :
     ui(new Ui::graph)
     {
         ui->setupUi(this);
-		graph::makePlot();
+		//graph::makePlot();
     }
 
 graph::~graph()
@@ -55,7 +55,7 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 	compare = t.front();	//the first publication type
 	xlabel[0] = t.front();	//record the first label
 
-							//This loop goes through the list of publications and counts how many are of each type.
+	//This loop goes through the list of publications and counts how many are of each type.
 	for (int count = 0; count < size; count++)
 	{
 		//check if the publications is in the date range
@@ -104,6 +104,8 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 		createBarPublications(name, num_publications, xaxis, xlabel);
 	else if (graphtype == 2)
 		createLinePublications(name, num_publications, xaxis, xlabel);
+	//else if (graphtype == 3)
+	//	createPiePublications(name, num_publications)
 	
 }
 
@@ -113,40 +115,41 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 void graph:: createBarPublications(string name, int num_publications, vector<int> xaxis, vector<string> xlabel)
 {
 	
-    // empty bar chart objects:
-    
+    //empty bar chart objects:
     QCPBars *Person = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-    
-    
     ui->customPlot->addPlottable(Person);
     
-    // set names and colors:
+    //set names and colors:
     QPen pen;
     pen.setWidthF(1.0);
     
-    QString str = QString::fromUtf8(name.c_str());
-    Person->setName(str);
-    pen.setColor(QColor(1, 92, 191));
+    //QString str = QString::fromUtf8(name.c_str());
+    //Person->setName(str);
+	Pereson->setName(name);
+	pen.setColor(QColor(1, 92, 191));
     Person->setPen(pen);
     Person->setBrush(QColor(1, 92, 191, 50));
+        
     
-    //stack bars ontop of each other:
-    
-    
-    // prepare x axis with country labels:
+    //variables for x axis ticks and labels:
     QVector<double> ticks;
     QVector<QString> labels;
-    for (int i = 0 ; i <= xaxis.size() ; i++)
+
+	//loop to print the same number of ticks to match the number of publication types
+    for (int i = 1 ; i <= xaxis.size() ; i++)
     {
-        ticks << xaxis[i];  //a loop to print out the ticks
+        ticks << i;
     }
     
-    // loop to print the labels
+    //loop to print the labels
     int len = xlabel.size();
     for(int i = 0; i < len; i++)
     {
-        labels.insert(i, QString::fromUtf8(xlabel[i].c_str()));
+        //labels.insert(i, QString::fromUtf8(xlabel[i].c_str()));
+		labels << xlabel[i];
     }
+
+	//graph plotting settings
     ui->customPlot->xAxis->setAutoTicks(false);
     ui->customPlot->xAxis->setAutoTickLabels(false);
     ui->customPlot->xAxis->setTickVector(ticks);
@@ -156,14 +159,19 @@ void graph:: createBarPublications(string name, int num_publications, vector<int
     ui->customPlot->xAxis->setTickLength(0, 4);
     ui->customPlot->xAxis->grid()->setVisible(true);
     ui->customPlot->xAxis->setRange(0, 8);
-    ui->customPlot->xAxis->setLabel("Type of Publication ");
+    ui->customPlot->xAxis->setLabel("Publication Type");
 
-    // prepare y axis:
+    //make the y-axis
     ui->customPlot->yAxis->setRange(0, num_publications);
 
-    ui->customPlot->yAxis->setPadding(5); // a bit more space to the left border
-    ui->customPlot->yAxis->setLabel("Number of Publication ");
+	//add space to the left border
+    ui->customPlot->yAxis->setPadding(5);
+
+	//y-axis label
+    ui->customPlot->yAxis->setLabel("Number of Publications");
     ui->customPlot->yAxis->grid()->setSubGridVisible(true);
+
+	//other graph plot settings
     QPen gridPen;
     gridPen.setStyle(Qt::SolidLine);
     gridPen.setColor(QColor(0, 0, 0, 25));
@@ -171,16 +179,19 @@ void graph:: createBarPublications(string name, int num_publications, vector<int
     gridPen.setStyle(Qt::DotLine);
     ui->customPlot->yAxis->grid()->setSubGridPen(gridPen);
 
-    // Add data:
-    QVector<double> PersonData;
+    //The actual values for plotting
+    QVector<double> publicationData;
+	//loop to put in the values to the QVector
+	for (int i = 0; i <= xaxis.size(); i++)
+	{
+		publicationData << xaxis[i];
+	}
 
-    PersonData << 1 << 3 << 2 << 5 << 6 << 8 << 12;
-    //it will be loop
-
-    Person->setData(ticks, PersonData);
+	//plot the data onto the graph
+    Person->setData(ticks, publicationData);
 
 
-    // setup legend:
+    //setup legend:
     ui->customPlot->legend->setVisible(true);
     ui->customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignHCenter);
     ui->customPlot->legend->setBrush(QColor(255, 255, 255, 200));
@@ -198,37 +209,52 @@ void graph:: createBarPublications(string name, int num_publications, vector<int
 //method for creating a window which displays a line graph from the Publications summary
 void graph:: createLinePublications(string name, int num_publications, vector<int> xaxis, vector<string> xlabel)
 {
-    
+    //add graph and set how they look like
     ui->customPlot->addGraph();
-    ui->customPlot->graph()->setLineStyle(QCPGraph::lsLine);
+    
+	/*******
+	ui->customPlot->graph()->setLineStyle(QCPGraph::lsLine);
     QPen pen;
     pen.setColor(QColor(1, 92, 191));
     pen.setStyle(Qt::SolidLine);
     pen.setWidthF(2.5);
     ui->customPlot->graph()->setPen(pen);
+	*******/
+
+	//blue line colour
+	customPlot->setPen(QPen(Qt::blue));
+	customPlot->setBrush(QBrush(QColor(0, 0, 255, 20)));
+	    
+    //ui->customPlot->graph()->setScatterStyle(QCPScatterStyle(QPixmap("./sun.png")));
     
-    ui->customPlot->graph()->setScatterStyle(QCPScatterStyle(QPixmap("./sun.png")));
-    
-    // set data:
+    //variables used to plot
     QVector<double> year, value;
-    for (int i = 0 ; i <= xaxis.size() ; i++)
+
+	//loop to set x-axis values
+    for (int i = 1; i <= xaxis.size(); i++)
     {
-        year << xaxis[i];  //a loop to print out the ticks
+        year << i;  //a loop to print out the ticks
     }
     
-    value << 2.17 << 3.42 << 4.94 << 10.38 << 15.86 << 29.33;
+	//loop to set y-axis values
+	for (int i = 0; i < yaxis.size(); i++)
+	{
+		value << yaxis[i];
+	}
+
+	//plot the values
     ui->customPlot->graph()->setData(year, value);
     
-    // set title of plot:
+    //set title of plot:
     ui->customPlot->plotLayout()->insertRow(0);
-    ui->customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(ui->customPlot,QString::fromUtf8(name.c_str())));
-    // set a fixed tick-step to one tick per year value:
+    ui->customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(ui->customPlot,name));
+    //set a fixed tick-step to one tick per year value:
     ui->customPlot->xAxis->setAutoTickStep(false);
     ui->customPlot->xAxis->setTickStep(1);
     ui->customPlot->xAxis->setSubTickCount(3);
-    // other axis configurations:
-    ui->customPlot->xAxis->setLabel("Type of Publication");
-    ui->customPlot->yAxis->setLabel("Number of Publication");
+    //other axis configurations:
+    ui->customPlot->xAxis->setLabel("Publication Type");
+    ui->customPlot->yAxis->setLabel("Number of Publications");
     ui->customPlot->xAxis2->setVisible(true);
     ui->customPlot->yAxis2->setVisible(true);
     ui->customPlot->xAxis2->setTickLabels(false);
@@ -237,7 +263,7 @@ void graph:: createLinePublications(string name, int num_publications, vector<in
     ui->customPlot->yAxis2->setTicks(false);
     ui->customPlot->xAxis2->setSubTickCount(0);
     ui->customPlot->yAxis2->setSubTickCount(0);
-    ui->customPlot->xAxis->setRange(2000, 2015);
+    ui->customPlot->xAxis->setRange(0, xaxis.size());
     ui->customPlot->yAxis->setRange(0, num_publications);
     
 
