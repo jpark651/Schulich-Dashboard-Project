@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <vector>
+#include <QMainWindow>
 
 
 namespace Ui {
@@ -23,13 +24,12 @@ namespace Ui {
 }
 
 
-class graph : public QWidget
+class graph : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit graph(QWidget *parent = 0);
-    ~graph();
+    
     //processes info for Publications and calls one of the 3 graph creating functions
     void preparePublications(std:: string name, std:: vector<std:: string> types, std:: vector<int> years, int diff_types, int begin, int end, int graphtype);
 
@@ -41,6 +41,12 @@ public:
 
     //method for creating a window which display a pie chart from the Publications summary
     void createPiePublications(std:: string name, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);
+
+	explicit graph(QWidget *parent = 0);
+	~graph();
+
+private slots:
+	void makePlot();
 private:
     Ui::graph *ui;
     std::vector<std::vector<std::string> > names;

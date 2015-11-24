@@ -15,11 +15,12 @@
 
 using namespace std;
 
-graph::graph(QWidget *parent) :
-    QWidget(parent),
+graph::graph(QMainWindow *parent) :
+    QWindow(parent),
     ui(new Ui::graph)
     {
         ui->setupUi(this);
+		graph::makePlot();
     }
 
 graph::~graph()

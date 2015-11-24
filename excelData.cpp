@@ -13,6 +13,7 @@
 #include "graph.h"
 #include "Parser.h"
 #include "excelData.h"
+#include <QApplication>
 using namespace std;
 
 //excelData constructor (first/last year is set using the earliest/latest year in the file)
@@ -410,6 +411,10 @@ void excelData::showGraph(int personIndex, int graphType)
 {
     if (personIndex < getPersonTotal())
     {
+		graph g;
+		g.show();
+		g.preparePublications(names[personIndex], vectorToList(types[personIndex]), vectorToList(years[personIndex]),
+			//uniqueTypes[personIndex], startYear, endYear, graphType);
         //graph newGraph();
         //newGraph->preparePublications(names[personIndex], vectorToList(types[personIndex]), vectorToList(years[personIndex]),
             //uniqueTypes[personIndex], startYear, endYear, graphType);
