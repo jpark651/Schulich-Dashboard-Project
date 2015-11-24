@@ -29,6 +29,8 @@ public:
     presentations(string file);
     //first/last year is set using the given parameters
     presentations(string file, int startYear, int endYear);
+    //uninitiated constructor
+    presentations();
 
 
     /*------ Methods ------*/

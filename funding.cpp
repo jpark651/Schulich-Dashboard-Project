@@ -27,6 +27,9 @@ funding::funding(string file, int firstYear, int lastYear)
     excelData newData(file, firstYear, lastYear, 1);
     storedData = newData;
 }
+//uninitiated constructor
+funding::funding(){}
+
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> funding::guiTypeData()

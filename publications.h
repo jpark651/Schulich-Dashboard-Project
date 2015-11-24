@@ -29,6 +29,8 @@ public:
     publications(string file);
     //first/last year is set using the given parameters
     publications(string file, int startYear, int endYear);
+    //uninitiated constructor
+    publications();
 
 
     /*------ Methods ------*/

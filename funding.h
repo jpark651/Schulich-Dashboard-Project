@@ -29,6 +29,8 @@ public:
     funding(string file);
     //first/last year is set using the given parameters
     funding(string file, int startYear, int endYear);
+    //uninitiated constructor
+    funding();
 
 
     /*------ Methods ------*/
