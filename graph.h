@@ -40,12 +40,11 @@ public:
 	//void graph::prepareFunding(std::string name, std::vector<std::string> types, std::vector<int> years, std::vector<double> amount, int diff_types, int begin, int end, int graphtype)
 
 
-
     //method for creating a window which displays a bar graph
     void createBarGraph(std:: string title, int yaxis_range, std:: vector<int> xaxis, std:: vector<std::string> xlabel, std:: string xtitle, std:: string ytitle);
 
     //method for creating a window which displays a line graph
-    void createLineGraph(std:: string title, int yaxis_range, std:: vector<int> xaxis, std:: vector<std:: string> xlabel, std::string xtitle, std::string ytitle);
+    void createLineGraph(std:: string title, int yaxis_range, std:: vector<int> xaxis, std:: vector<int> yaxis, std:: vector<std:: string> xlabel, std::string xtitle, std::string ytitle);
 
     //method for creating a window which display a pie chart
     //void createPieChart(std:: string title, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);

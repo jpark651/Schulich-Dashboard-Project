@@ -15,13 +15,17 @@
 
 using namespace std;
 
-graph::graph(QMainWindow *parent) :
-    QWindow(parent),
-    ui(new Ui::graph)
+//graph::graph(QMainWindow *parent) {
+graph::graph(QWidget *parent) {
+//    QWindow(parent);
+//    super(parent);
+//    QWidget(*parent);
+    /*ui = (new Ui::graph)
     {
         ui->setupUi(this);
 		//graph::makePlot();
-    }
+    };*/
+}
 
 graph::~graph()
 {
@@ -31,7 +35,7 @@ graph::~graph()
 
 /*Prepares the data needed to graph from the publications summary.
 */
-void graph:: preparePublications(std:: string name, std:: vector<std:: string> types, std:: vector<int> years, int diff_types, int begin, int end, int graphtype)
+void graph:: preparePublications(string name, vector<string> types, vector<int> years, int diff_types, int begin, int end, int graphtype)
 {
     vector<string> t = types;	//create a copy to manipulate
     vector<int> y = years;		//create a copy to manipulate
@@ -42,6 +46,7 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 	int num_publications = 0;	//number of publications that fit the date range. used for y-axis
 
 	vector<int> xaxis;			//array for the number of publications of each publication type
+    vector<int> yaxis;
 	vector<string> xlabel;		//string array for x-axis tick labels
 
 
@@ -49,6 +54,7 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 	for (int count = 0; count < diff_types; count++)
 	{
 		xaxis[count] = 0;
+        yaxis[count] = 0;
 	}
 
 
@@ -95,7 +101,16 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 	}
 
 	//title for the graphs
-	string title = name + ", " + begin + "-" + end;
+    int beginsize = snprintf(NULL, 0, "%d", begin);
+    int endsize = snprintf(NULL, 0, "%d", end);
+
+    char beginstring[beginsize + 1];
+    char endstring[endsize + 1];
+
+    sprintf(beginstring, "%d", begin);
+    sprintf(endstring, "%d", end);
+
+    string title = name + ", " + beginstring + "-" + endstring;
 
 	/* THE TYPE OF GRAPH THAT THE USER WANTS TO DISPLAY
 	*    1 = bar
@@ -105,7 +120,7 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 	if (graphtype == 1)
 		createBarGraph(title, num_publications, xaxis, xlabel, "Number of Publications", "Publication Type");
 	else if (graphtype == 2)
-		createLineGraph(title, num_publications, xaxis, xlabel, "Number of Publications", "Publication Type");
+        createLineGraph(title, num_publications, xaxis, yaxis, xlabel, "Number of Publications", "Publication Type");
 	//else if (graphtype == 3)
 	//	createPiePublications(name, num_publications)
 	
@@ -114,16 +129,16 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 //need: clinical/grant, approval, amounts, years
 //other: fac name, begin, end, graphtype 
 
-void graph:: prepareFunding(std:: string fname, std:: vector<std:: string> c_or_g, std:: vector<std:: string> approval, std:: vector<int> years, std:: vector<double> amount, int begin, int end, int graphtype)
+/*void graph:: prepareFunding(string fname, vector<string> c_or_g, vector<string> approval, vector<int> years, vector<double> amount, int begin, int end, int graphtype)
 {
 	vector<string> type = c_or_g;	//create a copy to manipulate
 	vector<int> y = years;			//create a copy to manipulate
 	vector<string> a = approval;	//create a copy to manipulate
-	vector<double> a = amounts;		//create a copy to manipulate
+    vector<double> am = amount;		//create a copy to manipulate
 	string compare;					//for checking when a new type of publication exists
 	int track = 0;					//used to track where in the string array we are
 
-	int size = types.size();	//get the size of the list
+    int size = type.size();	//get the size of the list
 	int num_publications = 0;	//number of publications that fit the date range. used for y-axis
 
 	vector<int> xaxis;			//array for the number of publications of each publication type
@@ -137,8 +152,8 @@ void graph:: prepareFunding(std:: string fname, std:: vector<std:: string> c_or_
 	}
 
 
-	compare = t.front();	//the first publication type
-	xlabel[0] = t.front();	//record the first label
+    compare = type.front();	//the first publication type
+    xlabel[0] = type.front();	//record the first label
 
 							//This loop goes through the list of publications and counts how many are of each type.
 	for (int count = 0; count < size; count++)
@@ -147,12 +162,12 @@ void graph:: prepareFunding(std:: string fname, std:: vector<std:: string> c_or_
 		if ((y.front() >= begin) && (y.front() <= end))
 		{
 			//check if the publication type is the same as the previous
-			if (t.front() == compare)
+            if (type.front() == compare)
 			{
 				//record the publication
 				xaxis[track]++;
 				//pop from the list
-				t.erase(t.begin());
+                type.erase(type.begin());
 				y.erase(y.begin());
 			}
 			//else start counting the next type
@@ -162,25 +177,26 @@ void graph:: prepareFunding(std:: string fname, std:: vector<std:: string> c_or_
 				track++;
 				xaxis[track]++;
 				//record the label for the new type
-				xlabel[track] = t.front();
+                xlabel[track] = type.front();
 
 				//pop from the list
-				t.erase(t.begin());
+                type.erase(type.begin());
 				y.erase(y.begin());
 				//record the new publication type
-				compare = t.front();
+                compare = type.front();
 			}
 		}
 		else
 		{
 			//pop from the list
-			t.erase(t.begin());
+            type.erase(type.begin());
 			y.erase(y.begin());
 		}
 	}
 
-	createBarGraph(title, largest, xaxis, xlabel, "Total Amount", "Funding Type"
+    createBarGraph(title, largest, xaxis, xlabel, "Total Amount", "Funding Type");
 
+}*/
 
 
 
@@ -201,14 +217,15 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     
     //QString str = QString::fromUtf8(name.c_str());
     //Person->setName(str);
-	Person->setName(title);
+    QString qTitle = QString::fromUtf8(title.c_str());
+    Person->setName(qTitle);
 	pen.setColor(QColor(1, 92, 191));
     Person->setPen(pen);
     Person->setBrush(QColor(1, 92, 191, 50));
         
     //variables for x axis ticks and labels:
     QVector<double> ticks;
-    QVector<QString> labels;
+    QVector<QString> labels(0);
 
 	//loop to print the same number of ticks to match the number of publication types
     for (int i = 1 ; i <= xaxis.size() ; i++)
@@ -221,7 +238,10 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     for(int i = 0; i < len; i++)
     {
         //labels.insert(i, QString::fromUtf8(xlabel[i].c_str()));
-		labels << xlabel[i];
+//		labels << xlabel[i];
+        QString tmpLabel = QString::fromUtf8(xlabel.at(i).c_str());
+        labels.append(tmpLabel);
+
     }
 
 	//graph plotting settings
@@ -234,7 +254,10 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     ui->customPlot->xAxis->setTickLength(0, 4);
     ui->customPlot->xAxis->grid()->setVisible(true);
     ui->customPlot->xAxis->setRange(0, 8);
-    ui->customPlot->xAxis->setLabel(xtitle);
+
+    QString qXTitle = QString::fromUtf8(xtitle.c_str());
+
+    ui->customPlot->xAxis->setLabel(qXTitle);
 
     //make the y-axis
     ui->customPlot->yAxis->setRange(0, yaxis_range);
@@ -243,7 +266,9 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     ui->customPlot->yAxis->setPadding(5);
 
 	//y-axis label
-    ui->customPlot->yAxis->setLabel(ytitle);
+    QString qYTitle = QString::fromUtf8(ytitle.c_str());
+
+    ui->customPlot->yAxis->setLabel(qYTitle);
     ui->customPlot->yAxis->grid()->setSubGridVisible(true);
 
 	//other graph plot settings
@@ -282,7 +307,7 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
 
 
 //method for creating a window which displays a line graph
-void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, vector<string> xlabel, string xtitle, string ytitle)
+void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, vector<int> yaxis, vector<string> xlabel, string xtitle, string ytitle)
 {
     //add graph and set how they look like
     ui->customPlot->addGraph();
@@ -297,8 +322,9 @@ void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, v
 	*******/
 
 	//blue line colour
-	customPlot->setPen(QPen(Qt::blue));
-	customPlot->setBrush(QBrush(QColor(0, 0, 255, 20)));
+    ui->customPlot->graph(0)->setBrush(QBrush(QColor(0, 0, 255, 20)));
+    ui->customPlot->graph(0)->setPen(QPen(Qt::blue));
+
 	    
     //ui->customPlot->graph()->setScatterStyle(QCPScatterStyle(QPixmap("./sun.png")));
     
@@ -317,19 +343,24 @@ void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, v
 		value << yaxis[i];
 	}
 
+    QString qTitle = QString::fromUtf8(title.c_str());
+    QString qXTitle = QString::fromUtf8(xtitle.c_str());
+    QString qYTitle = QString::fromUtf8(ytitle.c_str());
+
+
 	//plot the values
     ui->customPlot->graph()->setData(year, value);
     
     //set title of plot:
     ui->customPlot->plotLayout()->insertRow(0);
-    ui->customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(ui->customPlot,title));
+    ui->customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(ui->customPlot,qTitle));
     //set a fixed tick-step to one tick per year value:
     ui->customPlot->xAxis->setAutoTickStep(false);
     ui->customPlot->xAxis->setTickStep(1);
     ui->customPlot->xAxis->setSubTickCount(3);
     //other axis configurations:
-    ui->customPlot->xAxis->setLabel(xtitle);
-    ui->customPlot->yAxis->setLabel(ytitle);
+    ui->customPlot->xAxis->setLabel(qXTitle);
+    ui->customPlot->yAxis->setLabel(qYTitle);
     ui->customPlot->xAxis2->setVisible(true);
     ui->customPlot->yAxis2->setVisible(true);
     ui->customPlot->xAxis2->setTickLabels(false);
