@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <string>
+#include <QHeaderView>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->menuBar->setNativeMenuBar(false);
     activeFile=false;
+    ui->publicationTree->header()->resizeSection(0,400);
 
     //Adding expandable items for Publications
     if (activeFile==true) {
@@ -64,6 +66,54 @@ void MainWindow::createParser(QString filePath) {
 }
 
 void MainWindow::active() {
+    if (type_of_file==0)
+        activePublication();
+    else if (type_of_file==1)
+        activeTeaching();
+    else if (type_of_file==2)
+        activePresentation();
+    else if (type_of_file==3)
+        activeGrants();
+    else
+        //Error, let the user know there was a problem
+        //TODO
+        printf("ERROR");
+}
+
+void MainWindow::activePresentation() {
+    //To do
+}
+
+void MainWindow::activeGrants() {
+    //TO DO
+}
+
+void MainWindow::activeTeaching() {
+    noActiveFile->hide();
+    
+    QTreeWidgetItem *pme = new QTreeWidgetItem();
+    QTreeWidgetItem *ume = new QTreeWidgetItem();
+    QTreeWidgetItem *cme = new QTreeWidgetItem();
+    QTreeWidgetItem *other = new QTreeWidgetItem();
+
+    int numColumns = ui->publicationTree->columnCount();
+
+    //Readjusting the headers to match teaching summary
+    if (numColumns != 3) {
+        if (numColumns<3) {
+
+
+        }
+        else {
+
+
+        }
+    }
+
+}
+
+
+void MainWindow::activePublication() {
     noActiveFile->hide();
     QTreeWidgetItem *publicat = new QTreeWidgetItem();
     QTreeWidgetItem *publishedAbstracts = new QTreeWidgetItem();
@@ -71,6 +121,7 @@ void MainWindow::active() {
     QTreeWidgetItem *books = new QTreeWidgetItem();
     QTreeWidgetItem *bookChapters = new QTreeWidgetItem();
     QTreeWidgetItem *letters = new QTreeWidgetItem();
+
     ui->publicationTree->addTopLevelItem(publicat);
 
     parsedData = pub->guiTypeData();        //Getting the parsedData from publications
