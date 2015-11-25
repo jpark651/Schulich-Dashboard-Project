@@ -46,7 +46,6 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
 	int num_publications = 0;	//number of publications that fit the date range. used for y-axis
 
 	vector<int> xaxis;			//array for the number of publications of each publication type
-    vector<int> yaxis;
 	vector<string> xlabel;		//string array for x-axis tick labels
 
 
@@ -54,7 +53,6 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
 	for (int count = 0; count < diff_types; count++)
 	{
 		xaxis[count] = 0;
-        yaxis[count] = 0;
 	}
 
 
@@ -120,7 +118,7 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
 	if (graphtype == 1)
 		createBarGraph(title, num_publications, xaxis, xlabel, "Number of Publications", "Publication Type");
 	else if (graphtype == 2)
-        createLineGraph(title, num_publications, xaxis, yaxis, xlabel, "Number of Publications", "Publication Type");
+        createLineGraph(title, num_publications, xaxis, xlabel, "Number of Publications", "Publication Type");
 	//else if (graphtype == 3)
 	//	createPiePublications(name, num_publications)
 	
@@ -307,7 +305,7 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
 
 
 //method for creating a window which displays a line graph
-void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, vector<int> yaxis, vector<string> xlabel, string xtitle, string ytitle)
+void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, vector<string> xlabel, string xtitle, string ytitle)
 {
     //add graph and set how they look like
     ui->customPlot->addGraph();
@@ -338,9 +336,9 @@ void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, v
     }
     
 	//loop to set y-axis values
-	for (int i = 0; i < yaxis.size(); i++)
+	for (int i = 0; i < xaxis.size(); i++)
 	{
-		value << yaxis[i];
+		value << xaxis[i];
 	}
 
     QString qTitle = QString::fromUtf8(title.c_str());
