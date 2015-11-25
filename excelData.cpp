@@ -412,7 +412,7 @@ void excelData::showGraph(int personIndex, int graphType)
     if (personIndex < getPersonTotal())
     {
 		graph g;
-		g.preparePublications(names[personIndex], vectorToList(types[personIndex]), vectorToList(years[personIndex]), uniqueTypes[personIndex], startYear, endYear, graphType);
+		g.preparePublications(names[personIndex], types[personIndex], years[personIndex], uniqueTypes[personIndex], startYear, endYear, graphType);
 		g.show();
 		//graph newGraph();
 		//newGraph->preparePublications(names[personIndex], vectorToList(types[personIndex]), vectorToList(years[personIndex]),
