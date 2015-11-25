@@ -36,14 +36,19 @@ public:
     //processes info for Publications and calls one of the 3 graph creating functions
     void preparePublications(std:: string name, std:: vector<std:: string> types, std:: vector<int> years, int diff_types, int begin, int end, int graphtype);
 
-    //method for creating a window which displays a bar graph from the Publications summary
-    void createBarPublications(std:: string name, int num_publications, std:: vector<int> xaxis, std:: vector<std::string> xlabel);
+	//processes info for Funding and calls one of the 3 graph creating functions
+	//void graph::prepareFunding(std::string name, std::vector<std::string> types, std::vector<int> years, std::vector<double> amount, int diff_types, int begin, int end, int graphtype)
 
-    //method for creating a window which displays a line graph from the Publications summary
-    void createLinePublications(std:: string name, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);
 
-    //method for creating a window which display a pie chart from the Publications summary
-    void createPiePublications(std:: string name, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);
+
+    //method for creating a window which displays a bar graph
+    void createBarGraph(std:: string title, int yaxis_range, std:: vector<int> xaxis, std:: vector<std::string> xlabel, std:: string xtitle, std:: string ytitle);
+
+    //method for creating a window which displays a line graph
+    void createLineGraph(std:: string title, int yaxis_range, std:: vector<int> xaxis, std:: vector<std:: string> xlabel, std::string xtitle, std::string ytitle);
+
+    //method for creating a window which display a pie chart
+    //void createPieChart(std:: string title, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);
 
 
 private:
