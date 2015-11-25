@@ -125,7 +125,7 @@ void graph:: createBarPublications(string name, int num_publications, vector<int
     
     //QString str = QString::fromUtf8(name.c_str());
     //Person->setName(str);
-	Pereson->setName(name);
+    Person->setName(name);
 	pen.setColor(QColor(1, 92, 191));
     Person->setPen(pen);
     Person->setBrush(QColor(1, 92, 191, 50));
