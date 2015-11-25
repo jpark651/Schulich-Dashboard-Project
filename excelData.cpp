@@ -419,7 +419,7 @@ void excelData::showGraph(int personIndex, int graphType)
             //uniqueTypes[personIndex], startYear, endYear, graphType);
     }
 }
-
+/*
 //returns a list representation of the input vector
 template <typename T>
 list<T> excelData::vectorToList(vector<T> inputVector)
@@ -462,6 +462,7 @@ vector<vector<T> > excelData::nestedListToVector(list<list<T> > inputNestedList)
     }
     return result;
 }
+*/
 
 //parses a string and returns the integer
 int excelData::stringToInt(string inputString)

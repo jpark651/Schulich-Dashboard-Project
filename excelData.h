@@ -65,7 +65,7 @@ private:
 
     //sorts filtered data into "namesByType"/"countByType"
     void sortForGui(vector<vector<string> > filteredVects);
-
+/*
     //returns a list representation of the input vector
     template <typename T>
     list<T> vectorToList(vector<T> inputVector);
@@ -81,7 +81,7 @@ private:
     //returns a nested vector representation of the input nested list
     template <typename T>
     vector<vector<T> > nestedListToVector(list<list<T> > inputNestedList);
-
+*/
     //parses a string and returns the integer
     int stringToInt(string inputString);
 
