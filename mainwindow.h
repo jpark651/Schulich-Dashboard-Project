@@ -30,7 +30,7 @@ public:
     QLabel *noActiveFile;   //Label to let the user know to open a file
     vector<string> parsedData;
     void insertNames(QTreeWidgetItem*);
-    int type_of_file=NULL;       //0=publication, 1=teaching, 2=presentation, 3=grants and clinical funding summary
+    int type_of_file=0;       //0=publication, 1=teaching, 2=presentation, 3=grants and clinical funding summary
 
 private slots:
     void on_pushButton_clicked();

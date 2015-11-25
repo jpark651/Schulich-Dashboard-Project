@@ -91,6 +91,7 @@ void MainWindow::activeGrants() {
 void MainWindow::activeTeaching() {
     noActiveFile->hide();
     
+    QTreeWidgetItem *teaching = new QTreeWidgetItem();
     QTreeWidgetItem *pme = new QTreeWidgetItem();
     QTreeWidgetItem *ume = new QTreeWidgetItem();
     QTreeWidgetItem *cme = new QTreeWidgetItem();
@@ -99,16 +100,18 @@ void MainWindow::activeTeaching() {
     int numColumns = ui->publicationTree->columnCount();
 
     //Readjusting the headers to match teaching summary
-    if (numColumns != 3) {
-        if (numColumns<3) {
+    ui->publicationTree->clear();
+    ui->publicationTree->setColumnCount(4);
 
+    //Creating a string list of the headers
+    QStringList horizontalHeaders;
+    horizontalHeaders << "Summary" << "Academic Year" << "Hours" << "Students";
 
-        }
-        else {
+    //Setting the column headers
+    ui->publicationTree->setHeaderLabels(horizontalHeaders);
 
+    ui->publicationTree->addTopLevelItem(teaching);
 
-        }
-    }
 
 }
 
