@@ -111,15 +111,17 @@ void graph:: preparePublications(std:: string name, std:: vector<std:: string> t
 	
 }
 
+//need: clinical/grant, approval, amounts, years
+//other: fac name, begin, end, graphtype 
 
-/*
-void graph:: prepareFunding(std:: string name, std:: vector<std:: string> types, std:: vector<int> years, std:: vector<double> amount, int diff_types, int begin, int end, int graphtype)
+void graph:: prepareFunding(std:: string fname, std:: vector<std:: string> c_or_g, std:: vector<std:: string> approval, std:: vector<int> years, std:: vector<double> amount, int begin, int end, int graphtype)
 {
-	vector<string> t = types;	//create a copy to manipulate
-	vector<int> y = years;		//create a copy to manipulate
-	vector<double> a = amounts;	//create a copy to manipulate
-	string compare;				//for checking when a new type of publication exists
-	int track = 0;				//used to track where in the string array we are
+	vector<string> type = c_or_g;	//create a copy to manipulate
+	vector<int> y = years;			//create a copy to manipulate
+	vector<string> a = approval;	//create a copy to manipulate
+	vector<double> a = amounts;		//create a copy to manipulate
+	string compare;					//for checking when a new type of publication exists
+	int track = 0;					//used to track where in the string array we are
 
 	int size = types.size();	//get the size of the list
 	int num_publications = 0;	//number of publications that fit the date range. used for y-axis
@@ -128,7 +130,7 @@ void graph:: prepareFunding(std:: string name, std:: vector<std:: string> types,
 	vector<string> xlabel;		//string array for x-axis tick labels
 
 
-								//initialize the array values to 0 to prepare for counting
+	//initialize the array values to 0 to prepare for counting
 	for (int count = 0; count < diff_types; count++)
 	{
 		xaxis[count] = 0;
@@ -181,7 +183,7 @@ void graph:: prepareFunding(std:: string name, std:: vector<std:: string> types,
 
 
 
-*/
+
 
 
 
