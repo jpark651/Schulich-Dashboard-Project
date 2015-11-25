@@ -213,10 +213,11 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     QPen pen;
     pen.setWidthF(1.0);
     
-    //QString str = QString::fromUtf8(name.c_str());
-    //Person->setName(str);
+	//convert the string and set to be the title for the graph
     QString qTitle = QString::fromUtf8(title.c_str());
     Person->setName(qTitle);
+
+	//colour
 	pen.setColor(QColor(1, 92, 191));
     Person->setPen(pen);
     Person->setBrush(QColor(1, 92, 191, 50));
@@ -253,8 +254,8 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     ui->customPlot->xAxis->grid()->setVisible(true);
     ui->customPlot->xAxis->setRange(0, 8);
 
+	//convert string and display the xaxis title
     QString qXTitle = QString::fromUtf8(xtitle.c_str());
-
     ui->customPlot->xAxis->setLabel(qXTitle);
 
     //make the y-axis
@@ -263,9 +264,8 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
 	//add space to the left border
     ui->customPlot->yAxis->setPadding(5);
 
-	//y-axis label
+	//convert string and display y-axis label
     QString qYTitle = QString::fromUtf8(ytitle.c_str());
-
     ui->customPlot->yAxis->setLabel(qYTitle);
     ui->customPlot->yAxis->grid()->setSubGridVisible(true);
 
@@ -322,10 +322,7 @@ void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, v
 	//blue line colour
     ui->customPlot->graph(0)->setBrush(QBrush(QColor(0, 0, 255, 20)));
     ui->customPlot->graph(0)->setPen(QPen(Qt::blue));
-
 	    
-    //ui->customPlot->graph()->setScatterStyle(QCPScatterStyle(QPixmap("./sun.png")));
-    
     //variables used to plot
     QVector<double> year, value;
 
@@ -340,7 +337,8 @@ void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, v
 	{
 		value << xaxis[i];
 	}
-
+	
+	//convert strings for titles
     QString qTitle = QString::fromUtf8(title.c_str());
     QString qXTitle = QString::fromUtf8(xtitle.c_str());
     QString qYTitle = QString::fromUtf8(ytitle.c_str());
