@@ -82,10 +82,49 @@ void MainWindow::active() {
 
 void MainWindow::activePresentation() {
     //To do
+    noActiveFile->hide();
+
+    QTreeWidgetItem *presentation = new QTreeWidgetItem();
+    QTreeWidgetItem *invitedLectures = new QTreeWidgetItem();
+    QTreeWidgetItem *abstractsPresented = new QTreeWidgetItem();
+    QTreeWidgetItem *nextPrentationType = new QTreeWidgetItem();
+    QTreeWidgetItem *Other = new QTreeWidgetItem();
+
+    ui->publicationTree->clear();
+    ui->publicationTree->setColumnCount(3);
+
+    QStringList horizontalHeaders;
+    horizontalHeaders << "Summary" << "Faculty Name" << "Number of Presentations";
+
+    ui->publicationTree->setHeaderLabels(horizontalHeaders);
+
+    ui->publicationTree->addTopLevelItem(presentation);
+
+    //TO DO
+
+
 }
 
 void MainWindow::activeGrants() {
-    //TO DO
+    noActiveFile->hide();
+
+    QTreeWidgetItem *grants = new QTreeWidgetItem();
+    QTreeWidgetItem *peerReviewed1 = new QTreeWidgetItem();
+    QTreeWidgetItem *industrySponsored1 = new QTreeWidgetItem();
+    QTreeWidgetItem *clinicalFunding = new QTreeWidgetItem();
+    QTreeWidgetItem *peerReviewed2 = new QTreeWidgetItem();
+    QTreeWidgetItem *industrySponsored2 = new QTreeWidgetItem();
+
+    ui->publicationTree->clear();
+    ui->publicationTree->setColumnCount(3);
+
+    QStringList horizontalHeaders;
+    horizontalHeaders << "Summary" << "Total #" << "Total $";
+    ui->publicationTree->setHeaderLabels(horizontalHeaders);
+
+    ui->publicationTree->addTopLevelItem(grants);
+
+    // TODO
 }
 
 void MainWindow::activeTeaching() {
@@ -96,8 +135,6 @@ void MainWindow::activeTeaching() {
     QTreeWidgetItem *ume = new QTreeWidgetItem();
     QTreeWidgetItem *cme = new QTreeWidgetItem();
     QTreeWidgetItem *other = new QTreeWidgetItem();
-
-    int numColumns = ui->publicationTree->columnCount();
 
     //Readjusting the headers to match teaching summary
     ui->publicationTree->clear();
@@ -112,7 +149,7 @@ void MainWindow::activeTeaching() {
 
     ui->publicationTree->addTopLevelItem(teaching);
 
-
+    //TODO
 }
 
 
@@ -124,6 +161,14 @@ void MainWindow::activePublication() {
     QTreeWidgetItem *books = new QTreeWidgetItem();
     QTreeWidgetItem *bookChapters = new QTreeWidgetItem();
     QTreeWidgetItem *letters = new QTreeWidgetItem();
+
+    ui->publicationTree->clear();
+    ui->publicationTree->setColumnCount(2);
+
+    QStringList horizontalHeaders;
+    horizontalHeaders << "Summary" << "Total";
+
+    ui->publicationTree->setHeaderLabels(horizontalHeaders);
 
     ui->publicationTree->addTopLevelItem(publicat);
 
