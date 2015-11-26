@@ -159,11 +159,6 @@ void MainWindow::activeTeaching() {
 void MainWindow::activePublication() {
     noActiveFile->hide();
     QTreeWidgetItem *publicat = new QTreeWidgetItem();
-    QTreeWidgetItem *publishedAbstracts = new QTreeWidgetItem();
-    QTreeWidgetItem *journalArticles = new QTreeWidgetItem();
-    QTreeWidgetItem *books = new QTreeWidgetItem();
-    QTreeWidgetItem *bookChapters = new QTreeWidgetItem();
-    QTreeWidgetItem *letters = new QTreeWidgetItem();
 
     ui->publicationTree->clear();
     ui->publicationTree->setColumnCount(2);
@@ -184,61 +179,18 @@ void MainWindow::activePublication() {
     publicat->setText(1, QString::fromStdString(parsedData.front()));   //Setting # of publications
     parsedData.erase(parsedData.begin());
 
+    while (parsedData.size() > 0)
+    {
+        QTreeWidgetItem *nextSection = new QTreeWidgetItem();
+        nextSection->setText(0, QString::fromStdString(parsedData.front()));
+        parsedData.erase(parsedData.begin());
+        nextSection->setText(1, QString::fromStdString(parsedData.front()));
+        parsedData.erase(parsedData.begin());
+        publicat->addChild(nextSection);
 
-    //Published Abstracts
-    publishedAbstracts->setText(0, QString::fromStdString(parsedData.front()));    //Setting "Published Abstracts"
-    parsedData.erase(parsedData.begin());
-    publishedAbstracts->setText(1, QString::fromStdString(parsedData.front()));    //Setting # of published abstracts
-    parsedData.erase(parsedData.begin());
-    publicat->addChild(publishedAbstracts);                //Add to publication tree
-
-    //Insert the author's names
-    insertNames(publishedAbstracts);
-
-
-    //Journal Articles
-    journalArticles->setText(0, QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    journalArticles->setText(1, QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    publicat->addChild(publishedAbstracts);
-
-    //Insert the author's names
-    insertNames(journalArticles);
-
-
-    //Books
-    books->setText(0, QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    books->setText(1, QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    publicat->addChild(books);
-
-    //Insert the author's names
-    insertNames(books);
-
-
-    //Book Chapters
-    bookChapters->setText(0,QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    bookChapters->setText(1,QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    publicat->addChild(bookChapters);
-
-    //Insert Author's names
-    insertNames(bookChapters);
-
-
-    //Letters to Editors
-    letters->setText(0, QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    letters->setText(1, QString::fromStdString(parsedData.front()));
-    parsedData.erase(parsedData.begin());
-    publicat->addChild(letters);
-
-    //Insert names
-    insertNames(letters);
-    publicat->addChild(letters);
+        //Insert names
+        insertNames(nextSection);
+    }
 }
 
 
