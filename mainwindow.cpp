@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <string>
 #include <QHeaderView>
+#include "excelSheet.h"
 
 using namespace std;
 
@@ -58,10 +59,12 @@ void MainWindow::on_pushButton_clicked()
 }
 
 void MainWindow::createParser(QString filePath) {
+    excelSheet excel(filePath.toStdString());
+    parsedData = excel.guiTypeData();
 
     string path;
     path = filePath.toStdString();
-    pub = new publications(path,1970,2020);
+//    pub = new publications(path,1970,2020);
     active();
 }
 
@@ -172,7 +175,7 @@ void MainWindow::activePublication() {
 
     ui->publicationTree->addTopLevelItem(publicat);
 
-    parsedData = pub->guiTypeData();        //Getting the parsedData from publications
+//    parsedData = pub->guiTypeData();        //Getting the parsedData from publications
 
     //Publications
     publicat->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Publications"

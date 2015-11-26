@@ -25,10 +25,10 @@ public:
     void activeTeaching();
     void activePresentation();
     void activeGrants();
+    vector<string> parsedData;  //Holds parsed data
     QString filePath;
     publications *pub;
     QLabel *noActiveFile;   //Label to let the user know to open a file
-    vector<string> parsedData;
     void insertNames(QTreeWidgetItem*);
     int type_of_file=0;       //0=publication, 1=teaching, 2=presentation, 3=grants and clinical funding summary
 
