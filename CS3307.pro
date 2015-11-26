@@ -16,7 +16,8 @@ HEADERS += excelData.h \
            presentations.h \
            publications.h \
            qcustomplot.h \
-           teaching.h
+           teaching.h \
+    excelSheet.h
 FORMS += graph.ui mainwindow.ui
 SOURCES += excelData.cpp \
            funding.cpp \
@@ -27,4 +28,5 @@ SOURCES += excelData.cpp \
            presentations.cpp \
            publications.cpp \
            qcustomplot.cpp \
-           teaching.cpp
+           teaching.cpp \
+    excelSheet.cpp

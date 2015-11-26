@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <vector>
 #include "Parser.h"
+#include "excelData.h"
 using namespace std;
 //Parser constructor
 Parser:: Parser (string name, int type)

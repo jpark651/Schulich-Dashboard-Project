@@ -13,6 +13,7 @@
 #include "excelData.h"
 #include "Parser.h"
 #include "publications.h"
+#include "mainwindow.h"
 using namespace std;
 
 //publications constructor (first/last year is set to the earliest/latest year in the file)
