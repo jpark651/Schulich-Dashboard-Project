@@ -13,8 +13,11 @@
 #include "excelData.h"
 #include "Parser.h"
 #include "publications.h"
-#include "mainwindow.h"
+#include "dialog.h"
+
+#include <unistd.h>
 using namespace std;
+
 
 //publications constructor (first/last year is set to the earliest/latest year in the file)
 publications::publications(string file)
@@ -27,6 +30,15 @@ publications::publications(string file, int firstYear, int lastYear)
 {
     excelData newData(file, firstYear, lastYear, 3);
     storedData = newData;
+
+//    unsigned int microseconds = 5000000;
+//    usleep(microseconds);
+//    Dialog dialog;
+//    dialog.show();
+
+
+//    usleep(microseconds);
+    printf("About to show graph!\n");
 }
 //uninitiated constructor
 publications::publications() {}

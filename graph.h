@@ -29,15 +29,15 @@ class graph : public QMainWindow
     Q_OBJECT
 
 public:
-	
-	explicit graph(QWidget *parent = 0);	//choice is the data and graph type to be displayed
-	~graph();
+
+    explicit graph(QWidget *parent = 0);	//choice is the data and graph type to be displayed
+    ~graph();
 
     //processes info for Publications and calls one of the 3 graph creating functions
     void preparePublications(std:: string name, std:: vector<std:: string> types, std:: vector<int> years, int diff_types, int begin, int end, int graphtype);
 
-	//processes info for Funding and calls one of the 3 graph creating functions
-	//void graph::prepareFunding(std::string name, std::vector<std::string> types, std::vector<int> years, std::vector<double> amount, int diff_types, int begin, int end, int graphtype)
+    //processes info for Funding and calls one of the 3 graph creating functions
+    //void graph::prepareFunding(std::string name, std::vector<std::string> types, std::vector<int> years, std::vector<double> amount, int diff_types, int begin, int end, int graphtype)
 
 
     //method for creating a window which displays a bar graph
@@ -48,6 +48,10 @@ public:
 
     //method for creating a window which display a pie chart
     //void createPieChart(std:: string title, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);
+
+    void closeEvent(QCloseEvent *event);
+
+    void close();
 
 
 private:

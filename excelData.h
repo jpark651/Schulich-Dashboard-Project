@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include "Parser.h"
+#include "graph.h"
 using namespace std;
 
 class excelData
@@ -27,6 +28,7 @@ private:
     int startYear;
     int endYear;
     int excelType;
+
     vector<vector<string> > organized;
     vector<vector<string> > selection;
     vector<int> selectYears;
