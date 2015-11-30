@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 #include "Parser.h"
-#include "graph.h"
 using namespace std;
 
 class excelData
@@ -36,9 +35,14 @@ private:
     vector<string> names;
     vector<vector<string> > types;
     vector<int> uniqueTypes;
+    vector<vector<bool> > peerReviewed;
+    vector<vector<string> > money;
+    vector<vector<long> > longMoney;
+    vector<vector<int> > hours;
     vector<vector<int> > years;
     vector<vector<string> > namesByType;
     vector<vector<int> > countByType;
+    vector<vector<long> > moneyByType;
     Parser *parse;
 
 
@@ -67,25 +71,24 @@ private:
 
     //sorts filtered data into "namesByType"/"countByType"
     void sortForGui(vector<vector<string> > filteredVects);
-/*
-    //returns a list representation of the input vector
-    template <typename T>
-    list<T> vectorToList(vector<T> inputVector);
 
-    //returns a nested list representation of the input nested vector
-    template <typename T>
-    list<list<T> > nestedVectorToList(vector<vector<T> > inputNestedVector);
-
-    //returns a vector representation of the input list
-    template <typename T>
-    vector<T> listToVector(list<T> inputList);
-
-    //returns a nested vector representation of the input nested list
-    template <typename T>
-    vector<vector<T> > nestedListToVector(list<list<T> > inputNestedList);
-*/
     //parses a string and returns the integer
     int stringToInt(string inputString);
+
+    //returns "true" for funding-type Excel files
+    int isFunding();
+
+    //returns "true" for presentation-type Excel files
+    int isPresentations();
+
+    //returns "true" for publications-type Excel files
+    int isPublications();
+
+    //returns "true" for teaching-type Excel files
+    int isTeaching();
+
+    //parses a currency string into a long
+    long parseMoney(string amount);
 
 
     /*------ Constructors ------*/
@@ -107,11 +110,11 @@ private:
     //returns the information to be printed to the GUI, with each type's data separated by a single hyphen
     vector<string> guiTypeData();
 
-    //shows a graph for the given person
-    void showGraph(int personIndex, int graphType);
+    //shows a graph for the given entry
+    void showGraph(int entryIndex, int graphType);
 
-    //get the total number of persons
-    int getPersonTotal();
+    //get the total number of entries
+    int getTotalEntries();
 
     //returns a reference to the Parser object
     Parser *getParse();

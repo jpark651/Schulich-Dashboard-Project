@@ -37,16 +37,16 @@ vector<string> funding::guiTypeData()
     return storedData.guiTypeData();
 }
 
-//shows a graph for the given person
-void funding::showGraph(int personIndex, int graphType)
+//shows a graph for the given entry
+void funding::showGraph(int entryIndex, int graphType)
 {
-    storedData.showGraph(personIndex, graphType);
+    storedData.showGraph(entryIndex, graphType);
 }
 
-//get the total number of persons
-int funding::getPersonTotal()
+//get the total number of entries
+int funding::getTotalEntries()
 {
-    return storedData.getPersonTotal();
+    return storedData.getTotalEntries();
 }
 
 //returns a reference to the Parser object

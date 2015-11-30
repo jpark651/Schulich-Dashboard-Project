@@ -92,6 +92,12 @@ int excelSheet::getExcelType(string filename)
     return type;
 }
 
+//returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+int excelSheet::getExcelType()
+{
+    return sheetType;
+}
+
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> excelSheet::guiTypeData()
 {
@@ -114,46 +120,46 @@ vector<string> excelSheet::guiTypeData()
     return typeData;
 }
 
-//shows a graph for the given person
-void excelSheet::showGraph(int personIndex, int graphType)
+//shows a graph for the given entry
+void excelSheet::showGraph(int entryIndex, int graphType)
 {
     switch (sheetType)
     {
     case 1:
-        sheetType1.showGraph(personIndex, graphType);
+        sheetType1.showGraph(entryIndex, graphType);
         break;
     case 2:
-        sheetType2.showGraph(personIndex, graphType);
+        sheetType2.showGraph(entryIndex, graphType);
         break;
     case 3:
-        sheetType3.showGraph(personIndex, graphType);
+        sheetType3.showGraph(entryIndex, graphType);
         break;
     case 4:
-        sheetType4.showGraph(personIndex, graphType);
+        sheetType4.showGraph(entryIndex, graphType);
         break;
     }
 }
 
-//get the total number of persons
-int excelSheet::getPersonTotal()
+//get the total number of entries
+int excelSheet::getTotalEntries()
 {
-    int personTotal;
+    int entryTotal;
     switch (sheetType)
     {
     case 1:
-        personTotal = sheetType1.getPersonTotal();
+        entryTotal = sheetType1.getTotalEntries();
         break;
     case 2:
-        personTotal = sheetType2.getPersonTotal();
+        entryTotal = sheetType2.getTotalEntries();
         break;
     case 3:
-        personTotal = sheetType3.getPersonTotal();
+        entryTotal = sheetType3.getTotalEntries();
         break;
     case 4:
-        personTotal = sheetType4.getPersonTotal();
+        entryTotal = sheetType4.getTotalEntries();
         break;
     }
-    return personTotal;
+    return entryTotal;
 }
 
 //returns a reference to the Parser object

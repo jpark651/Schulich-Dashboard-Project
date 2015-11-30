@@ -36,16 +36,16 @@ vector<string> teaching::guiTypeData()
     return storedData.guiTypeData();
 }
 
-//shows a graph for the given person
-void teaching::showGraph(int personIndex, int graphType)
+//shows a graph for the given entry
+void teaching::showGraph(int entryIndex, int graphType)
 {
-    storedData.showGraph(personIndex, graphType);
+    storedData.showGraph(entryIndex, graphType);
 }
 
-//get the total number of persons
-int teaching::getPersonTotal()
+//get the total number of entries
+int teaching::getTotalEntries()
 {
-    return storedData.getPersonTotal();
+    return storedData.getTotalEntries();
 }
 
 //returns a reference to the Parser object

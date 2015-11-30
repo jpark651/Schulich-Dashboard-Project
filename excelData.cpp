@@ -57,17 +57,18 @@ void excelData::initializeObject(string file, int firstYear, int lastYear, bool 
 //creates a selection of columns based on header names
 vector<vector<string> > excelData::selectColumns(vector<vector<string> > organizedVects)
 {
-    bool name = false, type = false, year = false, done = false;
-    string nameTest = "Member Name", typeTest, yearTest;
+    bool name = false, type = false, year = false, money = false, done = false;
+    string nameTest = "Member Name", typeTest, yearTest, moneyTest;
     switch (excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     {
         case 1:
             typeTest = "Funding Type";
+            moneyTest = "Total Amount";
             yearTest = "Start Date";
             break;
 
         case 2:
-            typeTest = "Activity Type";
+            typeTest = "Type";
             yearTest = "Date";
             break;
 
@@ -77,12 +78,12 @@ vector<vector<string> > excelData::selectColumns(vector<vector<string> > organiz
             break;
 
         case 4:
-            typeTest = "Type of Course / Activity";
+            typeTest = "Program";
             yearTest = "Start Date";
             break;
     }
-    vector<string> nameVect, typeVect, yearVect;
-    vector<vector<string> > columnVect = organized;
+    vector<string> nameVect, typeVect, yearVect, moneyVect;
+    vector<vector<string> > columnVect = organizedVects;
     for (int i = 0, iMax = columnVect.size(); i < iMax && !done; i++)
     {
         vector<string> columnRows = columnVect[i];
@@ -104,23 +105,35 @@ vector<vector<string> > excelData::selectColumns(vector<vector<string> > organiz
                 yearVect = columnRows;
                 year = true;
             }
+            if (isFunding() && !money && header.compare(moneyTest) == 0)
+            {
+                moneyVect = columnRows;
+                money = true;
+            }
         }
         if (name && type && year)
         {
-            done = true;
+            if (excelType != 1 || money)
+            {
+                done = true;
+            }
         }
     }
     vector<vector<string> > selectionVect;
     selectionVect.push_back(nameVect);
     selectionVect.push_back(typeVect);
     selectionVect.push_back(yearVect);
+    if (isFunding())
+    {
+        selectionVect.push_back(moneyVect);
+    }
     return selectionVect;
 }
 
 //parses the vector of strings into a vector of integers ("selectYears")
 void excelData::parseYears()
 {
-    if (selection.size() == 3)
+    if (selection.size() >= 3)
     {
         vector<int> intYears;
         vector<string> yearsVect = selection[2];
@@ -172,7 +185,7 @@ vector<vector<string> > excelData::removeFirstStrings(vector<vector<string> > se
 {
     vector<vector<string> > filteredVects;
     int selectedVectsSize = selectedVects.size();
-    if (selectedVectsSize == 3 && selectedVects[0].size() > 1)
+    if (selectedVectsSize >= 3 && selectedVects[0].size() > 1)
     {
         for (int i = 0, iMax = selectedVectsSize; i < iMax; i++)
         {
@@ -186,13 +199,17 @@ vector<vector<string> > excelData::removeFirstStrings(vector<vector<string> > se
 //filters out entries (from the selection) which are outside the given date range
 vector<vector<string> > excelData::filterByDate(vector<vector<string> > selectedVects, int startYear, int endYear)
 {
-    vector<string> nameVectFilt, typeVectFilt, yearVectFilt;
-    if (selectedVects.size() == 3)
+    vector<string> nameVectFilt, typeVectFilt, yearVectFilt, moneyVectFilt;
+    if (selectedVects.size() >= 3)
     {
-        vector<string> nameVect, typeVect, yearVect;
+        vector<string> nameVect, typeVect, yearVect, moneyVect;
         nameVect = selectedVects[0];
         typeVect = selectedVects[1];
         yearVect = selectedVects[2];
+        if (isFunding())
+        {
+            moneyVect = selectedVects[3];
+        }
         for (int i = 1, iMax = selectYears.size(); i < iMax; i++)
         {
             int year = selectYears[i];
@@ -201,6 +218,10 @@ vector<vector<string> > excelData::filterByDate(vector<vector<string> > selected
                 nameVectFilt.push_back(nameVect[i]);
                 typeVectFilt.push_back(typeVect[i]);
                 yearVectFilt.push_back(yearVect[i]);
+                if (isFunding())
+                {
+                    moneyVectFilt.push_back((moneyVect[i]));
+                }
             }
         }
     }
@@ -208,28 +229,41 @@ vector<vector<string> > excelData::filterByDate(vector<vector<string> > selected
     filtered.push_back(nameVectFilt);
     filtered.push_back(typeVectFilt);
     filtered.push_back(yearVectFilt);
+    if (isFunding())
+    {
+        filtered.push_back(moneyVectFilt);
+    }
     return filtered;
 }
 
 //sorts filtered data into "names"/"types"/"uniqueTypes"/"years"
 void excelData::sortForGraph(vector<vector<string> > filteredVects)
 {
-    if (filteredVects.size() == 3)
+    if (filteredVects.size() >= 3)
     {
-        vector<string> namesVect, typesVect, yearsVect;
+        vector<string> namesVect, typesVect, yearsVect, moneyVect;
         namesVect = filteredVects[0];
         typesVect = filteredVects[1];
         yearsVect = filteredVects[2];
-
+        if (isFunding())
+        {
+            moneyVect = filteredVects[3];
+        }
         vector<string> namesVectSort;
         vector<int> uniqueTypesVect;
         vector<vector<string> > typesVectSort;
         vector<vector<int> > yearsVectSort;
+        vector<vector<string> > moneyVectSort;
         for (int i = 0, iMax = namesVect.size(); i < iMax; i++)
         {
             string nextName = namesVect[i];
             string nextType = typesVect[i];
             string nextYear = yearsVect[i];
+            string nextMoney;
+            if (isFunding())
+            {
+                nextMoney = moneyVect[i];
+            }
             bool exists = false;
             int count = -1;
             for (int j = 0, jMax = namesVectSort.size(); j < jMax && !exists; j++)
@@ -246,27 +280,47 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
                 namesVectSort.push_back(nextName);
                 vector<string> newTypesVect;
                 vector<int> newYearsVect;
+                vector<string> newMoneyVect;
                 typesVectSort.push_back(newTypesVect);
                 yearsVectSort.push_back(newYearsVect);
+                if (isFunding())
+                {
+                    moneyVectSort.push_back(newMoneyVect);
+                }
                 count++;
             }
             typesVectSort[count].push_back(nextType);
             const char * ctemp = nextYear.c_str();
             int nextYearInt = atoi(ctemp);
             yearsVectSort[count].push_back(nextYearInt);
+            if (isFunding())
+            {
+                moneyVectSort[count].push_back(nextMoney);
+            }
         }
 
         for (int i = 0, totalVects = namesVectSort.size(); i < totalVects; i++)
         {
             vector<string> tempTypesVect = typesVectSort[i];
             vector<int> tempYearsVect = yearsVectSort[i];
+            vector<string> tempMoneyVect;
+            if (isFunding())
+            {
+                tempMoneyVect = moneyVectSort[i];
+            }
             vector<string> newTypesVect;
             vector<int> newYearsVect;
+            vector<string> newMoneyVect;
             int count = 0;
             for (int j = 0, jMax = tempTypesVect.size(); j < jMax; j++)
             {
                 string testType = tempTypesVect[j];
                 int testYear = tempYearsVect[j];
+                string testMoney;
+                if (isFunding())
+                {
+                    testMoney = tempMoneyVect[j];
+                }
                 bool exists = false;
                 for (int k = 0, kMax = newTypesVect.size(); k < kMax && !exists; k++)
                 {
@@ -274,8 +328,17 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
                     {
                         vector<string>::iterator typesBegin = newTypesVect.begin() + k;
                         vector<int>::iterator yearsBegin = newYearsVect.begin() + k;
+                        vector<string>::iterator moneyBegin;
+                        if (isFunding())
+                        {
+                            moneyBegin = newMoneyVect.begin() + k;
+                        }
                         newTypesVect.insert(typesBegin, testType);
                         newYearsVect.insert(yearsBegin, testYear);
+                        if (isFunding())
+                        {
+                            newMoneyVect.insert(moneyBegin, testMoney);
+                        }
                         exists = true;
                     }
                 }
@@ -283,24 +346,49 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
                 {
                     newTypesVect.push_back(testType);
                     newYearsVect.push_back(testYear);
+                    if (isFunding())
+                    {
+                        newMoneyVect.push_back(testMoney);
+                    }
                     count++;
                 }
             }
             typesVectSort[i] = newTypesVect;
             yearsVectSort[i] = newYearsVect;
+            if (isFunding())
+            {
+                moneyVectSort[i] = newMoneyVect;
+            }
             uniqueTypesVect.push_back(count);
         }
         names = namesVectSort;
         uniqueTypes = uniqueTypesVect;
         types = typesVectSort;
         years = yearsVectSort;
+        if (isFunding())
+        {
+            money = moneyVectSort;
+            vector<vector<long> > newMoney;
+            vector<long> newMoneyTemp;
+            for (int i = 0, iMax = money.size(); i < iMax; i++)
+            {
+                newMoneyTemp = vector<long>();
+                for (int j = 0, jMax = money[i].size(); j < jMax; j++)
+                {
+                    long newLongMoney = parseMoney(money[i][j]);
+                    newMoneyTemp.push_back(newLongMoney);
+                }
+                newMoney.push_back(newMoneyTemp);
+            }
+            longMoney = newMoney;
+        }
     }
 }
 
 //sorts filtered data into "namesByType"/"countByType"
 void excelData::sortForGui(vector<vector<string> > filteredVects)
 {
-    if (filteredVects.size() == 3)
+    if (filteredVects.size() >= 3)
     {
         vector<string> namesVect, typesVect;
         namesVect = filteredVects[0];
@@ -385,84 +473,123 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
 vector<string> excelData::guiTypeData()
 {
     vector<string> guiData;
-    for (int i = 0, iMax = countByType.size(); i < iMax; i++)
+    switch(excelType)
     {
-        vector<string> namesVect = namesByType[i];
-        vector<int> countVect = countByType[i];
-        if (i > 1)
+    case 1:
+        for (int i = 0, iMax = countByType.size(); i < iMax; i++)
         {
-            string hyphen = "-";
-            guiData.push_back(hyphen);
+            vector<string> namesVect = namesByType[i];
+            vector<int> countVect = countByType[i];
+            if (i > 1)
+            {
+                string hyphen = "-";
+                guiData.push_back(hyphen);
+            }
+            for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
+            {
+                guiData.push_back(namesVect[j]);
+                stringstream ss;
+                ss << countVect[j];
+                string count = ss.str();
+                guiData.push_back(count);
+            }
         }
-        for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
+        break;
+
+    case 2:
+        for (int i = 0, iMax = countByType.size(); i < iMax; i++)
         {
-            guiData.push_back(namesVect[j]);
-            stringstream ss;
-            ss << countVect[j];
-            string count = ss.str();
-            guiData.push_back(count);
+            vector<string> namesVect = namesByType[i];
+            vector<int> countVect = countByType[i];
+            if (i > 1)
+            {
+                string hyphen = "-";
+                guiData.push_back(hyphen);
+            }
+            for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
+            {
+                guiData.push_back(namesVect[j]);
+                stringstream ss;
+                ss << countVect[j];
+                string count = ss.str();
+                guiData.push_back(count);
+            }
         }
+        break;
+
+    case 3:
+        for (int i = 0, iMax = countByType.size(); i < iMax; i++)
+        {
+            vector<string> namesVect = namesByType[i];
+            vector<int> countVect = countByType[i];
+            if (i > 1)
+            {
+                string hyphen = "-";
+                guiData.push_back(hyphen);
+            }
+            for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
+            {
+                guiData.push_back(namesVect[j]);
+                stringstream ss;
+                ss << countVect[j];
+                string count = ss.str();
+                guiData.push_back(count);
+            }
+        }
+        break;
+
+    case 4:
+        for (int i = 0, iMax = countByType.size(); i < iMax; i++)
+        {
+            vector<string> namesVect = namesByType[i];
+            vector<int> countVect = countByType[i];
+            if (i > 1)
+            {
+                string hyphen = "-";
+                guiData.push_back(hyphen);
+            }
+            for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
+            {
+                guiData.push_back(namesVect[j]);
+                stringstream ss;
+                ss << countVect[j];
+                string count = ss.str();
+                guiData.push_back(count);
+            }
+        }
+        break;
     }
     return guiData;
 }
 
-//shows a graph for the given person
-void excelData::showGraph(int personIndex, int graphType)
+//shows a graph for the given entry
+void excelData::showGraph(int entryIndex, int graphType)
 {
-    if (personIndex < getPersonTotal())
+    if (entryIndex < getTotalEntries())
     {
-		graph g;
-		g.preparePublications(names[personIndex], types[personIndex], years[personIndex], uniqueTypes[personIndex], startYear, endYear, graphType);
+        graph g;
+        switch(excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
+        {
+        case 1:
+            g.preparePublications(names[entryIndex], money[entryIndex], years[entryIndex],
+                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
+            break;
+        case 2:
+            g.preparePublications(names[entryIndex], types[entryIndex], years[entryIndex],
+                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
+            break;
+        case 3:
+            g.preparePublications(names[entryIndex], types[entryIndex], years[entryIndex],
+                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
+            break;
+        case 4:
+            g.preparePublications(names[entryIndex], types[entryIndex], years[entryIndex],
+                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
+            break;
+        }
 		g.show();
-		//graph newGraph();
-		//newGraph->preparePublications(names[personIndex], vectorToList(types[personIndex]), vectorToList(years[personIndex]),
-            //uniqueTypes[personIndex], startYear, endYear, graphType);
     }
 }
-/*
-//returns a list representation of the input vector
-template <typename T>
-list<T> excelData::vectorToList(vector<T> inputVector)
-{
-    list<T> result(inputVector.begin(), inputVector.end());
-    return result;
-}
-
-//returns a nested list representation of the input nested vector
-template <typename T>
-list<list<T> > excelData::nestedVectorToList(vector<vector<T> > inputNestedVector)
-{
-    list<list<T> > result;
-    vector<list<T> > listVect;
-    for (int i = 0, iMax = inputNestedVector.size(); i < iMax; i++)
-    {
-        listVect.push_back(vectorToList(inputNestedVector[i]));
-    }
-    result = vectorToList(listVect);
-    return result;
-}
-
-//returns a vector representation of the input list
-template <typename T>
-vector<T> excelData::listToVector(list<T> inputList)
-{
-    vector<T> result = { make_move_iterator(begin(inputList)), make_move_iterator(end(inputList)) };
-    return result;
-}
-
-//returns a nested vector representation of the input nested list
-template <typename T>
-vector<vector<T> > excelData::nestedListToVector(list<list<T> > inputNestedList)
-{
-    vector<vector<T> > result;
-    vector<list<T> > listVect = listToVector(inputNestedList);
-    for (int i = 0, iMax = listVect.size(); i < iMax; i++)
-    {
-        result.push_back(listToVector(listVect[i]));
-    }
-    return result;
-}
-*/
 
 //parses a string and returns the integer
 int excelData::stringToInt(string inputString)
@@ -471,8 +598,51 @@ int excelData::stringToInt(string inputString)
     return atoi(ctemp);
 }
 
-//get the total number of persons
-int excelData::getPersonTotal()
+//returns "true" for funding-type Excel files
+int excelData::isFunding()
+{
+    return (excelType == 1);
+}
+
+//returns "true" for presentation-type Excel files
+int excelData::isPresentations()
+{
+    return (excelType == 2);
+}
+
+//returns "true" for publications-type Excel files
+int excelData::isPublications()
+{
+    return (excelType == 3);
+}
+
+//returns "true" for teaching-type Excel files
+int excelData::isTeaching()
+{
+    return (excelType == 4);
+}
+
+//parses a currency string into a long
+long excelData::parseMoney(string amount)
+{
+    long value = 0;
+    long mult = 1;
+    for (int i = amount.length() - 4; i >= 0; i--)
+    {
+        string nextDigit = "";
+        nextDigit += amount[i];
+        int digit = stringToInt(nextDigit);
+        if (digit > 0 || nextDigit.compare("0") == 0)
+        {
+            value += (digit * mult);
+            mult *= 10;
+        }
+    }
+    return value;
+}
+
+//get the total number of entries
+int excelData::getTotalEntries()
 {
     return names.size();
 }

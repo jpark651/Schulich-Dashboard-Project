@@ -3,15 +3,6 @@
 */
 #include "mainwindow.h"
 #include <QApplication>
-#include "Parser.h"
-#include "funding.h"
-#include "presentations.h"
-#include "publications.h"
-#include "teaching.h"
-#include "excelSheet.h"
-#include "graph.h"
-#include <string>
-#include <iostream>
 
 int main(int argc, char *argv[])
 {

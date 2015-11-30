@@ -31,7 +31,7 @@
      <widget class="QWidget" name="sidebar" native="true">
       <property name="minimumSize">
        <size>
-        <width>200</width>
+        <width>250</width>
         <height>400</height>
        </size>
       </property>
@@ -44,12 +44,6 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QTreeWidget" name="publicationTree">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>400</height>
-          </size>
-         </property>
          <property name="maximumSize">
           <size>
            <width>500</width>
@@ -69,6 +63,21 @@
            <string>Total</string>
           </property>
          </column>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="unactiveLabel">
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -114,7 +123,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -145,7 +154,16 @@
   </widget>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>Open File</string>
+   </property>
+   <property name="toolTip">
+    <string>Open File</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+O</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionExit">
@@ -159,6 +177,12 @@
   <action name="actionCloseFile">
    <property name="text">
     <string>Close File</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+C</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionFullscreen">

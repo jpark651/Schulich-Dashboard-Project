@@ -46,14 +46,17 @@ public:
 
     /*------ Methods ------*/
 
+    //returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+    int getExcelType();
+
     //returns the information to be printed to the GUI, with each type's data separated by a single hyphen
     vector<string> guiTypeData();
 
-    //shows a graph for the given person
-    void showGraph(int personIndex, int graphType);
+    //shows a graph for the given entry
+    void showGraph(int entryIndex, int graphType);
 
-    //get the total number of persons
-    int getPersonTotal();
+    //get the total number of entries
+    int getTotalEntries();
 
     //returns a reference to the Parser object
     Parser *getParse();
