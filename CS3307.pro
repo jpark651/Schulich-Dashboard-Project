@@ -5,6 +5,7 @@
 TEMPLATE = app
 TARGET = CS3307
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
+CONFIG += static 
 INCLUDEPATH += .
 
 # Input

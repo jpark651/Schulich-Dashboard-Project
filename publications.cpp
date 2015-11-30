@@ -13,7 +13,7 @@
 #include "excelData.h"
 #include "Parser.h"
 #include "publications.h"
-#include "dialog.h"
+
 
 #include <unistd.h>
 using namespace std;

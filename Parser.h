@@ -55,8 +55,26 @@ class Parser
 
 //Returns a particular column stored at a particular index
         vector <string> getColumn(int index);
+
+//removes all rows in grants clinical funding that is missing mandatory fields
+        vector<vector<string> > getParsedFunding(vector<vector<string> >rows);
+
+//removes all rows in publications that is missing mandatory fields
+        vector<vector<string> > getParsedPublications(vector<vector<string> >rows);
+
+//removes all rows in presentations that is missing mandatory fields
+        vector<vector<string> > getParsedPresentations(vector<vector<string> >rows);
+
+//removes all rows in teaching that are missing mandatory fields
+       vector<vector<string> > getParsedTeaching(vector<vector<string> >rows);
+
+//Decides which parsing method to call based off of sheet type
+        vector<vector<string> > getParsedFile (int sheetType, vector<vector<string> > inputRows);
+
+//checks to see if a file is missing any mandatory fields and removes rows that are missing them
+        vector<vector<string> > removeRows(int index, vector<vector<string> >inputRows);
+
 };
 
 
 #endif // PARSER_H_INCLUDED
-
