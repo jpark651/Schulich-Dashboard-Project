@@ -22,10 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->menuBar->setNativeMenuBar(false);
     activeFile=false;
-    ui->publicationTree->header()->resizeSection(0,400);
+    ui->excelTree->header()->resizeSection(0,400);
 
     //Adding expandable items for Publications
-    if (activeFile==true) {
+    if (activeFile) {
         active();
     }
     else {
@@ -42,8 +42,8 @@ void MainWindow::unactive() {
     ui->unactiveLabel->setAlignment(Qt::AlignCenter);
     ui->unactiveLabel->setText("No file has been loaded.\nTo open a file go to File > Open.");
     ui->unactiveLabel->show();
-    ui->publicationTree->clear();
-    ui->publicationTree->setColumnCount(0);
+    ui->excelTree->clear();
+    ui->excelTree->setColumnCount(0);
     ui->label->setAlignment(Qt::AlignCenter);
     ui->label->setText("No Data to Display.");
 }
@@ -62,8 +62,6 @@ void MainWindow::createParser(QString filePath) {
     excelSheet excel(filePath.toStdString());
     type_of_file = excel.getExcelType();
     parsedData = excel.guiTypeData();
-    string path;
-    path = filePath.toStdString();
     active();
 }
 
@@ -91,19 +89,17 @@ void MainWindow::active() {
 }
 
 void MainWindow::activePresentation() {
-    //To do
     QTreeWidgetItem *presentation = new QTreeWidgetItem();
 
-    ui->publicationTree->clear();
-    ui->publicationTree->setColumnCount(0);
-    ui->publicationTree->setColumnCount(2);
+    ui->excelTree->clear();
+    ui->excelTree->setColumnCount(0);
+    ui->excelTree->setColumnCount(2);
 
     QStringList horizontalHeaders;
     horizontalHeaders << "Summary" << "Number of Presentations";
 
-    ui->publicationTree->setHeaderLabels(horizontalHeaders);
-
-    ui->publicationTree->addTopLevelItem(presentation);
+    ui->excelTree->setHeaderLabels(horizontalHeaders);
+    ui->excelTree->addTopLevelItem(presentation);
 
     //Presentations
     presentation->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Presentations"
@@ -127,42 +123,68 @@ void MainWindow::activePresentation() {
 }
 
 void MainWindow::activeGrants() {
-    QTreeWidgetItem *grants = new QTreeWidgetItem();
-    QTreeWidgetItem *peerReviewed1 = new QTreeWidgetItem();
-    QTreeWidgetItem *industrySponsored1 = new QTreeWidgetItem();
-    QTreeWidgetItem *clinicalFunding = new QTreeWidgetItem();
-    QTreeWidgetItem *peerReviewed2 = new QTreeWidgetItem();
-    QTreeWidgetItem *industrySponsored2 = new QTreeWidgetItem();
+    //Readjusting the headers to match teaching summary
+    ui->excelTree->clear();
+    ui->excelTree->setColumnCount(0);
+    ui->excelTree->setColumnCount(3);
 
-    ui->publicationTree->clear();
-    ui->publicationTree->setColumnCount(0);
-    ui->publicationTree->setColumnCount(3);
-
+    //Creating a string list of the headers
     QStringList horizontalHeaders;
     horizontalHeaders << "Summary" << "Total #" << "Total $";
-    ui->publicationTree->setHeaderLabels(horizontalHeaders);
 
-    ui->publicationTree->addTopLevelItem(grants);
+    //Setting the column headers
+    ui->excelTree->setHeaderLabels(horizontalHeaders);
 
-    // TODO
+    //Grants
+    for (int i = 0; i < 2; i++)
+    {
+        QTreeWidgetItem *subSection = new QTreeWidgetItem();
+        subSection->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Grants"/"Clinical Funding"
+        parsedData.erase(parsedData.begin());
+
+        subSection->setText(1, QString::fromStdString(parsedData.front()));   //Setting number of grants/funding
+        parsedData.erase(parsedData.begin());
+
+        subSection->setText(2, QString::fromStdString(parsedData.front()));   //Setting amount of money
+        parsedData.erase(parsedData.begin());
+        ui->excelTree->addTopLevelItem(subSection);
+
+        while (parsedData.size() > 0 && parsedData.front().compare("-") != 0)
+        {
+            QTreeWidgetItem *nextSection = new QTreeWidgetItem();
+            nextSection->setText(0, QString::fromStdString(parsedData.front()));
+            parsedData.erase(parsedData.begin());
+            nextSection->setText(1, QString::fromStdString(parsedData.front()));
+            parsedData.erase(parsedData.begin());
+            nextSection->setText(2, QString::fromStdString(parsedData.front()));
+            parsedData.erase(parsedData.begin());
+            subSection->addChild(nextSection);
+
+            //Insert names
+            insertNames(nextSection);
+        }
+        if (!parsedData.empty())
+        {
+            parsedData.erase(parsedData.begin());
+        }
+    }
 }
 
 void MainWindow::activeTeaching() {
     QTreeWidgetItem *teaching = new QTreeWidgetItem();
 
     //Readjusting the headers to match teaching summary
-    ui->publicationTree->clear();
-    ui->publicationTree->setColumnCount(0);
-    ui->publicationTree->setColumnCount(2);
+    ui->excelTree->clear();
+    ui->excelTree->setColumnCount(0);
+    ui->excelTree->setColumnCount(2);
 
     //Creating a string list of the headers
     QStringList horizontalHeaders;
     horizontalHeaders << "Summary" << "Hours";
 
     //Setting the column headers
-    ui->publicationTree->setHeaderLabels(horizontalHeaders);
-
-    ui->publicationTree->addTopLevelItem(teaching);
+    ui->excelTree->setHeaderLabels(horizontalHeaders);
+    ui->excelTree->addTopLevelItem(teaching);
 
     //Teaching
     teaching->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Teaching"
@@ -189,16 +211,15 @@ void MainWindow::activeTeaching() {
 void MainWindow::activePublication() {
     QTreeWidgetItem *publicat = new QTreeWidgetItem();
 
-    ui->publicationTree->clear();
-    ui->publicationTree->setColumnCount(0);
-    ui->publicationTree->setColumnCount(2);
+    ui->excelTree->clear();
+    ui->excelTree->setColumnCount(0);
+    ui->excelTree->setColumnCount(2);
 
     QStringList horizontalHeaders;
     horizontalHeaders << "Summary" << "Total";
 
-    ui->publicationTree->setHeaderLabels(horizontalHeaders);
-
-    ui->publicationTree->addTopLevelItem(publicat);
+    ui->excelTree->setHeaderLabels(horizontalHeaders);
+    ui->excelTree->addTopLevelItem(publicat);
 
     //Publications
     publicat->setText(0, QString::fromStdString(parsedData.front()));   //Setting "Publications"
@@ -224,15 +245,20 @@ void MainWindow::activePublication() {
 
 void MainWindow::insertNames(QTreeWidgetItem *parent) {
     //While current item isn't a "-" and isn't empty do
-    while (parsedData.front()!="-" && parsedData.empty()!=true) {
-        QTreeWidgetItem *newItem = new QTreeWidgetItem();       //Create a new tree widget item
-        newItem->setText(0, QString::fromStdString(parsedData.front()));                //Set it's name to the next item in the parsed data
-        parsedData.erase(parsedData.begin());                                 //Pop the item off the list
-        newItem->setText(1, QString::fromStdString(parsedData.front()));                //Set the # to the next item in the list
-         parsedData.erase(parsedData.begin());
+    while (parsedData.front()!="-" && !parsedData.empty()) {
+        QTreeWidgetItem *newItem = new QTreeWidgetItem();                   //Create a new tree widget item
+        newItem->setText(0, QString::fromStdString(parsedData.front()));    //Set its name to the next item in the parsed data
+        parsedData.erase(parsedData.begin());                               //Pop the item off the list
+        newItem->setText(1, QString::fromStdString(parsedData.front()));    //Set the # to the next item in the list
+        parsedData.erase(parsedData.begin());
+        if (type_of_file == 1)
+        {
+            newItem->setText(2, QString::fromStdString(parsedData.front()));
+            parsedData.erase(parsedData.begin());
+        }
         parent->addChild(newItem);
     }
-    if (parsedData.empty() != true)
+    if (!parsedData.empty())
     {
         parsedData.erase(parsedData.begin());
     }

@@ -43,7 +43,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QTreeWidget" name="publicationTree">
+        <widget class="QTreeWidget" name="excelTree">
          <property name="maximumSize">
           <size>
            <width>500</width>

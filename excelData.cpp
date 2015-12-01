@@ -57,13 +57,14 @@ void excelData::initializeObject(string file, int firstYear, int lastYear, bool 
 //creates a selection of columns based on header names
 vector<vector<string> > excelData::selectColumns(vector<vector<string> > organizedVects)
 {
-    bool name = false, type = false, year = false, money = false, done = false;
-    string nameTest = "Member Name", typeTest, yearTest, moneyTest;
+    bool name = false, type = false, year = false, money = false, hours = false, peer = false, done = false;
+    string nameTest = "Member Name", typeTest, yearTest, moneyTest, hoursTest, peerTest;
     switch (excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     {
         case 1:
             typeTest = "Funding Type";
             moneyTest = "Total Amount";
+            peerTest = "Peer Reviewed?";
             yearTest = "Start Date";
             break;
 
@@ -79,10 +80,11 @@ vector<vector<string> > excelData::selectColumns(vector<vector<string> > organiz
 
         case 4:
             typeTest = "Program";
+            hoursTest = "Total Hours";
             yearTest = "Start Date";
             break;
     }
-    vector<string> nameVect, typeVect, yearVect, moneyVect;
+    vector<string> nameVect, typeVect, yearVect, moneyVect, hoursVect, peerVect;
     vector<vector<string> > columnVect = organizedVects;
     for (int i = 0, iMax = columnVect.size(); i < iMax && !done; i++)
     {
@@ -110,10 +112,34 @@ vector<vector<string> > excelData::selectColumns(vector<vector<string> > organiz
                 moneyVect = columnRows;
                 money = true;
             }
+            if (isFunding() && !peer && header.compare(peerTest) == 0)
+            {
+                peerVect = columnRows;
+                peer = true;
+            }
+            if (isTeaching() && !hours && header.compare(hoursTest) == 0)
+            {
+                hoursVect = columnRows;
+                hours = true;
+            }
         }
         if (name && type && year)
         {
-            if (excelType != 1 || money)
+            if (isFunding())
+            {
+                if (money && peer)
+                {
+                    done = true;
+                }
+            }
+            else if (isTeaching())
+            {
+                if (hours)
+                {
+                    done = true;
+                }
+            }
+            else
             {
                 done = true;
             }
@@ -126,6 +152,11 @@ vector<vector<string> > excelData::selectColumns(vector<vector<string> > organiz
     if (isFunding())
     {
         selectionVect.push_back(moneyVect);
+        selectionVect.push_back(peerVect);
+    }
+    else if (isTeaching())
+    {
+        selectionVect.push_back(hoursVect);
     }
     return selectionVect;
 }
@@ -199,16 +230,21 @@ vector<vector<string> > excelData::removeFirstStrings(vector<vector<string> > se
 //filters out entries (from the selection) which are outside the given date range
 vector<vector<string> > excelData::filterByDate(vector<vector<string> > selectedVects, int startYear, int endYear)
 {
-    vector<string> nameVectFilt, typeVectFilt, yearVectFilt, moneyVectFilt;
+    vector<string> nameVectFilt, typeVectFilt, yearVectFilt, moneyVectFilt, peerVectFilt, hoursVectFilt;
     if (selectedVects.size() >= 3)
     {
-        vector<string> nameVect, typeVect, yearVect, moneyVect;
+        vector<string> nameVect, typeVect, yearVect, moneyVect, peerVect, hoursVect;
         nameVect = selectedVects[0];
         typeVect = selectedVects[1];
         yearVect = selectedVects[2];
         if (isFunding())
         {
             moneyVect = selectedVects[3];
+            peerVect = selectedVects[4];
+        }
+        else if (isTeaching())
+        {
+            hoursVect = selectedVects[3];
         }
         for (int i = 1, iMax = selectYears.size(); i < iMax; i++)
         {
@@ -220,7 +256,12 @@ vector<vector<string> > excelData::filterByDate(vector<vector<string> > selected
                 yearVectFilt.push_back(yearVect[i]);
                 if (isFunding())
                 {
-                    moneyVectFilt.push_back((moneyVect[i]));
+                    moneyVectFilt.push_back(moneyVect[i]);
+                    peerVectFilt.push_back(peerVect[i]);
+                }
+                else if (isTeaching())
+                {
+                    hoursVectFilt.push_back(hoursVect[i]);
                 }
             }
         }
@@ -232,6 +273,11 @@ vector<vector<string> > excelData::filterByDate(vector<vector<string> > selected
     if (isFunding())
     {
         filtered.push_back(moneyVectFilt);
+        filtered.push_back(peerVectFilt);
+    }
+    else if (isTeaching())
+    {
+        filtered.push_back(hoursVectFilt);
     }
     return filtered;
 }
@@ -241,28 +287,42 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
 {
     if (filteredVects.size() >= 3)
     {
-        vector<string> namesVect, typesVect, yearsVect, moneyVect;
+        vector<string> namesVect, typesVect, yearsVect, moneyVect, peerVect, hoursVect;
         namesVect = filteredVects[0];
         typesVect = filteredVects[1];
         yearsVect = filteredVects[2];
         if (isFunding())
         {
             moneyVect = filteredVects[3];
+            peerVect = filteredVects[4];
+        }
+        else if (isTeaching())
+        {
+            hoursVect = filteredVects[3];
         }
         vector<string> namesVectSort;
         vector<int> uniqueTypesVect;
         vector<vector<string> > typesVectSort;
         vector<vector<int> > yearsVectSort;
         vector<vector<string> > moneyVectSort;
+        vector<vector<bool> > peerVectSort;
+        vector<vector<double> > hoursVectSort;
         for (int i = 0, iMax = namesVect.size(); i < iMax; i++)
         {
             string nextName = namesVect[i];
             string nextType = typesVect[i];
             string nextYear = yearsVect[i];
             string nextMoney;
+            string nextPeer;
+            string nextHours;
             if (isFunding())
             {
                 nextMoney = moneyVect[i];
+                nextPeer = peerVect[i];
+            }
+            else if (isTeaching())
+            {
+                nextHours = hoursVect[i];
             }
             bool exists = false;
             int count = -1;
@@ -281,21 +341,31 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
                 vector<string> newTypesVect;
                 vector<int> newYearsVect;
                 vector<string> newMoneyVect;
+                vector<bool> newPeerVect;
+                vector<double> newHoursVect;
                 typesVectSort.push_back(newTypesVect);
                 yearsVectSort.push_back(newYearsVect);
                 if (isFunding())
                 {
                     moneyVectSort.push_back(newMoneyVect);
+                    peerVectSort.push_back(newPeerVect);
+                }
+                else if (isTeaching())
+                {
+                    hoursVectSort.push_back(newHoursVect);
                 }
                 count++;
             }
             typesVectSort[count].push_back(nextType);
-            const char * ctemp = nextYear.c_str();
-            int nextYearInt = atoi(ctemp);
-            yearsVectSort[count].push_back(nextYearInt);
+            yearsVectSort[count].push_back(stringToInt(nextYear));
             if (isFunding())
             {
                 moneyVectSort[count].push_back(nextMoney);
+                peerVectSort[count].push_back(parseBool(nextPeer));
+            }
+            else if (isTeaching())
+            {
+                hoursVectSort[count].push_back(stringToDouble(nextHours));
             }
         }
 
@@ -304,22 +374,38 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
             vector<string> tempTypesVect = typesVectSort[i];
             vector<int> tempYearsVect = yearsVectSort[i];
             vector<string> tempMoneyVect;
+            vector<bool> tempPeerVect;
+            vector<double> tempHoursVect;
             if (isFunding())
             {
                 tempMoneyVect = moneyVectSort[i];
+                tempPeerVect = peerVectSort[i];
+            }
+            else if (isTeaching())
+            {
+                tempHoursVect = hoursVectSort[i];
             }
             vector<string> newTypesVect;
             vector<int> newYearsVect;
             vector<string> newMoneyVect;
+            vector<bool> newPeerVect;
+            vector<double> newHoursVect;
             int count = 0;
             for (int j = 0, jMax = tempTypesVect.size(); j < jMax; j++)
             {
                 string testType = tempTypesVect[j];
                 int testYear = tempYearsVect[j];
                 string testMoney;
+                bool testPeer;
+                double testHours;
                 if (isFunding())
                 {
                     testMoney = tempMoneyVect[j];
+                    testPeer = tempPeerVect[j];
+                }
+                else if (isTeaching())
+                {
+                    testHours = tempHoursVect[j];
                 }
                 bool exists = false;
                 for (int k = 0, kMax = newTypesVect.size(); k < kMax && !exists; k++)
@@ -329,15 +415,27 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
                         vector<string>::iterator typesBegin = newTypesVect.begin() + k;
                         vector<int>::iterator yearsBegin = newYearsVect.begin() + k;
                         vector<string>::iterator moneyBegin;
+                        vector<bool>::iterator peerBegin;
+                        vector<double>::iterator hoursBegin;
                         if (isFunding())
                         {
                             moneyBegin = newMoneyVect.begin() + k;
+                            peerBegin = newPeerVect.begin() + k;
+                        }
+                        else if (isTeaching())
+                        {
+                            hoursBegin = newHoursVect.begin() + k;
                         }
                         newTypesVect.insert(typesBegin, testType);
                         newYearsVect.insert(yearsBegin, testYear);
                         if (isFunding())
                         {
                             newMoneyVect.insert(moneyBegin, testMoney);
+                            newPeerVect.insert(peerBegin, testPeer);
+                        }
+                        else if (isTeaching())
+                        {
+                            newHoursVect.insert(hoursBegin, testHours);
                         }
                         exists = true;
                     }
@@ -349,6 +447,11 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
                     if (isFunding())
                     {
                         newMoneyVect.push_back(testMoney);
+                        newPeerVect.push_back(testPeer);
+                    }
+                    else if (isTeaching())
+                    {
+                        newHoursVect.push_back(testHours);
                     }
                     count++;
                 }
@@ -358,6 +461,11 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
             if (isFunding())
             {
                 moneyVectSort[i] = newMoneyVect;
+                peerVectSort[i] = newPeerVect;
+            }
+            else if (isTeaching())
+            {
+                hoursVectSort[i] = newHoursVect;
             }
             uniqueTypesVect.push_back(count);
         }
@@ -368,19 +476,24 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
         if (isFunding())
         {
             money = moneyVectSort;
-            vector<vector<long> > newMoney;
-            vector<long> newMoneyTemp;
+            vector<vector<long long> > newMoney;
+            vector<long long> newMoneyTemp;
             for (int i = 0, iMax = money.size(); i < iMax; i++)
             {
-                newMoneyTemp = vector<long>();
+                newMoneyTemp = vector<long long>();
                 for (int j = 0, jMax = money[i].size(); j < jMax; j++)
                 {
-                    long newLongMoney = parseMoney(money[i][j]);
+                    long long newLongMoney = parseMoney(money[i][j]);
                     newMoneyTemp.push_back(newLongMoney);
                 }
                 newMoney.push_back(newMoneyTemp);
             }
             longMoney = newMoney;
+            peerReviewed = peerVectSort;
+        }
+        else if (isTeaching())
+        {
+            hours = hoursVectSort;
         }
     }
 }
@@ -390,12 +503,23 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
 {
     if (filteredVects.size() >= 3)
     {
-        vector<string> namesVect, typesVect;
+        vector<string> namesVect, typesVect, moneyVect, peerVect, hoursVect;
         namesVect = filteredVects[0];
         typesVect = filteredVects[1];
+        if (isFunding())
+        {
+            moneyVect = filteredVects[3];
+            peerVect = filteredVects[4];
+        }
+        else if (isTeaching())
+        {
+            hoursVect = filteredVects[3];
+        }
 
         vector<vector<string> > dataNamesVect;
         vector<vector<int> > dataCountVect;
+        vector<vector<long long> > dataMoneyVect;
+        vector<vector<double> > dataHoursVect;
         vector<string> title;
         switch (excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
         {
@@ -416,13 +540,52 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
                 break;
         }
         dataNamesVect.push_back(title);
-        vector<int> total;
-        total.push_back(0);
-        dataCountVect.push_back(total);
+        if (!isTeaching())
+        {
+            vector<int> total;
+            vector<long long> totalMoney;
+            total.push_back(0);
+            dataCountVect.push_back(total);
+            if (isFunding())
+            {
+                totalMoney.push_back(0);
+                dataMoneyVect.push_back(totalMoney);
+            }
+        }
+        else
+        {
+            vector<double> total;
+            total.push_back(0);
+            dataHoursVect.push_back(total);
+        }
         for (int i = 0, iMax = typesVect.size(); i < iMax; i++)
         {
             string typeTest = typesVect[i];
+            if (isTeaching())
+            {
+                typeTest = acronymize(typeTest);
+            }
             string nameTest = namesVect[i];
+            long long moneyTest;
+            bool peerTest;
+            double hoursTest;
+            if (isFunding())
+            {
+                moneyTest = parseMoney(moneyVect[i]);
+                peerTest = parseBool(peerVect[i]);
+                if (peerTest)
+                {
+                    typeTest += "P";
+                }
+                else
+                {
+                    typeTest += "I";
+                }
+            }
+            else if (isTeaching())
+            {
+                hoursTest = stringToDouble(hoursVect[i]);
+            }
             bool exists = false;
             for (int j = 1, jMax = dataNamesVect.size(); j < jMax && !exists; j++)
             {
@@ -435,18 +598,47 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
                         string tempName = dataNamesVect[j][k];
                         if (tempName.compare(nameTest) == 0)
                         {
-                            dataCountVect[0][0]++;
-                            dataCountVect[j][0]++;
-                            dataCountVect[j][k]++;
-                            nameExists = true;
+                            if (!isTeaching())
+                            {
+                                dataCountVect[0][0]++;
+                                dataCountVect[j][0]++;
+                                dataCountVect[j][k]++;
+                                if (isFunding())
+                                {
+                                    dataMoneyVect[j][0] += moneyTest;
+                                    dataMoneyVect[j][k] += moneyTest;
+                                }
+                                nameExists = true;
+                            }
+                            else
+                            {
+                                dataHoursVect[0][0] += hoursTest;
+                                dataHoursVect[j][0] += hoursTest;
+                                dataHoursVect[j][k] += hoursTest;
+                                nameExists = true;
+                            }
                         }
                     }
                     if (!nameExists)
                     {
                         dataNamesVect[j].push_back(nameTest);
-                        dataCountVect[0][0]++;
-                        dataCountVect[j][0]++;
-                        dataCountVect[j].push_back(1);
+                        if (!isTeaching())
+                        {
+                            dataCountVect[0][0]++;
+                            dataCountVect[j][0]++;
+                            dataCountVect[j].push_back(1);
+                            if (isFunding())
+                            {
+                                dataMoneyVect[j][0] += moneyTest;
+                                dataMoneyVect[j].push_back(moneyTest);
+                            }
+                        }
+                        else
+                        {
+                            dataHoursVect[0][0] += hoursTest;
+                            dataHoursVect[j][0] += hoursTest;
+                            dataHoursVect[j].push_back(hoursTest);
+                        }
                     }
                     exists = true;
                 }
@@ -455,17 +647,120 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
             {
                 vector<string> newNameVect;
                 vector<int> newCountVect;
+                vector<long long> newMoneyVect;
+                vector<double> newHoursVect;
                 newNameVect.push_back(typeTest);
                 newNameVect.push_back(nameTest);
-                newCountVect.push_back(1);
-                newCountVect.push_back(1);
-                dataCountVect[0][0]++;
+                if (!isTeaching())
+                {
+                    newCountVect.push_back(1);
+                    newCountVect.push_back(1);
+                    dataCountVect[0][0]++;
+                    if (isFunding())
+                    {
+                        newMoneyVect.push_back(moneyTest);
+                        newMoneyVect.push_back(moneyTest);
+                    }
+                }
+                else
+                {
+                    newHoursVect.push_back(hoursTest);
+                    newHoursVect.push_back(hoursTest);
+                    dataHoursVect[0][0] += hoursTest;
+                }
                 dataNamesVect.push_back(newNameVect);
-                dataCountVect.push_back(newCountVect);
+                if (!isTeaching())
+                {
+                    dataCountVect.push_back(newCountVect);
+                    if (isFunding())
+                    {
+                        dataMoneyVect.push_back(newMoneyVect);
+                    }
+                }
+                else
+                {
+                    dataHoursVect.push_back(newHoursVect);
+                }
             }
         }
         namesByType = dataNamesVect;
-        countByType = dataCountVect;
+        if (!isTeaching())
+        {
+            countByType = dataCountVect;
+            if (isFunding())
+            {
+                moneyByType = dataMoneyVect;
+            }
+        }
+        else
+        {
+            hoursByType = dataHoursVect;
+        }
+        if (isFunding())
+        {
+            namesByType.erase(namesByType.begin());
+            countByType.erase(countByType.begin());
+            moneyByType.erase(moneyByType.begin());
+            vector<vector<string> > namesType;
+            vector<vector<int> > countType;
+            vector<vector<long long> > moneyType;
+            for (int i = 0; i < 4; i++)
+            {
+                vector<string> firstName;
+                vector<int> firstCount;
+                vector<long long> firstMoney;
+                if (i % 2 == 0)
+                {
+                    firstName.push_back("Peer Reviewed");
+                }
+                else
+                {
+                    firstName.push_back("Industry Sponsored");
+                }
+                firstCount.push_back(0);
+                firstMoney.push_back(0);
+                namesType.push_back(firstName);
+                countType.push_back(firstCount);
+                moneyType.push_back(firstMoney);
+            }
+            for (int i = 0; i < namesByType.size(); i++)
+            {
+                if (!namesByType[i].empty())
+                {
+                    if (namesByType[i][0].compare("GrantsP") == 0)
+                    {
+                        namesByType[i][0] = "Peer Reviewed";
+                        namesType[0] = namesByType[i];
+                        countType[0] = countByType[i];
+                        moneyType[0] = moneyByType[i];
+                    }
+                    else if (namesByType[i][0].compare("GrantsI") == 0)
+                    {
+                        namesByType[i][0] = "Industry Sponsored";
+                        namesType[1] = namesByType[i];
+                        countType[1] = countByType[i];
+                        moneyType[1] = moneyByType[i];
+                    }
+                    else if (namesByType[i][0].compare("Clinical TrialsP") == 0)
+                    {
+                        namesByType[i][0] = "Peer Reviewed";
+                        namesType[2] = namesByType[i];
+                        countType[2] = countByType[i];
+                        moneyType[2] = moneyByType[i];
+                    }
+                    else if (namesByType[i][0].compare("Clinical TrialsI") == 0)
+                    {
+                        namesByType[i][0] = "Industry Sponsored";
+                        namesType[3] = namesByType[i];
+                        countType[3] = countByType[i];
+                        moneyType[3] = moneyByType[i];
+                    }
+                }
+            }
+            namesByType = namesType;
+            countByType = countType;
+            moneyByType = moneyType;
+        }
     }
 }
 
@@ -480,18 +775,40 @@ vector<string> excelData::guiTypeData()
         {
             vector<string> namesVect = namesByType[i];
             vector<int> countVect = countByType[i];
-            if (i > 1)
+            vector<long long> moneyVect = moneyByType[i];
+            if (i == 0)
+            {
+                guiData.push_back("Grants");
+                int countTotal = countByType[0][0] + countByType[1][0];
+                stringstream ss;
+                ss << countTotal;
+                guiData.push_back(ss.str());
+                long long moneyTotal = moneyByType[0][0] + moneyByType[1][0];
+                guiData.push_back(formatMoney(moneyTotal));
+            }
+            else
             {
                 string hyphen = "-";
                 guiData.push_back(hyphen);
+                if (i == 2)
+                {
+                    guiData.push_back(hyphen);
+                    guiData.push_back("Clinical Funding");
+                    int countTotal = countByType[2][0] + countByType[3][0];
+                    stringstream ss;
+                    ss << countTotal;
+                    guiData.push_back(ss.str());
+                    long long moneyTotal = moneyByType[2][0] + moneyByType[3][0];
+                    guiData.push_back(formatMoney(moneyTotal));
+                }
             }
             for (int j = 0, jMax = namesVect.size(); j < jMax; j++)
             {
                 guiData.push_back(namesVect[j]);
                 stringstream ss;
                 ss << countVect[j];
-                string count = ss.str();
-                guiData.push_back(count);
+                guiData.push_back(ss.str());
+                guiData.push_back(formatMoney(moneyVect[j]));
             }
         }
         break;
@@ -511,8 +828,7 @@ vector<string> excelData::guiTypeData()
                 guiData.push_back(namesVect[j]);
                 stringstream ss;
                 ss << countVect[j];
-                string count = ss.str();
-                guiData.push_back(count);
+                guiData.push_back(ss.str());
             }
         }
         break;
@@ -532,17 +848,16 @@ vector<string> excelData::guiTypeData()
                 guiData.push_back(namesVect[j]);
                 stringstream ss;
                 ss << countVect[j];
-                string count = ss.str();
-                guiData.push_back(count);
+                guiData.push_back(ss.str());
             }
         }
         break;
 
     case 4:
-        for (int i = 0, iMax = countByType.size(); i < iMax; i++)
+        for (int i = 0, iMax = hoursByType.size(); i < iMax; i++)
         {
             vector<string> namesVect = namesByType[i];
-            vector<int> countVect = countByType[i];
+            vector<double> hoursVect = hoursByType[i];
             if (i > 1)
             {
                 string hyphen = "-";
@@ -552,9 +867,8 @@ vector<string> excelData::guiTypeData()
             {
                 guiData.push_back(namesVect[j]);
                 stringstream ss;
-                ss << countVect[j];
-                string count = ss.str();
-                guiData.push_back(count);
+                ss << hoursVect[j];
+                guiData.push_back(ss.str());
             }
         }
         break;
@@ -598,6 +912,13 @@ int excelData::stringToInt(string inputString)
     return atoi(ctemp);
 }
 
+//parses a string and returns the double
+double excelData::stringToDouble(string inputString)
+{
+    const char * ctemp = inputString.c_str();
+    return atof(ctemp);
+}
+
 //returns "true" for funding-type Excel files
 int excelData::isFunding()
 {
@@ -622,11 +943,25 @@ int excelData::isTeaching()
     return (excelType == 4);
 }
 
-//parses a currency string into a long
-long excelData::parseMoney(string amount)
+//returns a currency string for the given long long
+string excelData::formatMoney(long long amount)
 {
-    long value = 0;
-    long mult = 1;
+    stringstream ss;
+    ss << amount;
+    string raw = ss.str();
+    for (int i = raw.length() - 4; i >= 0; i -= 3)
+    {
+        raw.insert(i + 1, ",");
+    }
+    raw += ".00";
+    return raw;
+}
+
+//parses a currency string into a long long
+long long excelData::parseMoney(string amount)
+{
+    long long value = 0;
+    long long mult = 1;
     for (int i = amount.length() - 4; i >= 0; i--)
     {
         string nextDigit = "";
@@ -639,6 +974,30 @@ long excelData::parseMoney(string amount)
         }
     }
     return value;
+}
+
+//returns true if the string is "True"
+bool excelData::parseBool(string boolTest)
+{
+    return boolTest.compare("True") == 0;
+}
+
+//returns an acronym for the Teaching type-string
+string excelData::acronymize(string type)
+{
+    if (type.compare("Continuing Medical Education") == 0)
+    {
+        type = "CME";
+    }
+    else if (type.compare("Postgraduate Medical Education") == 0)
+    {
+        type = "PME";
+    }
+    else if (type.compare("Undergraduate Medical Education") == 0)
+    {
+        type = "UME";
+    }
+    return type;
 }
 
 //get the total number of entries

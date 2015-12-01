@@ -37,12 +37,13 @@ private:
     vector<int> uniqueTypes;
     vector<vector<bool> > peerReviewed;
     vector<vector<string> > money;
-    vector<vector<long> > longMoney;
-    vector<vector<int> > hours;
+    vector<vector<long long> > longMoney;
+    vector<vector<double> > hours;
     vector<vector<int> > years;
     vector<vector<string> > namesByType;
     vector<vector<int> > countByType;
-    vector<vector<long> > moneyByType;
+    vector<vector<double> > hoursByType;
+    vector<vector<long long> > moneyByType;
     Parser *parse;
 
 
@@ -75,6 +76,9 @@ private:
     //parses a string and returns the integer
     int stringToInt(string inputString);
 
+    //parses a string and returns the double
+    double stringToDouble(string inputString);
+
     //returns "true" for funding-type Excel files
     int isFunding();
 
@@ -87,8 +91,19 @@ private:
     //returns "true" for teaching-type Excel files
     int isTeaching();
 
-    //parses a currency string into a long
-    long parseMoney(string amount);
+    //returns a currency string for the given long long
+    string formatMoney(long long amount);
+
+    //parses a currency string into a long long
+    long long parseMoney(string amount);
+
+
+    //returns true if the string is "True"
+    bool parseBool(string boolTest);
+
+
+    //returns an acronym for the Teaching type-string
+    string acronymize(string type);
 
 
     /*------ Constructors ------*/

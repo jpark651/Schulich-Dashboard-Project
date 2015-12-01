@@ -16,13 +16,13 @@
 using namespace std;
 
 graph::graph(QWidget *parent) :
-//graph::graph(QWidget *parent) {
+    //graph::graph(QWidget *parent) {
     QMainWindow(parent),
     ui(new Ui::graph)
 {
     ui->setupUi(this);
-//    setGeometry(400, 250, 542, 390);
-//    graph::makePlot();
+    //    setGeometry(400, 250, 542, 390);
+    //    graph::makePlot();
 }
 
 graph::~graph()
@@ -33,7 +33,7 @@ graph::~graph()
 
 /*Prepares the data needed to graph from the publications summary.
 */
-void graph:: preparePublications(string name, vector<string> types, vector<int> years, int diff_types, int begin, int end, int graphtype)
+void graph::preparePublications(string name, vector<string> types, vector<int> years, int diff_types, int begin, int end, int graphtype)
 {
     vector<string> t = types;	//create a copy to manipulate
     vector<int> y = years;		//create a copy to manipulate
@@ -55,11 +55,11 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
     //initialize the array values to 0 to prepare for counting
     for (int count = 0; count < diff_types; count++)
     {
-//        xaxis.
+        //        xaxis.
         itx = xaxis.insert(itx, 0);
         itlabel = xlabel.insert(itlabel, "");
 
-//        xaxis[count] = 0;
+        //        xaxis[count] = 0;
     }
 
     printf("Inside prepare publications\n");
@@ -67,7 +67,7 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
     compare = t.front();	//the first publication type
     xlabel[0] = t.front();	//record the first label
 
-    //This loop goes through the list of publications and counts how many are of each type.
+                            //This loop goes through the list of publications and counts how many are of each type.
     for (int count = 0; count < size; count++)
     {
         //check if the publications is in the date range
@@ -128,7 +128,8 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
     if (graphtype == 1) {
         printf("Bar graph\n");
         createBarGraph(title, num_publications, xaxis, xlabel, "Number of Publications", "Publication Type");
-    } else if (graphtype == 2) {
+    }
+    else if (graphtype == 2) {
         printf("Line graph\n");
         createLineGraph(title, num_publications, xaxis, xlabel, "Number of Publications", "Publication Type");
     }
@@ -142,71 +143,61 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
 
 /*void graph:: prepareFunding(string fname, vector<string> c_or_g, vector<string> approval, vector<int> years, vector<double> amount, int begin, int end, int graphtype)
 {
-    vector<string> type = c_or_g;	//create a copy to manipulate
-    vector<int> y = years;			//create a copy to manipulate
-    vector<string> a = approval;	//create a copy to manipulate
-    vector<double> am = amount;		//create a copy to manipulate
-    string compare;					//for checking when a new type of publication exists
-    int track = 0;					//used to track where in the string array we are
-
-    int size = type.size();	//get the size of the list
-    int num_publications = 0;	//number of publications that fit the date range. used for y-axis
-
-    vector<int> xaxis;			//array for the number of publications of each publication type
-    vector<string> xlabel;		//string array for x-axis tick labels
-
-
-    //initialize the array values to 0 to prepare for counting
-    for (int count = 0; count < diff_types; count++)
-    {
-        xaxis[count] = 0;
-    }
-
-
-    compare = type.front();	//the first publication type
-    xlabel[0] = type.front();	//record the first label
-
-                            //This loop goes through the list of publications and counts how many are of each type.
-    for (int count = 0; count < size; count++)
-    {
-        //check if the publications is in the date range
-        if ((y.front() >= begin) && (y.front() <= end))
-        {
-            //check if the publication type is the same as the previous
-            if (type.front() == compare)
-            {
-                //record the publication
-                xaxis[track]++;
-                //pop from the list
-                type.erase(type.begin());
-                y.erase(y.begin());
-            }
-            //else start counting the next type
-            else
-            {
-                //record the publication for the new type
-                track++;
-                xaxis[track]++;
-                //record the label for the new type
-                xlabel[track] = type.front();
-
-                //pop from the list
-                type.erase(type.begin());
-                y.erase(y.begin());
-                //record the new publication type
-                compare = type.front();
-            }
-        }
-        else
-        {
-            //pop from the list
-            type.erase(type.begin());
-            y.erase(y.begin());
-        }
-    }
-
-    createBarGraph(title, largest, xaxis, xlabel, "Total Amount", "Funding Type");
-
+vector<string> type = c_or_g;	//create a copy to manipulate
+vector<int> y = years;			//create a copy to manipulate
+vector<string> a = approval;	//create a copy to manipulate
+vector<double> am = amount;		//create a copy to manipulate
+string compare;					//for checking when a new type of publication exists
+int track = 0;					//used to track where in the string array we are
+int size = type.size();	//get the size of the list
+int num_publications = 0;	//number of publications that fit the date range. used for y-axis
+vector<int> xaxis;			//array for the number of publications of each publication type
+vector<string> xlabel;		//string array for x-axis tick labels
+//initialize the array values to 0 to prepare for counting
+for (int count = 0; count < diff_types; count++)
+{
+xaxis[count] = 0;
+}
+compare = type.front();	//the first publication type
+xlabel[0] = type.front();	//record the first label
+//This loop goes through the list of publications and counts how many are of each type.
+for (int count = 0; count < size; count++)
+{
+//check if the publications is in the date range
+if ((y.front() >= begin) && (y.front() <= end))
+{
+//check if the publication type is the same as the previous
+if (type.front() == compare)
+{
+//record the publication
+xaxis[track]++;
+//pop from the list
+type.erase(type.begin());
+y.erase(y.begin());
+}
+//else start counting the next type
+else
+{
+//record the publication for the new type
+track++;
+xaxis[track]++;
+//record the label for the new type
+xlabel[track] = type.front();
+//pop from the list
+type.erase(type.begin());
+y.erase(y.begin());
+//record the new publication type
+compare = type.front();
+}
+}
+else
+{
+//pop from the list
+type.erase(type.begin());
+y.erase(y.begin());
+}
+}
+createBarGraph(title, largest, xaxis, xlabel, "Total Amount", "Funding Type");
 }*/
 
 
@@ -215,7 +206,7 @@ void graph:: preparePublications(string name, vector<string> types, vector<int> 
 
 
 //method for creating a window which displays a bar graph
-void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, vector<string> xlabel, string xtitle, string ytitle)
+void graph::createBarGraph(string title, int yaxis_range, vector<int> xaxis, vector<string> xlabel, string xtitle, string ytitle)
 {
     //empty bar chart objects:
     QCPBars *Person = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
@@ -239,17 +230,17 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
     QVector<QString> labels(0);
 
     //loop to print the same number of ticks to match the number of publication types
-    for (int i = 1 ; i <= xaxis.size() ; i++)
+    for (int i = 1; i <= xaxis.size(); i++)
     {
         ticks << i;
     }
 
     //loop to print the labels
     int len = xlabel.size();
-    for(int i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         //labels.insert(i, QString::fromUtf8(xlabel[i].c_str()));
-//		labels << xlabel[i];
+        //		labels << xlabel[i];
         QString tmpLabel = QString::fromUtf8(xlabel.at(i).c_str());
         labels.append(tmpLabel);
 
@@ -303,7 +294,7 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
 
     //setup legend:
     ui->customPlot->legend->setVisible(true);
-    ui->customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignHCenter);
+    ui->customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop | Qt::AlignHCenter);
     ui->customPlot->legend->setBrush(QColor(255, 255, 255, 200));
     QPen legendPen;
     legendPen.setColor(QColor(130, 130, 130, 200));
@@ -330,8 +321,8 @@ void graph:: createBarGraph(string title, int yaxis_range, vector<int> xaxis, ve
 void graph::closeEvent(QCloseEvent *event) {
     event->ignore();
     if (QMessageBox::Yes == QMessageBox::question(this, "Close Confirmation?",
-                          "Are you sure you want to exit?",
-                          QMessageBox::Yes|QMessageBox::No))
+        "Are you sure you want to exit?",
+        QMessageBox::Yes | QMessageBox::No))
     {
         event->accept();
     }
@@ -346,7 +337,7 @@ void graph::close() {
 
 
 //method for creating a window which displays a line graph
-void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, vector<string> xlabel, string xtitle, string ytitle)
+void graph::createLineGraph(string title, int yaxis_range, vector<int> xaxis, vector<string> xlabel, string xtitle, string ytitle)
 {
     //add graph and set how they look like
     ui->customPlot->addGraph();
@@ -391,7 +382,7 @@ void graph:: createLineGraph(string title, int yaxis_range, vector<int> xaxis, v
 
     //set title of plot:
     ui->customPlot->plotLayout()->insertRow(0);
-    ui->customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(ui->customPlot,qTitle));
+    ui->customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(ui->customPlot, qTitle));
     //set a fixed tick-step to one tick per year value:
     ui->customPlot->xAxis->setAutoTickStep(false);
     ui->customPlot->xAxis->setTickStep(1);
