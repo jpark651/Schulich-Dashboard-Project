@@ -723,7 +723,7 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
                 countType.push_back(firstCount);
                 moneyType.push_back(firstMoney);
             }
-            for (int i = 0; i < namesByType.size(); i++)
+            for (unsigned int i = 0; i < namesByType.size(); i++)
             {
                 if (!namesByType[i].empty())
                 {

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string.h>
+#include <string>
 #include <list>
 #include <iterator>
 #include <stdlib.h>
@@ -27,6 +27,7 @@ Parser:: Parser (string name, int type)
     createRows(filename);
     dateIndex = getDateIndex();
     parseDates(dateIndex);
+    errorVector = getMissingFields(sheetType, rows);
 }
 //uninitiated Parser constructor
 Parser:: Parser () {}
@@ -35,7 +36,7 @@ Parser:: Parser () {}
 int Parser:: countCommas(string s)
 {
     int count =0;
-    for (int i=0; i < s.length(); i++)
+    for (unsigned int i=0; i < s.length(); i++)
     {
         if (s.at(i) == ',')
         {
@@ -63,7 +64,7 @@ int Parser:: colCount (string filename)
             {
                 if (line.at(i) == '"')
                 {
-                    if (i + 1 >= line.length())
+                    if (unsigned(i + 1) >= line.length())
                     {
                         break;
                     }
@@ -76,7 +77,7 @@ int Parser:: colCount (string filename)
                 i++;
             }
             line.erase(0, temp.length()+1);
-            if (countCommas(line) != line.length())
+            if ((unsigned)countCommas(line) != line.length())
             {
                 line.erase(0,1);
             }
@@ -92,7 +93,7 @@ int Parser:: colCount (string filename)
             stringstream linestream(line);
             getline(linestream,cell, ',');
             line.erase(0, cell.length());
-            if (countCommas(line) != line.length())
+            if ((unsigned)countCommas(line) != line.length())
             {
                 line.erase(0,1);
             }
@@ -118,7 +119,7 @@ void Parser:: createRows(string filename)
         {
             commas = countCommas(line);
         }
-        if (line.length() != commas)
+        if (line.length() != (unsigned)commas)
         {
             int no = 0;
             while (no < commas)
@@ -147,7 +148,7 @@ void Parser:: createRows(string filename)
                         line.erase(0, 1);
                         if (line.length() == 0)
                         {
-                            if (no + 1 < rows.size())
+                            if ((unsigned)(no + 1) < rows.size())
                             {
                                 rows[no].push_back("");
                                 no++;
@@ -170,7 +171,7 @@ void Parser:: createRows(string filename)
                                     break;
                                 }
                             }
-                            else if (i + 1 >= line.length())
+                            else if ((unsigned)(i + 1) >= line.length())
                             {
                                 temp += line.at(i);
                                 break;
@@ -179,7 +180,7 @@ void Parser:: createRows(string filename)
                             i++;
                         }
                         line.erase(0, temp.length() + 1);
-                        if (countCommas(line) != line.length())
+                        if ((unsigned)countCommas(line) != line.length())
                         {
                             line.erase(0, 1);
                         }
@@ -197,7 +198,7 @@ void Parser:: createRows(string filename)
                         stringstream linestream(line);
                         getline(linestream, cell, ',');
                         line.erase(0, cell.length());
-                        if (countCommas(line) != line.length())
+                        if ((unsigned)countCommas(line) != line.length())
                         {
                             line.erase(0, 1);
                         }
@@ -205,7 +206,7 @@ void Parser:: createRows(string filename)
                         no++;
                     }
                 }
-            done:
+done:
                 if (no < commas || quotes)
                 {
                     bool done = false;
@@ -290,7 +291,7 @@ done:
             {
                 if (line.at(i) == '"')
                 {
-                    if (i + 1 >= line.length())
+                    if ((unsigned int)(i + 1) >= line.length())
                     {
                         break;
                     }
@@ -299,7 +300,7 @@ done:
                         break;
                     }
                 }
-                else if (i + 1>= line.length())
+                else if ((unsigned int)(i + 1)>= line.length())
                 {
                     break;
                 }
@@ -307,7 +308,7 @@ done:
                 i++;
             }
             line.erase(0, temp.length()+1);
-            if (countCommas(line) != line.length())
+            if ((unsigned int) countCommas(line) != line.length())
             {
                 line.erase(0,1);
             }
@@ -322,7 +323,7 @@ done:
             stringstream linestream(line);
             getline(linestream,cell, ',');
             line.erase(0, cell.length());
-            if (countCommas(line) != line.length())
+            if ((unsigned int)countCommas(line) != line.length())
             {
                 line.erase(0,1);
             }
@@ -422,27 +423,27 @@ vector <string> Parser:: getColumn(int index)
 //removes all rows in grants clinical funding that is missing mandatory fields
 vector<vector<string> > Parser:: getParsedFunding(vector<vector<string> >rows)
 {
-    for (int i =0; i < rows.size(); i++)
+    for (unsigned int i =0; i < rows.size(); i++)
     {
         if (rows[i][0].compare("Member Name") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Primary Domain") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Start Date") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("End Date") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Funding Type") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Status") == 0)
         {
@@ -483,27 +484,27 @@ vector<vector<string> > Parser:: getParsedFunding(vector<vector<string> >rows)
 //removes all rows in publications that is missing mandatory fields
 vector<vector<string> >  Parser::  getParsedPublications(vector<vector<string> >rows)
 {
-    for (int i =0; i < rows.size(); i++)
+    for (unsigned int i =0; i < rows.size(); i++)
     {
         if (rows[i][0].compare("Member Name") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Primary Domain") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Publication Status") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Type") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Status Date") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Role") == 0)
         {
@@ -528,27 +529,27 @@ vector<vector<string> >  Parser::  getParsedPublications(vector<vector<string> >
 //removes all rows in presentations that is missing mandatory fields
 vector<vector<string> >  Parser:: getParsedPresentations(vector<vector<string> >rows)
 {
-    for (int i =0; i < rows.size(); i++)
+    for (unsigned int i =0; i < rows.size(); i++)
     {
         if (rows[i][0].compare("Member Name") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Primary Domain") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Date") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Type") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Role") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Title") == 0)
         {
@@ -561,7 +562,7 @@ vector<vector<string> >  Parser:: getParsedPresentations(vector<vector<string> >
 //removes all rows in teaching that are missing mandatory fields
 vector<vector<string> >  Parser:: getParsedTeaching(vector<vector<string> >rows)
 {
-    for (int i =0; i < rows.size(); i++)
+    for (unsigned int i =0; i < rows.size(); i++)
     {
         if (rows[i][0].compare("Member Name") == 0)
         {
@@ -573,39 +574,39 @@ vector<vector<string> >  Parser:: getParsedTeaching(vector<vector<string> >rows)
         }
         else if (rows[i][0].compare("Start Date") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("End Date") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Program") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Type of Course / Activity") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Course / Activity") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Geographical Scope") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Hours per Teaching Session or Week") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Number of Teaching Sessions or Weeks") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
         else if (rows[i][0].compare("Total Hours") == 0)
         {
-             rows = removeRows(i,rows);
+            rows = removeRows(i,rows);
         }
     }
     return rows;
@@ -617,18 +618,18 @@ vector<vector<string> > Parser:: getParsedFile (int sheetType, vector<vector<str
     vector<vector<string> > returnedRows;
     switch(sheetType)
     {
-        case 1:
-            returnedRows = getParsedFunding(inputRows);
-            break;
-        case 2:
-            returnedRows = getParsedPresentations(inputRows);
-            break;
-        case 3:
-            returnedRows = getParsedPublications(inputRows);
-            break;
-        case 4:
-            returnedRows = getParsedTeaching(inputRows);
-            break;
+    case 1:
+        returnedRows = getParsedFunding(inputRows);
+        break;
+    case 2:
+        returnedRows = getParsedPresentations(inputRows);
+        break;
+    case 3:
+        returnedRows = getParsedPublications(inputRows);
+        break;
+    case 4:
+        returnedRows = getParsedTeaching(inputRows);
+        break;
     }
     return returnedRows;
 }
@@ -637,19 +638,298 @@ vector<vector<string> > Parser:: getParsedFile (int sheetType, vector<vector<str
 vector<vector<string> > Parser:: removeRows(int index, vector<vector<string> >inputRows)
 {
     vector<string>temp = inputRows[index];
-    for (int i = 1; i < temp.size(); i++)
+    for (unsigned int i = 1; i < temp.size(); i++)
     {
         if (temp[i].compare("") == 0)
         {
-            for (int k = 0; k < inputRows.size(); k++)
+            for (unsigned int k = 0; k < inputRows.size(); k++)
             {
                 vector <string> deletion = inputRows[k];
                 deletion.erase(deletion.begin() + i);
                 inputRows[k] = deletion;
             }
-            temp.erase(temp.begin() + i);
-            i--;
         }
     }
     return inputRows;
 }
+
+//Builds a vector containing the mandatory information that is missing for the rows in funding file
+vector<string> Parser:: getMissingFunding(vector<vector<string> >rows)
+{
+    vector<string>missingRows(rows[0].size());
+    unsigned int sz = missingRows.size();
+    for (unsigned int i =0; i < sz; i++)
+    {
+        stringstream ss;
+        ss << "Row " << i << " is missing: ";
+        string s = ss.str();
+        missingRows.push_back(s);
+        missingRows.erase(missingRows.begin());
+    }
+    for (unsigned int i =0; i < rows.size(); i++)
+    {
+        if (rows[i][0].compare("Member Name") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Primary Domain") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Start Date") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("End Date") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Funding Type") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Status") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Peer Reviewed?") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Industry Grant?") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Role") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Title") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Principal Investigator") == 0)
+        {
+            missingRows= missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Co-Investigators") == 0)
+        {
+            missingRows= missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Total Amount") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+    }
+    return missingRows;
+}
+
+//Builds a vector containing the mandatory information that is missing for the rows in publications file
+vector<string> Parser:: getMissingPublications(vector<vector<string> >rows)
+{
+    vector<string>missingRows;
+    vector<string>temp(rows[0].size());
+    missingRows = temp;
+   int sz = missingRows.size();
+   for (int i =0; i < sz; i++)
+    {
+        stringstream ss;
+        ss << "Row " << i << " is missing: ";
+        string s = ss.str();
+        missingRows.push_back(s);
+        missingRows.erase(missingRows.begin());
+    }
+    for (unsigned int i =0; i < rows.size(); i++)
+    {
+        if (rows[i][0].compare("Member Name") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Primary Domain") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Publication Status") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Type") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Status Date") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Role") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Journal Name | Published In | Book Title | etc.") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Author(s)") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+        else if (rows[i][0].compare("Title") == 0)
+        {
+            missingRows = missingFields(i,rows,missingRows);
+        }
+    }
+    return missingRows;
+}
+
+//Builds a vector containing the mandatory information that is missing for the rows in presentations file
+vector<string> Parser:: getMissingPresentations(vector<vector<string> >rows)
+{
+    vector<string>missingRows;
+    vector<string>temp(rows[0].size());
+    missingRows = temp;
+    int sz = missingRows.size();
+   for (int i =0; i < sz; i++)
+    {
+        stringstream ss;
+        ss << "Row " << i << " is missing: ";
+        string s = ss.str();
+        missingRows.push_back(s);
+        missingRows.erase(missingRows.begin());
+    }
+    for (unsigned int i =0; i < rows.size(); i++)
+    {
+        if (rows[i][0].compare("Member Name") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Primary Domain") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Date") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Type") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Role") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Title") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+    }
+    return missingRows;
+}
+
+//Builds a vector containing the mandatory information that is missing for the rows in teaching file
+vector<string> Parser:: getMissingTeaching(vector<vector<string> >rows)
+{
+    vector<string>missingRows;
+    vector<string>temp(rows[0].size());
+    missingRows = temp;
+     int sz = missingRows.size();
+   for (int i =0; i < sz; i++)
+    {
+        stringstream ss;
+        ss << "Row " << i << " is missing: ";
+        string s = ss.str();
+        missingRows.push_back(s);
+        missingRows.erase(missingRows.begin());
+    }
+    for (unsigned int i =0; i < rows.size(); i++)
+    {
+        if (rows[i][0].compare("Member Name") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Primary Domain") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Start Date") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("End Date") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Program") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Type of Course / Activity") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Course / Activity") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Geographical Scope") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Hours per Teaching Session or Week") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Number of Teaching Sessions or Weeks") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+        else if (rows[i][0].compare("Total Hours") == 0)
+        {
+            missingRows = missingFields(i,rows, missingRows);
+        }
+    }
+    return missingRows;
+}
+
+//Decides which missing fields method to call based off of sheet type
+vector<string> Parser:: getMissingFields (int sheetType, vector<vector<string> > rows)
+{
+    vector<string> returnedRows;
+    switch(sheetType)
+    {
+    case 1:
+        returnedRows = getMissingFunding(rows);
+        break;
+    case 2:
+        returnedRows = getMissingPresentations(rows);
+        break;
+    case 3:
+        returnedRows = getMissingPublications(rows);
+        break;
+    case 4:
+        returnedRows = getMissingTeaching(rows);
+        break;
+    }
+    return returnedRows;
+}
+
+//updates the error vector to specify which row numbers are missing a particular field
+vector<string> Parser:: missingFields(int index, vector<vector<string> >inputRows, vector<string>errorVector)
+{
+    vector<string>temp = inputRows[index];
+    for (unsigned int i = 1; i < temp.size(); i++)
+    {
+        if (temp[i].compare("") == 0)
+        {
+            errorVector[i] = errorVector[i] + temp.front() + ", ";
+        }
+    }
+    return errorVector;
+}
+
+//returns the vector containing all errors in the file
+vector<string> Parser:: getErrorVector()
+{
+    return errorVector;
+}
+

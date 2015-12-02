@@ -5,7 +5,6 @@
 #define PARSER_H_INCLUDED
 #include <string>
 #include <fstream>
-#include <list>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -19,6 +18,7 @@ class Parser
         int numCols;
         vector<vector<string> >rows;
         vector<string> cols;
+        vector<string>errorVector;
         int dateIndex;
     public:
 //Parser constructor
@@ -74,6 +74,26 @@ class Parser
 //checks to see if a file is missing any mandatory fields and removes rows that are missing them
         vector<vector<string> > removeRows(int index, vector<vector<string> >inputRows);
 
+//Builds a vector containing the mandatory information that is missing for the rows in funding file
+        vector<string> getMissingFunding(vector<vector<string> >rows);
+
+//Builds a vector containing the mandatory information that is missing for the rows in publications file
+        vector<string> getMissingPublications(vector<vector<string> >rows);
+
+//Builds a vector containing the mandatory information that is missing for the rows in presentations file
+        vector<string> getMissingPresentations(vector<vector<string> >rows);
+
+//Builds a vector containing the mandatory information that is missing for the rows in teaching file
+       vector<string> getMissingTeaching(vector<vector<string> >rows);
+
+//Decides which missing fields method to call based off of sheet type
+        vector<string> getMissingFields (int sheetType, vector<vector<string> > rows);
+
+//updates the error vector to specify which row numbers are missing a particular field
+        vector<string> missingFields(int index, vector<vector<string> >inputRows, vector<string>errorVector);
+
+//returns the vector containing all errors in the file
+        vector<string> getErrorVector();
 };
 
 
