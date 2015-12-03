@@ -648,6 +648,8 @@ vector<vector<string> > Parser:: removeRows(int index, vector<vector<string> >in
                 deletion.erase(deletion.begin() + i);
                 inputRows[k] = deletion;
             }
+            temp.erase(temp.begin() + i);
+            i--;
         }
     }
     return inputRows;
