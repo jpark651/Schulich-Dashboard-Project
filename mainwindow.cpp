@@ -276,6 +276,7 @@ void MainWindow::on_actionCloseFile_triggered()
     unactive();
 }
 
+//Causes the errordialog window to pop up
 void MainWindow::on_actionDisplay_Errors_triggered()
 {
     d.setModal(true);
