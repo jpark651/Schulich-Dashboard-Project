@@ -123,7 +123,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -133,6 +133,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionCloseFile"/>
     <addaction name="separator"/>
+    <addaction name="actionDisplay_Errors"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -193,6 +194,11 @@
   <action name="actionExit_Fullscreen">
    <property name="text">
     <string>Exit Fullscreen</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Errors">
+   <property name="text">
+    <string>Display Errors</string>
    </property>
   </action>
  </widget>

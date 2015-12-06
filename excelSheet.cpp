@@ -21,20 +21,29 @@ using namespace std;
 //excelSheet constructor (first/last year is set to the earliest/latest year in the file)
 excelSheet::excelSheet(string file)
 {
+    Parser *p;
     sheetType = getExcelType(file);
     switch (sheetType)
     {
     case 1:
         sheetType1 = funding(file);
+        p = new Parser(file, sheetType);
+        errorVector = p->getErrorVector();
         break;
     case 2:
         sheetType2 = presentations(file);
+        p = new Parser(file, sheetType);
+        errorVector = p->getErrorVector();
         break;
     case 3:
         sheetType3 = publications(file);
+        p = new Parser(file, sheetType);
+        errorVector = p->getErrorVector();
         break;
     case 4:
         sheetType4 = teaching(file);
+        p = new Parser(file, sheetType);
+        errorVector = p->getErrorVector();
         break;
     }
 }
@@ -184,3 +193,8 @@ Parser *excelSheet::getParse()
     return parse;
 }
 
+//returns a reference to the error vector
+vector <string> excelSheet:: getErrorVector()
+{
+    return errorVector;
+}

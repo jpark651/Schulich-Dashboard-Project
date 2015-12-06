@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTreeWidgetItem>
 #include <QLabel>
-
+#include "errordialog.h"
 namespace Ui {
 class MainWindow;
 }
@@ -25,6 +25,7 @@ public:
     void activeTeaching();
     void activePresentation();
     void activeGrants();
+    ErrorDialog d;
     vector<string> parsedData;  //Holds parsed data
     QString filePath;
     publications *pub;
@@ -38,6 +39,10 @@ private slots:
     void on_actionOpen_triggered();
 
     void on_actionCloseFile_triggered();
+
+
+
+    void on_actionDisplay_Errors_triggered();
 
 private:
     Ui::MainWindow *ui;

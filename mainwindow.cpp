@@ -11,7 +11,7 @@
 #include <string>
 #include <QHeaderView>
 #include "excelSheet.h"
-
+#include "errordialog.h"
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -60,6 +60,8 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::createParser(QString filePath) {
     excelSheet excel(filePath.toStdString());
+    d.clearData();
+    d.setData(excel.getErrorVector());
     type_of_file = excel.getExcelType();
     parsedData = excel.guiTypeData();
     active();
@@ -272,4 +274,10 @@ void MainWindow::on_actionOpen_triggered()
 void MainWindow::on_actionCloseFile_triggered()
 {
     unactive();
+}
+
+void MainWindow::on_actionDisplay_Errors_triggered()
+{
+    d.setModal(true);
+    d.exec();
 }

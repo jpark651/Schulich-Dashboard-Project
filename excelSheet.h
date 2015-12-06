@@ -27,6 +27,7 @@ private:
     presentations sheetType2;
     publications sheetType3;
     teaching sheetType4;
+    vector <string> errorVector;
 
 
     /*------ Methods ------*/
@@ -60,6 +61,9 @@ public:
 
     //returns a reference to the Parser object
     Parser *getParse();
+
+    //returns a reference to the error vector
+    vector <string> getErrorVector();
 };
 
 #endif //EXCELSHEET_H_INCLUDED

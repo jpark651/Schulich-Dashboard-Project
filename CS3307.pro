@@ -18,8 +18,10 @@ HEADERS += excelData.h \
            publications.h \
            qcustomplot.h \
            teaching.h \
-    excelSheet.h
-FORMS += graph.ui mainwindow.ui
+    excelSheet.h \
+    errordialog.h
+FORMS += graph.ui mainwindow.ui \
+    errordialog.ui
 SOURCES += excelData.cpp \
            funding.cpp \
            graph.cpp \
@@ -30,4 +32,5 @@ SOURCES += excelData.cpp \
            publications.cpp \
            qcustomplot.cpp \
            teaching.cpp \
-    excelSheet.cpp
+    excelSheet.cpp \
+    errordialog.cpp
