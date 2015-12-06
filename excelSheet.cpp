@@ -27,22 +27,22 @@ excelSheet::excelSheet(string file)
     {
     case 1:
         sheetType1 = funding(file);
-        p = new Parser(file, sheetType);
+        p = sheetType1.getParse();
         errorVector = p->getErrorVector();
         break;
     case 2:
         sheetType2 = presentations(file);
-        p = new Parser(file, sheetType);
+        p = sheetType2.getParse();
         errorVector = p->getErrorVector();
         break;
     case 3:
         sheetType3 = publications(file);
-        p = new Parser(file, sheetType);
+        p = sheetType3.getParse();
         errorVector = p->getErrorVector();
         break;
     case 4:
         sheetType4 = teaching(file);
-        p = new Parser(file, sheetType);
+        p = sheetType4.getParse();
         errorVector = p->getErrorVector();
         break;
     }
