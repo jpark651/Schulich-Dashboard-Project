@@ -20,7 +20,7 @@ HEADERS += excelData.h \
            teaching.h \
     excelSheet.h \
     errordialog.h
-FORMS += graph.ui mainwindow.ui \
+FORMS += mainwindow.ui \
     errordialog.ui
 SOURCES += excelData.cpp \
            funding.cpp \
