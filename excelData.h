@@ -124,8 +124,8 @@ private:
     //returns the information to be printed to the GUI, with each type's data separated by a single hyphen
     vector<string> guiTypeData();
 
-    //shows a graph for the given entry
-    void showGraph(int entryIndex, int graphType, QCustomPlot *plot);
+    //shows a graph for the given person
+    void showGraph(string personName, int graphType, QCustomPlot *plot);
 
     //get the total number of entries
     int getTotalEntries();

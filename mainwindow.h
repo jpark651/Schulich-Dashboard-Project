@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTreeWidgetItem>
 #include "errordialog.h"
-#include "publications.h"
+#include "excelSheet.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,6 +32,7 @@ public:
     QLabel *noActiveFile;       //Label to let the user know to open a file
     void insertNames(QTreeWidgetItem*);
     int type_of_file;           //1 = funding, 2 = presentations, 3 = publications, 4 = teaching
+    excelSheet excel;
 
 private slots:
     void on_pushButton_clicked();
@@ -45,6 +46,8 @@ private slots:
     void on_excelTree_collapsed(const QModelIndex &index);
 
     void on_excelTree_expanded(const QModelIndex &index);
+
+    void on_excelTree_itemSelectionChanged();
 
 private:
     Ui::MainWindow *ui;

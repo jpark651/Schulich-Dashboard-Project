@@ -23,7 +23,7 @@ class Parser
     public:
 //Parser constructor
         Parser (string file, int type);
-//uninitiated Parser constructor
+//uninitialized Parser constructor
         Parser ();
 
 //Gets the number of column headers in the file

@@ -61,6 +61,9 @@ excelSheet::excelSheet(string file, int firstYear, int lastYear)
     }
     setErrorVector();
 }
+//uninitialized constructor
+excelSheet::excelSheet(){}
+
 
 //returns the type of Excel file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
 int excelSheet::getExcelType(string filename)
@@ -145,22 +148,22 @@ vector<string> excelSheet::guiTypeData()
     return typeData;
 }
 
-//shows a graph for the given entry
-void excelSheet::showGraph(int entryIndex, int graphType, QCustomPlot *graph)
+//shows a graph for the given person
+void excelSheet::showGraph(string personName, int graphType, QCustomPlot *graph)
 {
     switch (sheetType)
     {
     case 1:
-        sheetType1.showGraph(entryIndex, graphType, graph);
+        sheetType1.showGraph(personName, graphType, graph);
         break;
     case 2:
-        sheetType2.showGraph(entryIndex, graphType, graph);
+        sheetType2.showGraph(personName, graphType, graph);
         break;
     case 3:
-        sheetType3.showGraph(entryIndex, graphType, graph);
+        sheetType3.showGraph(personName, graphType, graph);
         break;
     case 4:
-        sheetType4.showGraph(entryIndex, graphType, graph);
+        sheetType4.showGraph(personName, graphType, graph);
         break;
     }
 }

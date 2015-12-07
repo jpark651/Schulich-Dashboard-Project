@@ -30,6 +30,10 @@ graph::graph(int excelType, QCustomPlot *plot, string name, vector<string> types
     this->xRangeEnd = endYear;
     initializeObject();
 }
+graph::graph(QCustomPlot *plot)
+{
+    this->plot = plot;
+}
 //uninitiated constructor
 graph::graph(){}
 
@@ -211,124 +215,144 @@ QPen graph::getNextPen(int graphNum)
 void graph::showGraph(int graphType)
 {
     plot->clearGraphs();
-    plot->legend->setVisible(true);
-    plot->legend->setBrush(Qt::transparent);
-    for (int i = 0, iMax = labelsGraph.size(); i < iMax; i++)
+    if (graphType == 0)
     {
-        plot->addGraph();
-        QPen nextPen = getNextPen(i);
-        plot->graph(i)->setPen(nextPen);
-        QString qs = QString::fromStdString(labelsGraph[i]);
-        plot->graph(i)->setName(qs);
-        QVector<double> xVect = QVector<double>::fromStdVector(yearsX[i]);
-        QVector<double> yVect = QVector<double>::fromStdVector(totalsY[i]);
-        plot->graph(i)->setData(xVect, yVect);
-        plot->xAxis->setLabel("Year");
-        qs = QString::fromStdString(labelY);
-        plot->yAxis->setLabel(qs);
+        QVector<QString> blankTicks;
+        plot->legend->setVisible(false);
+        plot->xAxis->setLabel("");
+        plot->xAxis->setAutoTicks(true);
+        plot->xAxis->setAutoTickStep(true);
+        plot->xAxis->setAutoTickLabels(false);
+        plot->xAxis->setTickVectorLabels(blankTicks);
+        plot->xAxis->rescale();
+        plot->yAxis->setLabel("");
+        plot->yAxis->setAutoTicks(true);
+        plot->yAxis->setAutoTickStep(true);
+        plot->yAxis->setAutoTickLabels(false);
+        plot->yAxis->setTickVectorLabels(blankTicks);
+        plot->yAxis->rescale();
     }
-    plot->yAxis->setRange(0, yRangeEnd);
-    plot->xAxis->setRange(xRangeStart, xRangeEnd);
-    if (excelType == 2 || excelType == 3)
+    else if (graphType == 1)
     {
-        plot->yAxis->setTickStep(1);
-        vector<double> tickVectY;
-        QVector<QString> labelVectY;
-        int diff = yRangeEnd;
-        int perTicks = (9 + diff) / 10;
-        int countY = 0;
-        for (int i = 0; i <= yRangeEnd; i++)
+        plot->legend->setVisible(true);
+        plot->legend->setBrush(Qt::transparent);
+        for (int i = 0, iMax = labelsGraph.size(); i < iMax; i++)
         {
-            tickVectY.push_back(i);
-            if (diff > 1)
+            plot->addGraph();
+            QPen nextPen = getNextPen(i);
+            plot->graph(i)->setPen(nextPen);
+            QString qs = QString::fromStdString(labelsGraph[i]);
+            plot->graph(i)->setName(qs);
+            QVector<double> xVect = QVector<double>::fromStdVector(yearsX[i]);
+            QVector<double> yVect = QVector<double>::fromStdVector(totalsY[i]);
+            plot->graph(i)->setData(xVect, yVect);
+        }
+        plot->xAxis->setLabel("Year");
+        QString qs = QString::fromStdString(labelY);
+        plot->yAxis->setLabel(qs);
+        plot->yAxis->setRange(0, yRangeEnd);
+        plot->xAxis->setRange(xRangeStart, xRangeEnd);
+        if (excelType == 2 || excelType == 3)
+        {
+            plot->yAxis->setTickStep(1);
+            vector<double> tickVectY;
+            QVector<QString> labelVectY;
+            int diff = yRangeEnd;
+            int perTicks = (9 + diff) / 10;
+            int countY = 0;
+            for (int i = 0; i <= yRangeEnd; i++)
             {
-                if (i == 0)
+                tickVectY.push_back(i);
+                if (diff > 1)
                 {
-                    labelVectY.push_back("");
+                    if (i == 0)
+                    {
+                        labelVectY.push_back("");
+                    }
+                    else if (countY == 0)
+                    {
+                        stringstream ss;
+                        ss << i;
+                        labelVectY.push_back(QString::fromStdString(ss.str()));
+                        countY++;
+                    }
+                    else
+                    {
+                        labelVectY.push_back("");
+                        countY++;
+                    }
                 }
-                else if (countY == 0)
+                else
                 {
                     stringstream ss;
                     ss << i;
                     labelVectY.push_back(QString::fromStdString(ss.str()));
-                    countY++;
+                }
+                if (countY == perTicks)
+                {
+                    countY = 0;
+                }
+            }
+            QVector<double> tickQVectY = QVector<double>::fromStdVector(tickVectY);
+            plot->yAxis->setAutoTicks(false);
+            plot->yAxis->setAutoTickStep(false);
+            plot->yAxis->setTickVector(tickQVectY);
+            plot->yAxis->setAutoTickLabels(false);
+            plot->yAxis->setTickVectorLabels(labelVectY);
+            plot->yAxis->setSubTickCount(0);
+        }
+        else
+        {
+            plot->yAxis->setAutoTicks(true);
+            plot->yAxis->setAutoTickStep(true);
+            plot->yAxis->setAutoTickLabels(true);
+        }
+        plot->xAxis->setTickStep(1);
+        vector<double> tickVect;
+        QVector<QString> labelVect;
+        int diff = xRangeEnd - xRangeStart;
+        int perTicks = (9 + diff) / 10;
+        int count = 0;
+        for (int i = xRangeStart; i <= xRangeEnd; i++)
+        {
+            tickVect.push_back(i);
+            if (diff > 1)
+            {
+                if (i == xRangeStart)
+                {
+                    labelVect.push_back("");
+                }
+                else if (count == 0)
+                {
+                    stringstream ss;
+                    ss << i;
+                    labelVect.push_back(QString::fromStdString(ss.str()));
+                    count++;
                 }
                 else
                 {
-                    labelVectY.push_back("");
-                    countY++;
+                    labelVect.push_back("");
+                    count++;
                 }
             }
             else
-            {
-                stringstream ss;
-                ss << i;
-                labelVectY.push_back(QString::fromStdString(ss.str()));
-            }
-            if (countY == perTicks)
-            {
-                countY = 0;
-            }
-        }
-        QVector<double> tickQVectY = QVector<double>::fromStdVector(tickVectY);
-        plot->yAxis->setAutoTicks(false);
-        plot->yAxis->setAutoTickStep(false);
-        plot->yAxis->setTickVector(tickQVectY);
-        plot->yAxis->setAutoTickLabels(false);
-        plot->yAxis->setTickVectorLabels(labelVectY);
-        plot->yAxis->setSubTickCount(0);
-    }
-    else
-    {
-        plot->yAxis->setAutoTicks(true);
-        plot->yAxis->setAutoTickStep(true);
-        plot->yAxis->setAutoTickLabels(true);
-    }
-    plot->xAxis->setTickStep(1);
-    vector<double> tickVect;
-    QVector<QString> labelVect;
-    int diff = xRangeEnd - xRangeStart;
-    int perTicks = (9 + diff) / 10;
-    int count = 0;
-    for (int i = xRangeStart; i <= xRangeEnd; i++)
-    {
-        tickVect.push_back(i);
-        if (diff > 1)
-        {
-            if (i == xRangeStart)
-            {
-                labelVect.push_back("");
-            }
-            else if (count == 0)
             {
                 stringstream ss;
                 ss << i;
                 labelVect.push_back(QString::fromStdString(ss.str()));
-                count++;
             }
-            else
+            if (count == perTicks)
             {
-                labelVect.push_back("");
-                count++;
+                count = 0;
             }
         }
-        else
-        {
-            stringstream ss;
-            ss << i;
-            labelVect.push_back(QString::fromStdString(ss.str()));
-        }
-        if (count == perTicks)
-        {
-            count = 0;
-        }
+        QVector<double> tickQVect = QVector<double>::fromStdVector(tickVect);
+        plot->xAxis->setAutoTicks(false);
+        plot->xAxis->setAutoTickStep(false);
+        plot->xAxis->setTickVector(tickQVect);
+        plot->xAxis->setAutoTickLabels(false);
+        plot->xAxis->setTickVectorLabels(labelVect);
+        plot->xAxis->setSubTickCount(0);
     }
-    QVector<double> tickQVect = QVector<double>::fromStdVector(tickVect);
-    plot->xAxis->setAutoTicks(false);
-    plot->xAxis->setAutoTickStep(false);
-    plot->xAxis->setTickVector(tickQVect);
-    plot->xAxis->setAutoTickLabels(false);
-    plot->xAxis->setTickVectorLabels(labelVect);
-    plot->xAxis->setSubTickCount(0);
     plot->replot();
 }

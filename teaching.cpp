@@ -28,7 +28,7 @@ teaching::teaching(string file, int firstYear, int lastYear)
     excelData newData(file, firstYear, lastYear, 4);
     storedData = newData;
 }
-//uninitiated constructor
+//uninitialized constructor
 teaching::teaching() {}
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
@@ -37,10 +37,10 @@ vector<string> teaching::guiTypeData()
     return storedData.guiTypeData();
 }
 
-//shows a graph for the given entry
-void teaching::showGraph(int entryIndex, int graphType, QCustomPlot *graph)
+//shows a graph for the given person
+void teaching::showGraph(string personName, int graphType, QCustomPlot *graph)
 {
-    storedData.showGraph(entryIndex, graphType, graph);
+    storedData.showGraph(personName, graphType, graph);
 }
 
 //get the total number of entries

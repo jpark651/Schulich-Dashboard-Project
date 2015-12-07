@@ -28,7 +28,7 @@ publications::publications(string file, int firstYear, int lastYear)
     excelData newData(file, firstYear, lastYear, 3);
     storedData = newData;
 }
-//uninitiated constructor
+//uninitialized constructor
 publications::publications() {}
 
 //returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
@@ -37,10 +37,10 @@ vector<string> publications::guiTypeData()
     return storedData.guiTypeData();
 }
 
-//shows a graph for the given entry
-void publications::showGraph(int entryIndex, int graphType, QCustomPlot *graph)
+//shows a graph for the given person
+void publications::showGraph(string personName, int graphType, QCustomPlot *graph)
 {
-    storedData.showGraph(entryIndex, graphType, graph);
+    storedData.showGraph(personName, graphType, graph);
 }
 
 //get the total number of entries

@@ -41,7 +41,7 @@ private:
 
     /*------ Methods ------*/
 
-    //initiates the variables required for graphing
+    //initializes the variables required for graphing
     void initializeObject();
 
     //sets the y-axis label
@@ -61,9 +61,11 @@ public:
     /*------ Constructors ------*/
 
     //graph constructor
-    graph(int excelType, QCustomPlot *graph, string name, vector<string> types, vector<int> years,
+    graph(int excelType, QCustomPlot *plot, string name, vector<string> types, vector<int> years,
           vector<long long> money, vector<double> hours, int uniqueTypes, int startYear, int endYear);
-    //uninitiated constructor
+    //graph constructor (empty graph)
+    graph(QCustomPlot *plot);
+    //uninitialized constructor
     graph();
 
 

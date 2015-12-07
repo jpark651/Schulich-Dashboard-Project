@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuBar->setNativeMenuBar(false);
     ui->grid->removeWidget(ui->label);
     ui->grid->addWidget(ui->label, 0, 0, Qt::AlignCenter|Qt::AlignCenter);
+    ui->excelTree->setSelectionMode(QTreeWidget::SingleSelection);
     activeFile=false;
     unactive();
 }
@@ -56,12 +57,12 @@ void MainWindow::on_pushButton_clicked()
 }
 
 void MainWindow::createParser(QString filePath) {
-    excelSheet excel(filePath.toStdString());
+    excel = excelSheet(filePath.toStdString());
     d.clearData();
     d.setData(excel.getErrorVector());
     type_of_file = excel.getExcelType();
     parsedData = excel.guiTypeData();
-    excel.showGraph(1, 1, ui->graph);
+    excel.showGraph("", 0, ui->graph);
     active();
 }
 
@@ -299,4 +300,27 @@ void MainWindow::on_excelTree_expanded(const QModelIndex &index)
 {
     ui->excelTree->resizeColumnToContents(0);
     ui->excelTree->resizeColumnToContents(1);
+}
+
+void MainWindow::on_excelTree_itemSelectionChanged()
+{
+    QList<QTreeWidgetItem*> selected = ui->excelTree->selectedItems();
+    QTreeWidgetItem item;
+    if (selected.size() > 0)
+    {
+        item = *selected.back();
+    }
+    QString qName = item.text(0);
+    string name = "";
+    if (!qName.isNull() && !qName.isEmpty())
+    {
+        name = qName.toStdString();
+        for (int i = 0, iMax = name.size(); i < iMax; i++)
+        {
+            if (name[i] == ',')
+            {
+                excel.showGraph(name, 1, ui->graph);
+            }
+        }
+    }
 }

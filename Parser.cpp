@@ -29,7 +29,7 @@ Parser:: Parser (string name, int type)
     parseDates(dateIndex);
     errorVector = getMissingFields(sheetType, rows);
 }
-//uninitiated Parser constructor
+//uninitialized Parser constructor
 Parser:: Parser () {}
 
 //helps to handle situations where cells are missing at the end of a line

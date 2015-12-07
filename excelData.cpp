@@ -876,24 +876,43 @@ vector<string> excelData::guiTypeData()
     return guiData;
 }
 
-//shows a graph for the given entry
-void excelData::showGraph(int entryIndex, int graphType, QCustomPlot *plot)
+//shows a graph for the given person
+void excelData::showGraph(string personName, int graphType, QCustomPlot *plot)
 {
-    if (entryIndex < getTotalEntries())
+    int personIndex;
+    int totalPersons = getTotalEntries();
+    if (graphType == 0)
     {
-        vector<long long> graphMoney;
-        vector<double> graphHours;
-        if (isFunding())
-        {
-            graphMoney = longMoney[entryIndex];
-        }
-        else if (isTeaching())
-        {
-            graphHours = hours[entryIndex];
-        }
-        graph g(excelType, plot, names[entryIndex], types[entryIndex], years[entryIndex],
-                graphMoney, graphHours, uniqueTypes[entryIndex], startYear, endYear);
+        graph g(plot);
         g.showGraph(graphType);
+    }
+    else
+    {
+        bool done = false;
+        for (personIndex = 0; personIndex < totalPersons && !done; personIndex++)
+        {
+            if (names[personIndex].compare(personName) == 0)
+            {
+                done = true;
+                personIndex--;
+            }
+        }
+        if (personIndex < totalPersons)
+        {
+            vector<long long> graphMoney;
+            vector<double> graphHours;
+            if (isFunding())
+            {
+                graphMoney = longMoney[personIndex];
+            }
+            else if (isTeaching())
+            {
+                graphHours = hours[personIndex];
+            }
+            graph g(excelType, plot, names[personIndex], types[personIndex], years[personIndex],
+                    graphMoney, graphHours, uniqueTypes[personIndex], startYear, endYear);
+            g.showGraph(graphType);
+        }
     }
 }
 

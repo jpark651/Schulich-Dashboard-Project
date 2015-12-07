@@ -30,7 +30,7 @@ public:
     presentations(string file);
     //first/last year is set using the given parameters
     presentations(string file, int startYear, int endYear);
-    //uninitiated constructor
+    //uninitialized constructor
     presentations();
 
 
@@ -39,8 +39,8 @@ public:
     //returns the information to be printed to the GUI, with each type's data separated by a single hyphen
     vector<string> guiTypeData();
 
-    //shows a graph for the given entry
-    void showGraph(int entryIndex, int graphType, QCustomPlot *graph);
+    //shows a graph for the given person
+    void showGraph(string personName, int graphType, QCustomPlot *graph);
 
     //get the total number of entries
     int getTotalEntries();
