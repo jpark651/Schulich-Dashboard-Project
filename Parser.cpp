@@ -663,7 +663,7 @@ vector<string> Parser:: getMissingFunding(vector<vector<string> >rows)
     for (unsigned int i =0; i < sz; i++)
     {
         stringstream ss;
-        ss << "Row " << i << " is missing: ";
+        ss << "Row " << i + 1<< " is missing: ";
         string s = ss.str();
         missingRows.push_back(s);
         missingRows.erase(missingRows.begin());
@@ -736,7 +736,7 @@ vector<string> Parser:: getMissingPublications(vector<vector<string> >rows)
    for (int i =0; i < sz; i++)
     {
         stringstream ss;
-        ss << "Row " << i << " is missing: ";
+        ss << "Row " << i + 1 << " is missing: ";
         string s = ss.str();
         missingRows.push_back(s);
         missingRows.erase(missingRows.begin());
@@ -793,7 +793,7 @@ vector<string> Parser:: getMissingPresentations(vector<vector<string> >rows)
    for (int i =0; i < sz; i++)
     {
         stringstream ss;
-        ss << "Row " << i << " is missing: ";
+        ss << "Row " << i + 1 << " is missing: ";
         string s = ss.str();
         missingRows.push_back(s);
         missingRows.erase(missingRows.begin());
@@ -838,7 +838,7 @@ vector<string> Parser:: getMissingTeaching(vector<vector<string> >rows)
    for (int i =0; i < sz; i++)
     {
         stringstream ss;
-        ss << "Row " << i << " is missing: ";
+        ss << "Row " << i + 1 << " is missing: ";
         string s = ss.str();
         missingRows.push_back(s);
         missingRows.erase(missingRows.begin());

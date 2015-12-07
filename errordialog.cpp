@@ -10,6 +10,8 @@ ErrorDialog::ErrorDialog(QWidget *parent) :
     ui(new Ui::ErrorDialog)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Row Errors Window");
+    this->setFixedSize(this->width(),this->height());
 }
 
 //ErrorDialog deconstructor
@@ -21,6 +23,8 @@ ErrorDialog::~ErrorDialog()
 //Sets the data to be displayed in the ErrorDialog window
 void ErrorDialog:: setData(std::vector<std::string>errorVector)
 {
+    QString header = "Row                        Mandatory fields";
+    ui->listWidget->addItem(header);
     for (unsigned int i =0; i < errorVector.size(); i++)
     {
        QString str = QString::fromUtf8(errorVector[i].c_str());
