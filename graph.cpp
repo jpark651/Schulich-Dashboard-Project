@@ -278,6 +278,12 @@ void graph::showGraph(int graphType)
         plot->yAxis->setTickVectorLabels(labelVectY);
         plot->yAxis->setSubTickCount(0);
     }
+    else
+    {
+        plot->yAxis->setAutoTicks(true);
+        plot->yAxis->setAutoTickStep(true);
+        plot->yAxis->setAutoTickLabels(true);
+    }
     plot->xAxis->setTickStep(1);
     vector<double> tickVect;
     QVector<QString> labelVect;
