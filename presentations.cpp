@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <qcustomplot.h>
 #include <sstream>
 #include <stdbool.h>
 #include <stdio.h>
@@ -37,9 +38,9 @@ vector<string> presentations::guiTypeData()
 }
 
 //shows a graph for the given entry
-void presentations::showGraph(int entryIndex, int graphType)
+void presentations::showGraph(int entryIndex, int graphType, QCustomPlot *graph)
 {
-    storedData.showGraph(entryIndex, graphType);
+    storedData.showGraph(entryIndex, graphType, graph);
 }
 
 //get the total number of entries
@@ -48,7 +49,7 @@ int presentations::getTotalEntries()
     return storedData.getTotalEntries();
 }
 
-//returns a reference to the Parser object
+//returns a pointer to the Parser object
 Parser *presentations::getParse()
 {
     return storedData.getParse();

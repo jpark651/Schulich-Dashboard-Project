@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <qcustomplot.h>
 #include <sstream>
 #include <stdbool.h>
 #include <stdio.h>
@@ -38,9 +39,9 @@ vector<string> funding::guiTypeData()
 }
 
 //shows a graph for the given entry
-void funding::showGraph(int entryIndex, int graphType)
+void funding::showGraph(int entryIndex, int graphType, QCustomPlot *graph)
 {
-    storedData.showGraph(entryIndex, graphType);
+    storedData.showGraph(entryIndex, graphType, graph);
 }
 
 //get the total number of entries
@@ -49,7 +50,7 @@ int funding::getTotalEntries()
     return storedData.getTotalEntries();
 }
 
-//returns a reference to the Parser object
+//returns a pointer to the Parser object
 Parser *funding::getParse()
 {
     return storedData.getParse();

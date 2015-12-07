@@ -5,6 +5,7 @@
 #define EXCELDATA_H_INCLUDED
 #include <iostream>
 #include <list>
+#include <qcustomplot.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,10 +98,8 @@ private:
     //parses a currency string into a long long
     long long parseMoney(string amount);
 
-
     //returns true if the string is "True"
     bool parseBool(string boolTest);
-
 
     //returns an acronym for the Teaching type-string
     string acronymize(string type);
@@ -126,12 +125,12 @@ private:
     vector<string> guiTypeData();
 
     //shows a graph for the given entry
-    void showGraph(int entryIndex, int graphType);
+    void showGraph(int entryIndex, int graphType, QCustomPlot *plot);
 
     //get the total number of entries
     int getTotalEntries();
 
-    //returns a reference to the Parser object
+    //returns a pointer to the Parser object
     Parser *getParse();
 };
 

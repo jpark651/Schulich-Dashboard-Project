@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <qcustomplot.h>
 #include <sstream>
 #include <stdbool.h>
 #include <stdio.h>
@@ -21,31 +22,23 @@ using namespace std;
 //excelSheet constructor (first/last year is set to the earliest/latest year in the file)
 excelSheet::excelSheet(string file)
 {
-    Parser *p;
     sheetType = getExcelType(file);
     switch (sheetType)
     {
     case 1:
         sheetType1 = funding(file);
-        p = sheetType1.getParse();
-        errorVector = p->getErrorVector();
         break;
     case 2:
         sheetType2 = presentations(file);
-        p = sheetType2.getParse();
-        errorVector = p->getErrorVector();
         break;
     case 3:
         sheetType3 = publications(file);
-        p = sheetType3.getParse();
-        errorVector = p->getErrorVector();
         break;
     case 4:
         sheetType4 = teaching(file);
-        p = sheetType4.getParse();
-        errorVector = p->getErrorVector();
         break;
     }
+    setErrorVector();
 }
 //excelSheet constructor (first/last year is set using the given parameters)
 excelSheet::excelSheet(string file, int firstYear, int lastYear)
@@ -66,6 +59,7 @@ excelSheet::excelSheet(string file, int firstYear, int lastYear)
         sheetType4 = teaching(file, firstYear, lastYear);
         break;
     }
+    setErrorVector();
 }
 
 //returns the type of Excel file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
@@ -101,6 +95,28 @@ int excelSheet::getExcelType(string filename)
     return type;
 }
 
+//sets the error vector
+void excelSheet::setErrorVector()
+{
+    Parser *p;
+    switch (sheetType)
+    {
+    case 1:
+        p = sheetType1.getParse();
+        break;
+    case 2:
+        p = sheetType2.getParse();
+        break;
+    case 3:
+        p = sheetType3.getParse();
+        break;
+    case 4:
+        p = sheetType4.getParse();
+        break;
+    }
+    errorVector = p->getErrorVector();
+}
+
 //returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
 int excelSheet::getExcelType()
 {
@@ -130,21 +146,21 @@ vector<string> excelSheet::guiTypeData()
 }
 
 //shows a graph for the given entry
-void excelSheet::showGraph(int entryIndex, int graphType)
+void excelSheet::showGraph(int entryIndex, int graphType, QCustomPlot *graph)
 {
     switch (sheetType)
     {
     case 1:
-        sheetType1.showGraph(entryIndex, graphType);
+        sheetType1.showGraph(entryIndex, graphType, graph);
         break;
     case 2:
-        sheetType2.showGraph(entryIndex, graphType);
+        sheetType2.showGraph(entryIndex, graphType, graph);
         break;
     case 3:
-        sheetType3.showGraph(entryIndex, graphType);
+        sheetType3.showGraph(entryIndex, graphType, graph);
         break;
     case 4:
-        sheetType4.showGraph(entryIndex, graphType);
+        sheetType4.showGraph(entryIndex, graphType, graph);
         break;
     }
 }
@@ -171,7 +187,7 @@ int excelSheet::getTotalEntries()
     return entryTotal;
 }
 
-//returns a reference to the Parser object
+//returns a pointer to the Parser object
 Parser *excelSheet::getParse()
 {
     Parser *parse = new Parser();
@@ -193,8 +209,8 @@ Parser *excelSheet::getParse()
     return parse;
 }
 
-//returns a reference to the error vector
-vector <string> excelSheet:: getErrorVector()
+//returns the error vector
+vector<string> excelSheet::getErrorVector()
 {
     return errorVector;
 }

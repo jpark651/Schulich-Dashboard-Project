@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iterator>
 #include <list>
+#include <qcustomplot.h>
 #include <sstream>
 #include <stdbool.h>
 #include <stdio.h>
@@ -13,7 +14,6 @@
 #include "graph.h"
 #include "Parser.h"
 #include "excelData.h"
-#include <QApplication>
 using namespace std;
 
 //excelData constructor (first/last year is set using the earliest/latest year in the file)
@@ -877,31 +877,23 @@ vector<string> excelData::guiTypeData()
 }
 
 //shows a graph for the given entry
-void excelData::showGraph(int entryIndex, int graphType)
+void excelData::showGraph(int entryIndex, int graphType, QCustomPlot *plot)
 {
     if (entryIndex < getTotalEntries())
     {
-        graph g;
-        switch(excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
+        vector<long long> graphMoney;
+        vector<double> graphHours;
+        if (isFunding())
         {
-        case 1:
-            g.preparePublications(names[entryIndex], money[entryIndex], years[entryIndex],
-                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
-            break;
-        case 2:
-            g.preparePublications(names[entryIndex], types[entryIndex], years[entryIndex],
-                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
-            break;
-        case 3:
-            g.preparePublications(names[entryIndex], types[entryIndex], years[entryIndex],
-                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
-            break;
-        case 4:
-            g.preparePublications(names[entryIndex], types[entryIndex], years[entryIndex],
-                                  uniqueTypes[entryIndex], startYear, endYear, graphType);
-            break;
+            graphMoney = longMoney[entryIndex];
         }
-		g.show();
+        else if (isTeaching())
+        {
+            graphHours = hours[entryIndex];
+        }
+        graph g(excelType, plot, names[entryIndex], types[entryIndex], years[entryIndex],
+                graphMoney, graphHours, uniqueTypes[entryIndex], startYear, endYear);
+        g.showGraph(graphType);
     }
 }
 
@@ -1006,7 +998,7 @@ int excelData::getTotalEntries()
     return names.size();
 }
 
-//returns a reference to the Parser object
+//returns a pointer to the Parser object
 Parser *excelData::getParse()
 {
     return parse;

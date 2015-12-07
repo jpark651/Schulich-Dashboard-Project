@@ -5,6 +5,7 @@
 #define EXCELSHEET_H_INCLUDED
 #include <iostream>
 #include <list>
+#include <qcustomplot.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,13 +28,16 @@ private:
     presentations sheetType2;
     publications sheetType3;
     teaching sheetType4;
-    vector <string> errorVector;
+    vector<string> errorVector;
 
 
     /*------ Methods ------*/
 
     //returns the type of Excel file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
     int getExcelType(string filename);
+
+    //sets the error vector
+    void setErrorVector();
 
 
 public:
@@ -54,16 +58,16 @@ public:
     vector<string> guiTypeData();
 
     //shows a graph for the given entry
-    void showGraph(int entryIndex, int graphType);
+    void showGraph(int entryIndex, int graphType, QCustomPlot *graph);
 
     //get the total number of entries
     int getTotalEntries();
 
-    //returns a reference to the Parser object
+    //returns a pointer to the Parser object
     Parser *getParse();
 
-    //returns a reference to the error vector
-    vector <string> getErrorVector();
+    //returns the error vector
+    vector<string> getErrorVector();
 };
 
 #endif //EXCELSHEET_H_INCLUDED

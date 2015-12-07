@@ -1,10 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include "publications.h"
+#include <QLabel>
 #include <QMainWindow>
 #include <QTreeWidgetItem>
-#include <QLabel>
 #include "errordialog.h"
+#include "publications.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -28,10 +29,9 @@ public:
     ErrorDialog d;
     vector<string> parsedData;  //Holds parsed data
     QString filePath;
-    publications *pub;
-    QLabel *noActiveFile;   //Label to let the user know to open a file
+    QLabel *noActiveFile;       //Label to let the user know to open a file
     void insertNames(QTreeWidgetItem*);
-    int type_of_file;       //1 = funding, 2 = presentations, 3 = publications, 4 = teaching
+    int type_of_file;           //1 = funding, 2 = presentations, 3 = publications, 4 = teaching
 
 private slots:
     void on_pushButton_clicked();
@@ -40,9 +40,11 @@ private slots:
 
     void on_actionCloseFile_triggered();
 
-
-
     void on_actionDisplay_Errors_triggered();
+
+    void on_excelTree_collapsed(const QModelIndex &index);
+
+    void on_excelTree_expanded(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;

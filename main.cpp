@@ -1,8 +1,8 @@
 /**
 * This file implements the main.h
 */
-#include "mainwindow.h"
 #include <QApplication>
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {

@@ -5,6 +5,7 @@
 #define PRESENTATIONS_H_INCLUDED
 #include <iostream>
 #include <list>
+#include <qcustomplot.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,12 +40,12 @@ public:
     vector<string> guiTypeData();
 
     //shows a graph for the given entry
-    void showGraph(int entryIndex, int graphType);
+    void showGraph(int entryIndex, int graphType, QCustomPlot *graph);
 
     //get the total number of entries
     int getTotalEntries();
 
-    //returns a reference to the Parser object
+    //returns a pointer to the Parser object
     Parser *getParse();
 };
 

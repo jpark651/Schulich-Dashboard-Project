@@ -7,57 +7,70 @@
 //#ifndef GRAPH_H
 //#define GRAPH_H
 
-#include <QWidget>
-#include <string>
 #include <iostream>
-#include <stdlib.h>
-#include <list>
-#include <stdlib.h>
-#include <stdio.h>
+#include <qcustomplot.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
 #include <vector>
-#include <QMainWindow>
+#include "graph.h"
+using namespace std;
 
-
-namespace Ui {
-    class graph;
-}
-
-
-class graph : public QMainWindow
+class graph
 {
-    Q_OBJECT
+private:
+    /*------ Variables ------*/
+
+    int excelType;
+    QCustomPlot *plot;
+    string name;
+    vector<string> types;
+    vector<int> years;
+    vector<long long> money;
+    vector<double> hours;
+    string labelY;
+    vector<string> labelsGraph;
+    vector<vector<double> > totalsY;
+    vector<vector<double> > yearsX;
+    int uniqueTypes;
+    double yRangeEnd;
+    int xRangeStart;
+    int xRangeEnd;
+
+
+    /*------ Methods ------*/
+
+    //initiates the variables required for graphing
+    void initializeObject();
+
+    //sets the y-axis label
+    void setLabel();
+
+    //initializes the years for each graph to have empty totals
+    void initializeYears();
+
+    //groups data for each graph to be plotted
+    void groupByGraph();
+
+    //returns a unique pen for differentiating graphs
+    QPen getNextPen(int graphNum);
+
 
 public:
+    /*------ Constructors ------*/
 
-    explicit graph(QWidget *parent = 0);	//choice is the data and graph type to be displayed
-    ~graph();
-
-    //processes info for Publications and calls one of the 3 graph creating functions
-    void preparePublications(std::string name, std::vector<std::string> types, std::vector<int> years, int diff_types, int begin, int end, int graphtype);
-
-    //processes info for Funding and calls one of the 3 graph creating functions
-    //void graph::prepareFunding(std::string name, std::vector<std::string> types, std::vector<int> years, std::vector<double> amount, int diff_types, int begin, int end, int graphtype)
+    //graph constructor
+    graph(int excelType, QCustomPlot *graph, string name, vector<string> types, vector<int> years,
+          vector<long long> money, vector<double> hours, int uniqueTypes, int startYear, int endYear);
+    //uninitiated constructor
+    graph();
 
 
-    //method for creating a window which displays a bar graph
-    void createBarGraph(std::string title, int yaxis_range, std::vector<int> xaxis, std::vector<std::string> xlabel, std::string xtitle, std::string ytitle);
+    /*------ Methods ------*/
 
-    //method for creating a window which displays a line graph
-    void createLineGraph(std::string title, int yaxis_range, std::vector<int> xaxis, std::vector<std::string> xlabel, std::string xtitle, std::string ytitle);
-
-    //method for creating a window which display a pie chart
-    //void createPieChart(std:: string title, int num_publications, std:: vector<int> xaxis, std:: vector<std:: string> xlabel);
-
-    void closeEvent(QCloseEvent *event);
-
-    void close();
-
-
-private:
-    Ui::graph *ui;
-    std::vector<std::vector<std::string> > names;
+    //graphs the data using the given type
+    void showGraph(int graphType);
 };
-//
 
 #endif //GRAPH_H_INCLUDED

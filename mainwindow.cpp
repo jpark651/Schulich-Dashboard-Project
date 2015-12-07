@@ -1,36 +1,31 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "Parser.h"
-#include "publications.h"
-#include <QMessageBox>
 #include <iostream>
-#include <vector>
-#include <QStandardItemModel>
-#include <QLabel>
+#include <qcustomplot.h>
 #include <QFileDialog>
-#include <string>
 #include <QHeaderView>
-#include "excelSheet.h"
+#include <QLabel>
+#include <QMessageBox>
+#include <QStandardItemModel>
+#include <string>
+#include <vector>
 #include "errordialog.h"
+#include "excelSheet.h"
+#include "publications.h"
+#include "Parser.h"
+#include "ui_mainwindow.h"
+#include "mainwindow.h"
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
     ui->menuBar->setNativeMenuBar(false);
+    ui->grid->removeWidget(ui->label);
+    ui->grid->addWidget(ui->label, 0, 0, Qt::AlignCenter|Qt::AlignCenter);
     activeFile=false;
-    ui->excelTree->header()->resizeSection(0,400);
-
-    //Adding expandable items for Publications
-    if (activeFile) {
-        active();
-    }
-    else {
-        unactive();
-    }
+    unactive();
 }
 
 MainWindow::~MainWindow()
@@ -44,6 +39,8 @@ void MainWindow::unactive() {
     ui->unactiveLabel->show();
     ui->excelTree->clear();
     ui->excelTree->setColumnCount(0);
+    ui->graph->hide();
+    ui->label->show();
     ui->label->setAlignment(Qt::AlignCenter);
     ui->label->setText("No Data to Display.");
 }
@@ -64,10 +61,13 @@ void MainWindow::createParser(QString filePath) {
     d.setData(excel.getErrorVector());
     type_of_file = excel.getExcelType();
     parsedData = excel.guiTypeData();
+    excel.showGraph(1, 1, ui->graph);
     active();
 }
 
 void MainWindow::active() {
+    ui->label->hide();
+    ui->graph->show();
     ui->unactiveLabel->hide();
     switch (type_of_file)
     {
@@ -84,8 +84,6 @@ void MainWindow::active() {
         activeTeaching();
         break;
     default:
-        //Error, let the user know there was a problem
-        //TODO
         printf("ERROR");
     }
 }
@@ -122,6 +120,8 @@ void MainWindow::activePresentation() {
         //Insert names
         insertNames(nextSection);
     }
+    ui->excelTree->resizeColumnToContents(0);
+    ui->excelTree->resizeColumnToContents(1);
 }
 
 void MainWindow::activeGrants() {
@@ -170,6 +170,8 @@ void MainWindow::activeGrants() {
             parsedData.erase(parsedData.begin());
         }
     }
+    ui->excelTree->resizeColumnToContents(0);
+    ui->excelTree->resizeColumnToContents(1);
 }
 
 void MainWindow::activeTeaching() {
@@ -207,6 +209,8 @@ void MainWindow::activeTeaching() {
         //Insert names
         insertNames(nextSection);
     }
+    ui->excelTree->resizeColumnToContents(0);
+    ui->excelTree->resizeColumnToContents(1);
 }
 
 
@@ -242,6 +246,8 @@ void MainWindow::activePublication() {
         //Insert names
         insertNames(nextSection);
     }
+    ui->excelTree->resizeColumnToContents(0);
+    ui->excelTree->resizeColumnToContents(1);
 }
 
 
@@ -281,4 +287,16 @@ void MainWindow::on_actionDisplay_Errors_triggered()
 {
     d.setModal(true);
     d.exec();
+}
+
+void MainWindow::on_excelTree_collapsed(const QModelIndex &index)
+{
+    ui->excelTree->resizeColumnToContents(0);
+    ui->excelTree->resizeColumnToContents(1);
+}
+
+void MainWindow::on_excelTree_expanded(const QModelIndex &index)
+{
+    ui->excelTree->resizeColumnToContents(0);
+    ui->excelTree->resizeColumnToContents(1);
 }
