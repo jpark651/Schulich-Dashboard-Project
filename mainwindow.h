@@ -26,6 +26,8 @@ public:
     void activeTeaching();
     void activePresentation();
     void activeGrants();
+    int yearStart;
+    int yearEnd;
     ErrorDialog d;
     vector<string> parsedData;  //Holds parsed data
     QString filePath;
@@ -33,6 +35,7 @@ public:
     void insertNames(QTreeWidgetItem*);
     int type_of_file;           //1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     excelSheet excel;
+    bool willReset = false;
 
 private slots:
     void on_pushButton_clicked();
@@ -49,9 +52,18 @@ private slots:
 
     void on_excelTree_itemSelectionChanged();
 
+    void on_actionExit_Fullscreen_triggered();
+
+    void on_actionFullscreen_triggered();
+
+    void on_actionSet_Year_Range_triggered();
+
 private:
     Ui::MainWindow *ui;
-    //graph graphn;
+
+    //reinitializes the window using the stored excelSheet object
+    void reset();
+
     void createParser(QString);
 };
 

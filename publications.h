@@ -47,6 +47,18 @@ public:
 
     //returns a pointer to the Parser object
     Parser *getParse();
+
+    //returns the start year
+    int getStartYear();
+
+    //returns the end year
+    int getEndYear();
+
+    //updates the graph
+    void updateGraph(int startYear, int endYear);
+
+    //updates the years
+    void updateYears(int startYear, int endYear);
 };
 
 #endif //PUBLICATIONS_H_INCLUDED

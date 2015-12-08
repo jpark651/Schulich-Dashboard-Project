@@ -11,17 +11,19 @@ INCLUDEPATH += .
 # Input
 HEADERS += excelData.h \
            funding.h \
-	   graph.h \
+	       graph.h \
            mainwindow.h \
            Parser.h \
            presentations.h \
            publications.h \
            qcustomplot.h \
            teaching.h \
-    excelSheet.h \
-    errordialog.h
+           excelSheet.h \
+           errordialog.h \
+           yearRange.h
 FORMS += mainwindow.ui \
-    errordialog.ui
+         errordialog.ui \
+         yearRange.ui
 SOURCES += excelData.cpp \
            funding.cpp \
            graph.cpp \
@@ -32,5 +34,6 @@ SOURCES += excelData.cpp \
            publications.cpp \
            qcustomplot.cpp \
            teaching.cpp \
-    excelSheet.cpp \
-    errordialog.cpp
+           excelSheet.cpp \
+           errordialog.cpp \
+           yearRange.cpp

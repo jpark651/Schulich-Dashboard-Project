@@ -23,6 +23,7 @@ private:
     /*------ Variables ------*/
 
     int excelType;
+    int graphType = 0;
     QCustomPlot *plot;
     string name;
     vector<string> types;
@@ -73,6 +74,9 @@ public:
 
     //graphs the data using the given type
     void showGraph(int graphType);
+
+    //updates the graph
+    void updateGraph(int startYear, int endYear);
 };
 
 #endif //GRAPH_H_INCLUDED

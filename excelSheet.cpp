@@ -22,6 +22,7 @@ using namespace std;
 //excelSheet constructor (first/last year is set to the earliest/latest year in the file)
 excelSheet::excelSheet(string file)
 {
+    filepath = file;
     sheetType = getExcelType(file);
     switch (sheetType)
     {
@@ -43,6 +44,7 @@ excelSheet::excelSheet(string file)
 //excelSheet constructor (first/last year is set using the given parameters)
 excelSheet::excelSheet(string file, int firstYear, int lastYear)
 {
+    filepath = file;
     sheetType = getExcelType(file);
     switch (sheetType)
     {
@@ -216,4 +218,106 @@ Parser *excelSheet::getParse()
 vector<string> excelSheet::getErrorVector()
 {
     return errorVector;
+}
+
+//returns the start year
+int excelSheet::getStartYear()
+{
+    int year;
+    switch (sheetType)
+    {
+    case 1:
+        year = sheetType1.getStartYear();
+        break;
+    case 2:
+        year = sheetType2.getStartYear();
+        break;
+    case 3:
+        year = sheetType3.getStartYear();
+        break;
+    case 4:
+        year = sheetType4.getStartYear();
+        break;
+    }
+    return year;
+}
+
+//returns the end year
+int excelSheet::getEndYear()
+{
+    int year;
+    switch (sheetType)
+    {
+    case 1:
+        year = sheetType1.getEndYear();
+        break;
+    case 2:
+        year = sheetType2.getEndYear();
+        break;
+    case 3:
+        year = sheetType3.getEndYear();
+        break;
+    case 4:
+        year = sheetType4.getEndYear();
+        break;
+    }
+    return year;
+}
+
+//returns the filepath
+string excelSheet::getFilepath()
+{
+    return filepath;
+}
+
+//updates the graph
+void excelSheet::updateGraph(int startYear, int endYear)
+{
+    switch (sheetType)
+    {
+    case 1:
+        sheetType1.updateGraph(startYear, endYear);
+        break;
+    case 2:
+        sheetType2.updateGraph(startYear, endYear);
+        break;
+    case 3:
+        sheetType3.updateGraph(startYear, endYear);
+        break;
+    case 4:
+        sheetType4.updateGraph(startYear, endYear);
+        break;
+    }
+}
+
+//updates the years
+void excelSheet::updateYears(int startYear, int endYear)
+{
+    switch (sheetType)
+    {
+    case 1:
+        sheetType1.updateYears(startYear, endYear);
+        break;
+    case 2:
+        sheetType2.updateYears(startYear, endYear);
+        break;
+    case 3:
+        sheetType3.updateYears(startYear, endYear);
+        break;
+    case 4:
+        sheetType4.updateYears(startYear, endYear);
+        break;
+    }
+}
+
+//sets a boolean indicating whether mainwindow should reset
+void excelSheet::setReset(bool reset)
+{
+    this->reset = reset;
+}
+
+//gets a boolean indicating whether mainwindow should reset
+bool excelSheet::getReset()
+{
+    return reset;
 }

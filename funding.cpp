@@ -56,3 +56,26 @@ Parser *funding::getParse()
     return storedData.getParse();
 }
 
+//returns the start year
+int funding::getStartYear()
+{
+    return storedData.getStartYear();
+}
+
+//returns the end year
+int funding::getEndYear()
+{
+    return storedData.getEndYear();
+}
+
+//updates the graph
+void funding::updateGraph(int startYear, int endYear)
+{
+    storedData.updateGraph(startYear, endYear);
+}
+
+//updates the years
+void funding::updateYears(int startYear, int endYear)
+{
+    storedData.updateYears(startYear, endYear);
+}

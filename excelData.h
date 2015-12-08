@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include "graph.h"
 #include "Parser.h"
 using namespace std;
 
@@ -46,6 +47,8 @@ private:
     vector<vector<double> > hoursByType;
     vector<vector<long long> > moneyByType;
     Parser *parse;
+    bool graphed = false;
+    graph storedGraph;
 
 
     /*------ Methods ------*/
@@ -132,6 +135,18 @@ private:
 
     //returns a pointer to the Parser object
     Parser *getParse();
+
+    //returns the start year
+    int getStartYear();
+
+    //returns the end year
+    int getEndYear();
+
+    //updates the graph
+    void updateGraph(int startYear, int endYear);
+
+    //updates the years
+    void updateYears(int startYear, int endYear);
 };
 
 #endif //EXCELDATA_H_INCLUDED

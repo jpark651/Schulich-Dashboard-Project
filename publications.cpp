@@ -55,3 +55,26 @@ Parser *publications::getParse()
     return storedData.getParse();
 }
 
+//returns the start year
+int publications::getStartYear()
+{
+    return storedData.getStartYear();
+}
+
+//returns the end year
+int publications::getEndYear()
+{
+    return storedData.getEndYear();
+}
+
+//updates the graph
+void publications::updateGraph(int startYear, int endYear)
+{
+    storedData.updateGraph(startYear, endYear);
+}
+
+//updates the years
+void publications::updateYears(int startYear, int endYear)
+{
+    storedData.updateYears(startYear, endYear);
+}

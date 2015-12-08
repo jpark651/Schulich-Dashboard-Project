@@ -55,3 +55,26 @@ Parser *presentations::getParse()
     return storedData.getParse();
 }
 
+//returns the start year
+int presentations::getStartYear()
+{
+    return storedData.getStartYear();
+}
+
+//returns the end year
+int presentations::getEndYear()
+{
+    return storedData.getEndYear();
+}
+
+//updates the graph
+void presentations::updateGraph(int startYear, int endYear)
+{
+    storedData.updateGraph(startYear, endYear);
+}
+
+//updates the years
+void presentations::updateYears(int startYear, int endYear)
+{
+    storedData.updateYears(startYear, endYear);
+}

@@ -911,7 +911,9 @@ void excelData::showGraph(string personName, int graphType, QCustomPlot *plot)
             }
             graph g(excelType, plot, names[personIndex], types[personIndex], years[personIndex],
                     graphMoney, graphHours, uniqueTypes[personIndex], startYear, endYear);
+            graphed = true;
             g.showGraph(graphType);
+            storedGraph = g;
         }
     }
 }
@@ -1023,3 +1025,32 @@ Parser *excelData::getParse()
     return parse;
 }
 
+//returns the start year
+int excelData::getStartYear()
+{
+    return startYear;
+}
+
+//returns the end year
+int excelData::getEndYear()
+{
+    return endYear;
+}
+
+//updates the graph
+void excelData::updateGraph(int startYear, int endYear)
+{
+    this->startYear = startYear;
+    this->endYear = endYear;
+    if (graphed)
+    {
+        storedGraph.updateGraph(startYear, endYear);
+    }
+}
+
+//updates the years
+void excelData::updateYears(int startYear, int endYear)
+{
+    this->startYear = startYear;
+    this->endYear = endYear;
+}

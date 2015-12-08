@@ -23,12 +23,14 @@ class excelSheet
 private:
     /*------ Variables ------*/
 
+    string filepath;
     int sheetType;
     funding sheetType1;
     presentations sheetType2;
     publications sheetType3;
     teaching sheetType4;
     vector<string> errorVector;
+    bool reset = false;
 
 
     /*------ Methods ------*/
@@ -70,6 +72,27 @@ public:
 
     //returns the error vector
     vector<string> getErrorVector();
+
+    //returns the start year
+    int getStartYear();
+
+    //returns the end year
+    int getEndYear();
+
+    //returns the filepath
+    string getFilepath();
+
+    //updates the graph
+    void updateGraph(int startYear, int endYear);
+
+    //updates the years
+    void updateYears(int startYear, int endYear);
+
+    //sets a boolean indicating whether mainwindow should reset
+    void setReset(bool reset);
+
+    //gets a boolean indicating whether mainwindow should reset
+    bool getReset();
 };
 
 #endif //EXCELSHEET_H_INCLUDED

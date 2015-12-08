@@ -214,6 +214,7 @@ QPen graph::getNextPen(int graphNum)
 //returns a QCustomPlot showing the graph
 void graph::showGraph(int graphType)
 {
+    this->graphType = graphType;
     plot->clearGraphs();
     if (graphType == 0)
     {
@@ -355,4 +356,12 @@ void graph::showGraph(int graphType)
         plot->xAxis->setSubTickCount(0);
     }
     plot->replot();
+}
+
+//updates the graph
+void graph::updateGraph(int startYear, int endYear)
+{
+    this->xRangeStart = startYear;
+    this->xRangeEnd = endYear;
+    showGraph(graphType);
 }

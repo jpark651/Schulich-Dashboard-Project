@@ -55,3 +55,26 @@ Parser *teaching::getParse()
     return storedData.getParse();
 }
 
+//returns the start year
+int teaching::getStartYear()
+{
+    return storedData.getStartYear();
+}
+
+//returns the end year
+int teaching::getEndYear()
+{
+    return storedData.getEndYear();
+}
+
+//updates the graph
+void teaching::updateGraph(int startYear, int endYear)
+{
+    storedData.updateGraph(startYear, endYear);
+}
+
+//updates the years
+void teaching::updateYears(int startYear, int endYear)
+{
+    storedData.updateYears(startYear, endYear);
+}

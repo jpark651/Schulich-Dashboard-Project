@@ -11,6 +11,7 @@
 #include "excelSheet.h"
 #include "publications.h"
 #include "Parser.h"
+#include "yearRange.h"
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -22,8 +23,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->menuBar->setNativeMenuBar(false);
+    ui->actionExit_Fullscreen->setDisabled(true);
+    ui->actionCloseFile->setDisabled(true);
+    ui->actionDisplay_Errors->setDisabled(true);
+    ui->actionSet_Year_Range->setDisabled(true);
     ui->grid->removeWidget(ui->label);
     ui->grid->addWidget(ui->label, 0, 0, Qt::AlignCenter|Qt::AlignCenter);
+    ui->border->setFrameShape(QFrame::Box);
     ui->excelTree->setSelectionMode(QTreeWidget::SingleSelection);
     activeFile=false;
     unactive();
@@ -35,6 +41,9 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::unactive() {
+    ui->actionCloseFile->setDisabled(true);
+    ui->actionDisplay_Errors->setDisabled(true);
+    ui->actionSet_Year_Range->setDisabled(true);
     ui->unactiveLabel->setAlignment(Qt::AlignCenter);
     ui->unactiveLabel->setText("No file has been loaded.\nTo open a file go to File > Open.");
     ui->unactiveLabel->show();
@@ -57,9 +66,19 @@ void MainWindow::on_pushButton_clicked()
 }
 
 void MainWindow::createParser(QString filePath) {
-    excel = excelSheet(filePath.toStdString());
+    if (willReset)
+    {
+        excel = excelSheet(excel.getFilepath(), excel.getStartYear(), excel.getEndYear());
+        willReset = false;
+    }
+    else
+    {
+        excel = excelSheet(filePath.toStdString());
+    }
     d.clearData();
     d.setData(excel.getErrorVector());
+    yearStart = excel.getStartYear();
+    yearEnd = excel.getEndYear();
     type_of_file = excel.getExcelType();
     parsedData = excel.guiTypeData();
     excel.showGraph("", 0, ui->graph);
@@ -67,6 +86,9 @@ void MainWindow::createParser(QString filePath) {
 }
 
 void MainWindow::active() {
+    ui->actionCloseFile->setDisabled(false);
+    ui->actionDisplay_Errors->setDisabled(false);
+    ui->actionSet_Year_Range->setDisabled(false);
     ui->label->hide();
     ui->graph->show();
     ui->unactiveLabel->hide();
@@ -323,4 +345,33 @@ void MainWindow::on_excelTree_itemSelectionChanged()
             }
         }
     }
+}
+
+void MainWindow::on_actionExit_Fullscreen_triggered()
+{
+    ui->actionExit_Fullscreen->setDisabled(true);
+    ui->actionFullscreen->setDisabled(false);
+}
+
+void MainWindow::on_actionFullscreen_triggered()
+{
+    ui->actionFullscreen->setDisabled(true);
+    ui->actionExit_Fullscreen->setDisabled(false);
+}
+
+void MainWindow::on_actionSet_Year_Range_triggered()
+{
+    yearRange filter(&excel);
+    filter.exec();
+    if (excel.getReset())
+    {
+        reset();
+    }
+}
+
+//reinitializes the window using the stored excelSheet object
+void MainWindow::reset()
+{
+    willReset = true;
+    createParser(QString::fromStdString(excel.getFilepath()));
 }
