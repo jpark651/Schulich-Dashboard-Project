@@ -72,7 +72,7 @@ excelSheet::excelSheet(string file, int firstYear, int lastYear)
 excelSheet::excelSheet() {}
 
 
-//Returns the type of csv file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+//Returns the type of CSV file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
 int excelSheet::getExcelType(string filename)
 {
     int type = 0;
@@ -269,7 +269,7 @@ int excelSheet::getEndYear()
     return year;
 }
 
-//Returns the filepath
+//Returns the specified filepath
 string excelSheet::getFilepath()
 {
     return filepath;
@@ -295,7 +295,7 @@ void excelSheet::updateGraph(int startYear, int endYear)
     }
 }
 
-//Updates the years for a funding, teaching, presentations or publications object
+//Updates the start year and end year being stored
 void excelSheet::updateYears(int startYear, int endYear)
 {
     switch (sheetType)

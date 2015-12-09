@@ -18,7 +18,7 @@ namespace Ui
 class MainWindow;
 }
 
-//Defines the MainWindow Class and it's associated methods and instance variables
+//Defines the MainWindow Class and its associated methods and instance variables
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -67,7 +67,7 @@ public:
     bool willReset = false;
 
 private slots:
-//Opens a file to be parsed and displayed with the user clicks the open file button
+//Opens a file to be parsed and displayed when the user clicks the open file button
     void on_pushButton_clicked();
 
 //Slot for action when a file is opened
@@ -79,10 +79,10 @@ private slots:
 //Causes the errordialog window to pop up
     void on_actionDisplay_Errors_triggered();
 
-//Allows a data display to be closed to show less data
+//Resizes the columns to fit the visible data when a section is collapsed
     void on_excelTree_collapsed(const QModelIndex &index);
 
-//Allows a data display to be closed to show more data for a given section
+//Resizes the columns to fit the visible data when a section is expanded
     void on_excelTree_expanded(const QModelIndex &index);
 
 //Displays the graph for an inidivudal person if their name is clicked
@@ -94,7 +94,7 @@ private slots:
 //Allows the program to exit full screen mode
     void on_actionFullscreen_triggered();
 
-//Causes the dialog box that prompts the user to enter in a year range to be displayed
+//Causes the dialog box that prompts the user to enter a year range to be displayed
     void on_actionSet_Year_Range_triggered();
 
 //Instance variables and methods
@@ -104,7 +104,7 @@ private:
 //Reinitializes the window using the stored excelSheet object
     void reset();
 
-//Parses the csv file and displays all data as well as a default empty graph to the screen
+//Parses the CSV file, then displays all data and a default empty graph to the screen
     void createParser(QString);
 };
 

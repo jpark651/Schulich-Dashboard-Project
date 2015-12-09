@@ -938,31 +938,31 @@ double excelData::stringToDouble(string inputString)
     return atof(ctemp);
 }
 
-//Returns "true" for funding-type csv files
+//Returns "true" for funding-type CSV files
 int excelData::isFunding()
 {
     return (excelType == 1);
 }
 
-//Returns "true" for presentation-type csv files
+//Returns "true" for presentation-type CSV files
 int excelData::isPresentations()
 {
     return (excelType == 2);
 }
 
-//returns "true" for publications-type csv files
+//returns "true" for publications-type CSV files
 int excelData::isPublications()
 {
     return (excelType == 3);
 }
 
-//Returns "true" for teaching-type csv files
+//Returns "true" for teaching-type CSV files
 int excelData::isTeaching()
 {
     return (excelType == 4);
 }
 
-//Returns a currency string for the given long long
+//Returns a currency-formatted string for the given long long
 string excelData::formatMoney(long long amount)
 {
     stringstream ss;
@@ -976,7 +976,7 @@ string excelData::formatMoney(long long amount)
     return raw;
 }
 
-//Parses a currency string into a long long to represent the amount of money
+//Parses a currency-formatted string into a long long
 long long excelData::parseMoney(string amount)
 {
     long long value = 0;
@@ -1043,7 +1043,7 @@ int excelData::getEndYear()
     return endYear;
 }
 
-//Updates the graph with a new start year and end year specified by the user
+//Updates the graph with a new start year and end year
 void excelData::updateGraph(int startYear, int endYear)
 {
     this->startYear = startYear;

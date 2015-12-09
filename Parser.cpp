@@ -51,7 +51,7 @@ int Parser:: countCommas(string s)
     return count;
 }
 
-//Counts the number of column headers in a csv file
+//Counts the number of column headers in a CSV file
 int Parser:: colCount (string filename)
 {
     ifstream file;
@@ -566,7 +566,7 @@ vector<vector<string> >  Parser:: getParsedPresentations(vector<vector<string> >
     return rows;
 }
 
-//Removes all rows in teaching that are missing mandatory fields
+//Removes all rows in a teaching file that are missing mandatory fields
 vector<vector<string> >  Parser:: getParsedTeaching(vector<vector<string> >rows)
 {
     for (unsigned int i =0; i < rows.size(); i++)

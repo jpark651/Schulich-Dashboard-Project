@@ -19,14 +19,14 @@
 #include "teaching.h"
 using namespace std;
 
-//Teaching constructor (first/last year is set to the earliest/latest year in the file)
+//teaching constructor (first/last year is set to the earliest/latest year in the file)
 teaching::teaching(string file)
 {
     excelData newData(file, 4);
     storedData = newData;
 }
 
-//Teaching constructor (first/last year is set using the given parameters)
+//teaching constructor (first/last year is set using the given parameters)
 teaching::teaching(string file, int firstYear, int lastYear)
 {
     excelData newData(file, firstYear, lastYear, 4);
@@ -72,13 +72,13 @@ int teaching::getEndYear()
     return storedData.getEndYear();
 }
 
-//Updates the graph
+//Updates the graph with a new start year and end year
 void teaching::updateGraph(int startYear, int endYear)
 {
     storedData.updateGraph(startYear, endYear);
 }
 
-//Updates the years
+//Updates the start year and end year being stored
 void teaching::updateYears(int startYear, int endYear)
 {
     storedData.updateYears(startYear, endYear);

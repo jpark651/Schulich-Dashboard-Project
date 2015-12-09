@@ -19,14 +19,14 @@
 #include "funding.h"
 using namespace std;
 
-//Funding constructor (first/last year is set to the earliest/latest year in the file)
+//funding constructor (first/last year is set to the earliest/latest year in the file)
 funding::funding(string file)
 {
     excelData newData(file, 1);
     storedData = newData;
 }
 
-//Funding constructor (first/last year is set using the given parameters)
+//funding constructor (first/last year is set using the given parameters)
 funding::funding(string file, int firstYear, int lastYear)
 {
     excelData newData(file, firstYear, lastYear, 1);
@@ -79,7 +79,7 @@ void funding::updateGraph(int startYear, int endYear)
     storedData.updateGraph(startYear, endYear);
 }
 
-//Updates the years
+//Updates the start year and end year being stored
 void funding::updateYears(int startYear, int endYear)
 {
     storedData.updateYears(startYear, endYear);

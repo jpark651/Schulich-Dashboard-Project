@@ -21,7 +21,7 @@
 #include "Parser.h"
 using namespace std;
 
-//Defines the excelSheet class with its intance variables and associated methods
+//Defines the excelSheet class with its instance variables and associated methods
 class excelSheet
 {
 private:
@@ -38,7 +38,7 @@ private:
 
 //Private methods
 
-//Returns the type of the csv file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+//Returns the type of the CSV file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
     int getExcelType(string filename);
 
 //Sets the error vector which contains a list of missing mandatory fields from each row
@@ -89,7 +89,7 @@ public:
 //Updates a graph with a new start year and end year
     void updateGraph(int startYear, int endYear);
 
-//Updates the years for a funding, presentations, publications, or teaching object
+//Updates the start year and end year being stored
     void updateYears(int startYear, int endYear);
 
 //Sets a boolean indicating whether mainwindow should reset

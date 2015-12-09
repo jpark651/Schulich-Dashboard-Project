@@ -19,14 +19,14 @@
 #include "publications.h"
 using namespace std;
 
-//Publications constructor (first/last year is set to the earliest/latest year in the file)
+//publications constructor (first/last year is set to the earliest/latest year in the file)
 publications::publications(string file)
 {
     excelData newData(file, 3);
     storedData = newData;
 }
 
-//Publications constructor (first/last year is set using the given parameters)
+//publications constructor (first/last year is set using the given parameters)
 publications::publications(string file, int firstYear, int lastYear)
 {
     excelData newData(file, firstYear, lastYear, 3);
@@ -78,7 +78,7 @@ void publications::updateGraph(int startYear, int endYear)
     storedData.updateGraph(startYear, endYear);
 }
 
-//Updates the years
+//Updates the start year and end year being stored
 void publications::updateYears(int startYear, int endYear)
 {
     storedData.updateYears(startYear, endYear);

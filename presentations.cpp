@@ -19,14 +19,14 @@
 #include "presentations.h"
 using namespace std;
 
-//Presentations constructor (first/last year is set to the earliest/latest year in the file)
+//presentations constructor (first/last year is set to the earliest/latest year in the file)
 presentations::presentations(string file)
 {
     excelData newData(file, 2);
     storedData = newData;
 }
 
-//Presentations constructor (first/last year is set using the given parameters)
+//presentations constructor (first/last year is set using the given parameters)
 presentations::presentations(string file, int firstYear, int lastYear)
 {
     excelData newData(file, firstYear, lastYear, 2);
@@ -72,13 +72,13 @@ int presentations::getEndYear()
     return storedData.getEndYear();
 }
 
-//Updates the graph
+//Updates the graph with a new start year and end year
 void presentations::updateGraph(int startYear, int endYear)
 {
     storedData.updateGraph(startYear, endYear);
 }
 
-//Updates the years
+//Updates the start year and end year being stored
 void presentations::updateYears(int startYear, int endYear)
 {
     storedData.updateYears(startYear, endYear);

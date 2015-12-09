@@ -66,10 +66,10 @@ void MainWindow::unactive()
     ui->label->setText("No Data to Display.");
 }
 
-//Opens a file to be parsed and displayed with the user clicks the open file button
+//Opens a file to be parsed and displayed when the user clicks the open file button
 void MainWindow::on_pushButton_clicked()
 {
-    filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", "csv files (*.csv)");
+    filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", "CSV files (*.CSV)");
     cout<<"Path: "<<filePath.toStdString();
     if (filePath.toStdString() != "")
     {
@@ -77,7 +77,7 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-//Parses the csv file and displays all data as well as a default empty graph to the screen
+//Parses the CSV file, then displays all data and a default empty graph to the screen
 void MainWindow::createParser(QString filePath)
 {
     if (willReset)
@@ -339,14 +339,14 @@ void MainWindow::on_actionDisplay_Errors_triggered()
     d.exec();
 }
 
-//Allows a data display to be closed to show less data
+//Resizes the columns to fit the visible data when a section is collapsed
 void MainWindow::on_excelTree_collapsed(const QModelIndex &index)
 {
     ui->excelTree->resizeColumnToContents(0);
     ui->excelTree->resizeColumnToContents(1);
 }
 
-//Allows a data display to be closed to show more data for a given section
+//Resizes the columns to fit the visible data when a section is expanded
 void MainWindow::on_excelTree_expanded(const QModelIndex &index)
 {
     ui->excelTree->resizeColumnToContents(0);
@@ -391,7 +391,7 @@ void MainWindow::on_actionFullscreen_triggered()
     ui->actionExit_Fullscreen->setDisabled(false);
 }
 
-//Causes the dialog box that prompts the user to enter in a year range to be displayed
+//Causes the dialog box that prompts the user to enter a year range to be displayed
 void MainWindow::on_actionSet_Year_Range_triggered()
 {
     yearRange filter(&excel);

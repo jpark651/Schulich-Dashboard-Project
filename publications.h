@@ -59,10 +59,10 @@ public:
 //Returns the end year
     int getEndYear();
 
-//Updates the graph
+//Updates the graph with a new start year and end year
     void updateGraph(int startYear, int endYear);
 
-//Updates the years
+//Updates the start year and end year being stored
     void updateYears(int startYear, int endYear);
 };
 

@@ -64,11 +64,11 @@ private:
 public:
 //Public constructors
 
-//Graph constructor
+//graph constructor
     graph(int excelType, QCustomPlot *plot, string name, vector<string> types, vector<int> years,
           vector<long long> money, vector<double> hours, int uniqueTypes, int startYear, int endYear);
 
-//Graph constructor (empty graph)
+//graph constructor (empty graph)
     graph(QCustomPlot *plot);
 
 //Uninitialized constructor
@@ -79,7 +79,7 @@ public:
 //Builds the QCustomPlot that will allow the graph to be displayed
     void showGraph(int graphType);
 
-//Updates the graph with a new start year and end year specfied by the user
+//Updates the graph with a new start year and end year
     void updateGraph(int startYear, int endYear);
 };
 

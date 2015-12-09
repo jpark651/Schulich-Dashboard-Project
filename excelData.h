@@ -88,22 +88,22 @@ private:
 //Parses a string and returns the double
     double stringToDouble(string inputString);
 
-//Returns "true" for funding-type Excel files
+//Returns "true" for funding-type CSV files
     int isFunding();
 
-//Returns "true" for presentation-type Excel files
+//Returns "true" for presentation-type CSV files
     int isPresentations();
 
-//Returns "true" for publications-type Excel files
+//Returns "true" for publications-type CSV files
     int isPublications();
 
-//Returns "true" for teaching-type Excel files
+//Returns "true" for teaching-type CSV files
     int isTeaching();
 
-//Returns a currency string for the given long long
+//Returns a currency-formatted string for the given long long
     string formatMoney(long long amount);
 
-//Parses a currency string into a long long
+//Parses a currency-formatted string into a long long
     long long parseMoney(string amount);
 
 //Returns true if the string is "True"
@@ -148,10 +148,10 @@ private:
 //Returns the end year
     int getEndYear();
 
-//Updates the graph with a new start year and end year specified by the user
+//Updates the graph with a new start year and end year
     void updateGraph(int startYear, int endYear);
 
-//Updates the years in a given graph
+//Updates the start year and end year being stored
     void updateYears(int startYear, int endYear);
 };
 

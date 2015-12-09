@@ -17,7 +17,7 @@
 #include "graph.h"
 using namespace std;
 
-//Graph constructor
+//graph constructor
 graph::graph(int excelType, QCustomPlot *plot, string name, vector<string> types, vector<int> years,
              vector<long long> money, vector<double> hours, int uniqueTypes, int startYear, int endYear)
 {
@@ -34,7 +34,7 @@ graph::graph(int excelType, QCustomPlot *plot, string name, vector<string> types
     initializeObject();
 }
 
-//Graph constructor that sets the plot for the graph to be displayed
+//graph constructor that sets the plot for the graph to be displayed
 graph::graph(QCustomPlot *plot)
 {
     this->plot = plot;
@@ -364,7 +364,7 @@ void graph::showGraph(int graphType)
     plot->replot();
 }
 
-//Updates the graph with a new start year and end year specfied by the user
+//Updates the graph with a new start year and end year
 void graph::updateGraph(int startYear, int endYear)
 {
     this->xRangeStart = startYear;

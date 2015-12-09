@@ -63,34 +63,34 @@ public:
 //Returns a particular column stored at a particular index
     vector <string> getColumn(int index);
 
-//Removes all rows in grants clinical funding file that is missing mandatory fields
+//Removes all rows in a grants clinical funding file that is missing mandatory fields
     vector<vector<string> > getParsedFunding(vector<vector<string> >rows);
 
-//Removes all rows in publications file that is missing mandatory fields
+//Removes all rows in a publications file that is missing mandatory fields
     vector<vector<string> > getParsedPublications(vector<vector<string> >rows);
 
-//Removes all rows in presentations file that is missing mandatory fields
+//Removes all rows in a presentations file that is missing mandatory fields
     vector<vector<string> > getParsedPresentations(vector<vector<string> >rows);
 
-//Removes all rows in teaching file that are missing mandatory fields
+//Removes all rows in a teaching file that are missing mandatory fields
     vector<vector<string> > getParsedTeaching(vector<vector<string> >rows);
 
 //Decides which parsing method to call based off of sheet type
     vector<vector<string> > getParsedFile (int sheetType, vector<vector<string> > inputRows);
 
-//checks to see if a file is missing any mandatory fields and removes rows that are missing them
+//Checks to see if a file is missing any mandatory fields and removes rows that are missing them
     vector<vector<string> > removeRows(int index, vector<vector<string> >inputRows);
 
-//Builds a vector containing the mandatory information that is missing for the rows in funding file
+//Builds a vector containing the mandatory information that is missing for the rows in a funding file
     vector<string> getMissingFunding(vector<vector<string> >rows);
 
-//Builds a vector containing the mandatory information that is missing for the rows in publications file
+//Builds a vector containing the mandatory information that is missing for the rows in a publications file
     vector<string> getMissingPublications(vector<vector<string> >rows);
 
-//Builds a vector containing the mandatory information that is missing for the rows in presentations file
+//Builds a vector containing the mandatory information that is missing for the rows in a presentations file
     vector<string> getMissingPresentations(vector<vector<string> >rows);
 
-//Builds a vector containing the mandatory information that is missing for the rows in teaching file
+//Builds a vector containing the mandatory information that is missing for the rows in a teaching file
     vector<string> getMissingTeaching(vector<vector<string> >rows);
 
 //Decides which missing fields method to call based off of sheet type
