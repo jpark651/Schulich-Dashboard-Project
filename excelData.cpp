@@ -1,5 +1,9 @@
 /**
-* Source file for the excelData class and its associated methods
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * This file serves as the central data class in the project
+  * and implements the methods contained in excelData.h
 */
 #include <iostream>
 #include <iterator>
@@ -22,16 +26,18 @@ excelData::excelData(string file, int type)
     excelType = type; // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     initializeObject(file, 0, 0, false);
 }
+
 //excelData constructor (first/last year is set using the given parameters)
 excelData::excelData(string file, int firstYear, int lastYear, int type)
 {
     excelType = type; // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     initializeObject(file, firstYear, lastYear, true);
 }
-//default excelData constructor (not initialized)
-excelData::excelData(){}
 
-//initializes the excelData object
+// excelData constructor (not initialized)
+excelData::excelData() {}
+
+//Initializes the excelData object
 void excelData::initializeObject(string file, int firstYear, int lastYear, bool hasDates)
 {
     pathname = file;
@@ -54,35 +60,35 @@ void excelData::initializeObject(string file, int firstYear, int lastYear, bool 
     sortForGui(filtered);
 }
 
-//creates a selection of columns based on header names
+//Creates a selection of columns based on header names
 vector<vector<string> > excelData::selectColumns(vector<vector<string> > organizedVects)
 {
     bool name = false, type = false, year = false, money = false, hours = false, peer = false, done = false;
     string nameTest = "Member Name", typeTest, yearTest, moneyTest, hoursTest, peerTest;
     switch (excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
     {
-        case 1:
-            typeTest = "Funding Type";
-            moneyTest = "Total Amount";
-            peerTest = "Peer Reviewed?";
-            yearTest = "Start Date";
-            break;
+    case 1:
+        typeTest = "Funding Type";
+        moneyTest = "Total Amount";
+        peerTest = "Peer Reviewed?";
+        yearTest = "Start Date";
+        break;
 
-        case 2:
-            typeTest = "Type";
-            yearTest = "Date";
-            break;
+    case 2:
+        typeTest = "Type";
+        yearTest = "Date";
+        break;
 
-        case 3:
-            typeTest = "Type";
-            yearTest = "Status Date";
-            break;
+    case 3:
+        typeTest = "Type";
+        yearTest = "Status Date";
+        break;
 
-        case 4:
-            typeTest = "Program";
-            hoursTest = "Total Hours";
-            yearTest = "Start Date";
-            break;
+    case 4:
+        typeTest = "Program";
+        hoursTest = "Total Hours";
+        yearTest = "Start Date";
+        break;
     }
     vector<string> nameVect, typeVect, yearVect, moneyVect, hoursVect, peerVect;
     vector<vector<string> > columnVect = organizedVects;
@@ -161,7 +167,7 @@ vector<vector<string> > excelData::selectColumns(vector<vector<string> > organiz
     return selectionVect;
 }
 
-//parses the vector of strings into a vector of integers ("selectYears")
+//Parses the vector of strings into a vector of integers ("selectYears")
 void excelData::parseYears()
 {
     if (selection.size() >= 3)
@@ -177,7 +183,7 @@ void excelData::parseYears()
     }
 }
 
-//sets "startYear"/"endYear" based on earliest/latest years in the file
+//Sets "startYear"/"endYear" based on earliest/latest years in the file
 void excelData::setDates()
 {
     int selectYearsSize = selectYears.size();
@@ -211,7 +217,7 @@ void excelData::setDates()
     }
 }
 
-//removes first string from each vector nested in the vector
+//Removes first string from each vector nested in the vector
 vector<vector<string> > excelData::removeFirstStrings(vector<vector<string> > selectedVects)
 {
     vector<vector<string> > filteredVects;
@@ -227,7 +233,7 @@ vector<vector<string> > excelData::removeFirstStrings(vector<vector<string> > se
     return filteredVects;
 }
 
-//filters out entries (from the selection) which are outside the given date range
+//Filters out entries (from the selection) which are outside the given date range
 vector<vector<string> > excelData::filterByDate(vector<vector<string> > selectedVects, int startYear, int endYear)
 {
     vector<string> nameVectFilt, typeVectFilt, yearVectFilt, moneyVectFilt, peerVectFilt, hoursVectFilt;
@@ -282,7 +288,7 @@ vector<vector<string> > excelData::filterByDate(vector<vector<string> > selected
     return filtered;
 }
 
-//sorts filtered data into "names"/"types"/"uniqueTypes"/"years"
+//Sorts filtered data into "names"/"types"/"uniqueTypes"/"years"
 void excelData::sortForGraph(vector<vector<string> > filteredVects)
 {
     if (filteredVects.size() >= 3)
@@ -498,7 +504,7 @@ void excelData::sortForGraph(vector<vector<string> > filteredVects)
     }
 }
 
-//sorts filtered data into "namesByType"/"countByType"
+//Sorts filtered data into "namesByType"/"countByType"
 void excelData::sortForGui(vector<vector<string> > filteredVects)
 {
     if (filteredVects.size() >= 3)
@@ -523,21 +529,21 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
         vector<string> title;
         switch (excelType) // 1 = funding, 2 = presentations, 3 = publications, 4 = teaching
         {
-            case 1:
-                title.push_back("Grants and Clinical Funding");
-                break;
+        case 1:
+            title.push_back("Grants and Clinical Funding");
+            break;
 
-            case 2:
-                title.push_back("Presentations");
-                break;
+        case 2:
+            title.push_back("Presentations");
+            break;
 
-            case 3:
-                title.push_back("Publications");
-                break;
+        case 3:
+            title.push_back("Publications");
+            break;
 
-            case 4:
-                title.push_back("Teaching");
-                break;
+        case 4:
+            title.push_back("Teaching");
+            break;
         }
         dataNamesVect.push_back(title);
         if (!isTeaching())
@@ -764,7 +770,7 @@ void excelData::sortForGui(vector<vector<string> > filteredVects)
     }
 }
 
-//returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
+//Returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> excelData::guiTypeData()
 {
     vector<string> guiData;
@@ -876,7 +882,7 @@ vector<string> excelData::guiTypeData()
     return guiData;
 }
 
-//shows a graph for the given person
+//Shows a graph for the given person
 void excelData::showGraph(string personName, int graphType, QCustomPlot *plot)
 {
     int personIndex;
@@ -918,45 +924,45 @@ void excelData::showGraph(string personName, int graphType, QCustomPlot *plot)
     }
 }
 
-//parses a string and returns the integer
+//Parses a string and returns the integer
 int excelData::stringToInt(string inputString)
 {
     const char * ctemp = inputString.c_str();
     return atoi(ctemp);
 }
 
-//parses a string and returns the double
+//Parses a string and returns the double
 double excelData::stringToDouble(string inputString)
 {
     const char * ctemp = inputString.c_str();
     return atof(ctemp);
 }
 
-//returns "true" for funding-type Excel files
+//Returns "true" for funding-type csv files
 int excelData::isFunding()
 {
     return (excelType == 1);
 }
 
-//returns "true" for presentation-type Excel files
+//Returns "true" for presentation-type csv files
 int excelData::isPresentations()
 {
     return (excelType == 2);
 }
 
-//returns "true" for publications-type Excel files
+//returns "true" for publications-type csv files
 int excelData::isPublications()
 {
     return (excelType == 3);
 }
 
-//returns "true" for teaching-type Excel files
+//Returns "true" for teaching-type csv files
 int excelData::isTeaching()
 {
     return (excelType == 4);
 }
 
-//returns a currency string for the given long long
+//Returns a currency string for the given long long
 string excelData::formatMoney(long long amount)
 {
     stringstream ss;
@@ -970,7 +976,7 @@ string excelData::formatMoney(long long amount)
     return raw;
 }
 
-//parses a currency string into a long long
+//Parses a currency string into a long long to represent the amount of money
 long long excelData::parseMoney(string amount)
 {
     long long value = 0;
@@ -989,13 +995,13 @@ long long excelData::parseMoney(string amount)
     return value;
 }
 
-//returns true if the string is "True"
+//Returns true if the string is "True"
 bool excelData::parseBool(string boolTest)
 {
     return boolTest.compare("True") == 0;
 }
 
-//returns an acronym for the Teaching type-string
+//Returns an acronym for the Teaching type-string
 string excelData::acronymize(string type)
 {
     if (type.compare("Continuing Medical Education") == 0)
@@ -1013,31 +1019,31 @@ string excelData::acronymize(string type)
     return type;
 }
 
-//get the total number of entries
+//Get the total number of entries
 int excelData::getTotalEntries()
 {
     return names.size();
 }
 
-//returns a pointer to the Parser object
+//Returns a pointer to the Parser object
 Parser *excelData::getParse()
 {
     return parse;
 }
 
-//returns the start year
+//Returns the start year
 int excelData::getStartYear()
 {
     return startYear;
 }
 
-//returns the end year
+//Returns the end year
 int excelData::getEndYear()
 {
     return endYear;
 }
 
-//updates the graph
+//Updates the graph with a new start year and end year specified by the user
 void excelData::updateGraph(int startYear, int endYear)
 {
     this->startYear = startYear;
@@ -1048,7 +1054,7 @@ void excelData::updateGraph(int startYear, int endYear)
     }
 }
 
-//updates the years
+//Updates the graph with a new start year and end year
 void excelData::updateYears(int startYear, int endYear)
 {
     this->startYear = startYear;

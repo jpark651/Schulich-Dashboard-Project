@@ -1,5 +1,8 @@
 /**
- * This file implements the methods in yearRange.h
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * This file implements the methods in yearRange.h
  */
 #include <sstream>
 #include "excelSheet.h"
@@ -23,12 +26,14 @@ yearRange::yearRange(excelSheet *excel, QWidget *parent) :
     ui->lineStart->setText(QString::fromStdString(ss1.str()));
     ui->lineEnd->setText(QString::fromStdString(ss2.str()));
 }
+
 //yearRange deconstructor
 yearRange::~yearRange()
 {
     delete ui;
 }
 
+//Updates the graph associated with a user when the date range is confirmed by the user
 void yearRange::on_confirm_released()
 {
     QString newStartQ = ui->lineStart->text(), newEndQ = ui->lineEnd->text();

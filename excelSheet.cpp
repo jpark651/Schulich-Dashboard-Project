@@ -1,5 +1,8 @@
 /**
-* Source file for the excelSheet class and its associated methods
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * Source file for the excelSheet class that implements the methods in excelSheet.h
 */
 #include <iostream>
 #include <iterator>
@@ -41,6 +44,7 @@ excelSheet::excelSheet(string file)
     }
     setErrorVector();
 }
+
 //excelSheet constructor (first/last year is set using the given parameters)
 excelSheet::excelSheet(string file, int firstYear, int lastYear)
 {
@@ -63,11 +67,12 @@ excelSheet::excelSheet(string file, int firstYear, int lastYear)
     }
     setErrorVector();
 }
-//uninitialized constructor
-excelSheet::excelSheet(){}
+
+//Uninitialized constructor
+excelSheet::excelSheet() {}
 
 
-//returns the type of Excel file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+//Returns the type of csv file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
 int excelSheet::getExcelType(string filename)
 {
     int type = 0;
@@ -100,7 +105,7 @@ int excelSheet::getExcelType(string filename)
     return type;
 }
 
-//sets the error vector
+//Sets the error vector which contains a list of missing mandatory fields from each row
 void excelSheet::setErrorVector()
 {
     Parser *p;
@@ -122,13 +127,13 @@ void excelSheet::setErrorVector()
     errorVector = p->getErrorVector();
 }
 
-//returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+//Returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
 int excelSheet::getExcelType()
 {
     return sheetType;
 }
 
-//returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
+//Returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> excelSheet::guiTypeData()
 {
     vector<string> typeData;
@@ -150,7 +155,7 @@ vector<string> excelSheet::guiTypeData()
     return typeData;
 }
 
-//shows a graph for the given person
+//Shows a graph for the given person
 void excelSheet::showGraph(string personName, int graphType, QCustomPlot *graph)
 {
     switch (sheetType)
@@ -170,7 +175,7 @@ void excelSheet::showGraph(string personName, int graphType, QCustomPlot *graph)
     }
 }
 
-//get the total number of entries
+//Get the total number of entries
 int excelSheet::getTotalEntries()
 {
     int entryTotal;
@@ -192,7 +197,7 @@ int excelSheet::getTotalEntries()
     return entryTotal;
 }
 
-//returns a pointer to the Parser object
+//Returns a pointer to the Parser object
 Parser *excelSheet::getParse()
 {
     Parser *parse = new Parser();
@@ -214,13 +219,13 @@ Parser *excelSheet::getParse()
     return parse;
 }
 
-//returns the error vector
+//Returns the error vector that contains a list of rows with missing mandatory fields
 vector<string> excelSheet::getErrorVector()
 {
     return errorVector;
 }
 
-//returns the start year
+//Returns the start year
 int excelSheet::getStartYear()
 {
     int year;
@@ -242,7 +247,7 @@ int excelSheet::getStartYear()
     return year;
 }
 
-//returns the end year
+//Returns the end year
 int excelSheet::getEndYear()
 {
     int year;
@@ -264,13 +269,13 @@ int excelSheet::getEndYear()
     return year;
 }
 
-//returns the filepath
+//Returns the filepath
 string excelSheet::getFilepath()
 {
     return filepath;
 }
 
-//updates the graph
+//Updates the graph with a new start year and end year
 void excelSheet::updateGraph(int startYear, int endYear)
 {
     switch (sheetType)
@@ -290,7 +295,7 @@ void excelSheet::updateGraph(int startYear, int endYear)
     }
 }
 
-//updates the years
+//Updates the years for a funding, teaching, presentations or publications object
 void excelSheet::updateYears(int startYear, int endYear)
 {
     switch (sheetType)
@@ -310,13 +315,13 @@ void excelSheet::updateYears(int startYear, int endYear)
     }
 }
 
-//sets a boolean indicating whether mainwindow should reset
+//Sets a boolean indicating whether mainwindow should reset
 void excelSheet::setReset(bool reset)
 {
     this->reset = reset;
 }
 
-//gets a boolean indicating whether mainwindow should reset
+//Gets a boolean indicating whether mainwindow should reset
 bool excelSheet::getReset()
 {
     return reset;

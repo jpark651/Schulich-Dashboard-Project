@@ -19,26 +19,8 @@
      <x>0</x>
      <y>0</y>
      <width>731</width>
-     <height>781</height>
+     <height>791</height>
     </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>400</width>
-     <height>400</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>1600</width>
-     <height>900</height>
-    </size>
-   </property>
-   <property name="sizeIncrement">
-    <size>
-     <width>1</width>
-     <height>1</height>
-    </size>
    </property>
   </widget>
  </widget>

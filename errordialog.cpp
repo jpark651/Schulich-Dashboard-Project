@@ -1,9 +1,13 @@
 /**
- * This file implements the methods in errordialog.h and displays all mandatory fields that are missing from each row
- */
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * This file implements the methods in errordialog.h and displays all mandatory fields that are missing from each row
+*/
 #include "errordialog.h"
 #include "ui_errordialog.h"
 #include "QString"
+
 //ErrorDialog constructor
 ErrorDialog::ErrorDialog(QWidget *parent) :
     QDialog(parent),
@@ -27,7 +31,7 @@ void ErrorDialog:: setData(std::vector<std::string>errorVector)
     ui->listWidget->addItem(header);
     for (unsigned int i =0; i < errorVector.size(); i++)
     {
-       QString str = QString::fromUtf8(errorVector[i].c_str());
+        QString str = QString::fromUtf8(errorVector[i].c_str());
         ui->listWidget->addItem(str);
     }
 }
@@ -37,6 +41,6 @@ void ErrorDialog:: clearData()
 {
     while(ui->listWidget->count()>0)
     {
-      ui->listWidget->takeItem(0);
+        ui->listWidget->takeItem(0);
     }
 }

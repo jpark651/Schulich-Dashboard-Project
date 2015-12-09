@@ -1,5 +1,8 @@
 /**
-* This class implements the methods in graph.h
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * This class implements the methods in graph.h
 */
 #include <iostream>
 #include <qcustomplot.h>
@@ -14,7 +17,7 @@
 #include "graph.h"
 using namespace std;
 
-//graph constructor
+//Graph constructor
 graph::graph(int excelType, QCustomPlot *plot, string name, vector<string> types, vector<int> years,
              vector<long long> money, vector<double> hours, int uniqueTypes, int startYear, int endYear)
 {
@@ -30,15 +33,18 @@ graph::graph(int excelType, QCustomPlot *plot, string name, vector<string> types
     this->xRangeEnd = endYear;
     initializeObject();
 }
+
+//Graph constructor that sets the plot for the graph to be displayed
 graph::graph(QCustomPlot *plot)
 {
     this->plot = plot;
 }
-//uninitiated constructor
+
+//Uninitialized constructor
 graph::graph(){}
 
 
-//initiates the variables required for graphing
+//Initializes the variables required for graphing
 void graph::initializeObject()
 {
     setLabel();
@@ -46,7 +52,7 @@ void graph::initializeObject()
     groupByGraph();
 }
 
-//sets the y-axis label
+//Sets the y-axis label
 void graph::setLabel()
 {
     switch(excelType)
@@ -69,7 +75,7 @@ void graph::setLabel()
     }
 }
 
-//initializes the years for each graph to have empty totals
+//Initializes the years for each graph to have empty totals
 void graph::initializeYears()
 {
     vector<double> defaultYearVect;
@@ -86,7 +92,7 @@ void graph::initializeYears()
     }
 }
 
-//groups data for each graph to be plotted
+//Groups data for each graph to be plotted
 void graph::groupByGraph()
 {
     double maxY = 0;
@@ -157,7 +163,7 @@ void graph::groupByGraph()
     yRangeEnd = 1.1 * maxY;
 }
 
-//returns a unique pen for differentiating graphs
+//Returns a unique pen for differentiating graphs
 QPen graph::getNextPen(int graphNum)
 {
     QPen nextPen;
@@ -211,7 +217,7 @@ QPen graph::getNextPen(int graphNum)
     return nextPen;
 }
 
-//returns a QCustomPlot showing the graph
+//Builds the QCustomPlot that will allow the graph to be displayed
 void graph::showGraph(int graphType)
 {
     this->graphType = graphType;
@@ -358,7 +364,7 @@ void graph::showGraph(int graphType)
     plot->replot();
 }
 
-//updates the graph
+//Updates the graph with a new start year and end year specfied by the user
 void graph::updateGraph(int startYear, int endYear)
 {
     this->xRangeStart = startYear;

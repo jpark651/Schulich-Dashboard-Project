@@ -1,3 +1,10 @@
+/**
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * This file implements the methods in mainwindow.h and represents the GUI where all of the main
+  * data will be displayed
+  */
 #include <iostream>
 #include <qcustomplot.h>
 #include <QFileDialog>
@@ -17,6 +24,7 @@
 
 using namespace std;
 
+//MainWindow constructor
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -35,12 +43,15 @@ MainWindow::MainWindow(QWidget *parent) :
     unactive();
 }
 
+//MainWindow deconstructor
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void MainWindow::unactive() {
+//Clears the GUI when a file is closed
+void MainWindow::unactive()
+{
     ui->actionCloseFile->setDisabled(true);
     ui->actionDisplay_Errors->setDisabled(true);
     ui->actionSet_Year_Range->setDisabled(true);
@@ -55,17 +66,20 @@ void MainWindow::unactive() {
     ui->label->setText("No Data to Display.");
 }
 
-
+//Opens a file to be parsed and displayed with the user clicks the open file button
 void MainWindow::on_pushButton_clicked()
 {
     filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", "csv files (*.csv)");
     cout<<"Path: "<<filePath.toStdString();
-    if (filePath.toStdString() != "") {
+    if (filePath.toStdString() != "")
+    {
         createParser(filePath);
     }
 }
 
-void MainWindow::createParser(QString filePath) {
+//Parses the csv file and displays all data as well as a default empty graph to the screen
+void MainWindow::createParser(QString filePath)
+{
     if (willReset)
     {
         excel = excelSheet(excel.getFilepath(), excel.getStartYear(), excel.getEndYear());
@@ -85,7 +99,9 @@ void MainWindow::createParser(QString filePath) {
     active();
 }
 
-void MainWindow::active() {
+//Updates the view of the graph to show data when a file is opened
+void MainWindow::active()
+{
     ui->actionCloseFile->setDisabled(false);
     ui->actionDisplay_Errors->setDisabled(false);
     ui->actionSet_Year_Range->setDisabled(false);
@@ -111,7 +127,9 @@ void MainWindow::active() {
     }
 }
 
-void MainWindow::activePresentation() {
+//Builds the display for presentation data in the GUI if a presentations file is opened
+void MainWindow::activePresentation()
+{
     QTreeWidgetItem *presentation = new QTreeWidgetItem();
 
     ui->excelTree->clear();
@@ -147,7 +165,9 @@ void MainWindow::activePresentation() {
     ui->excelTree->resizeColumnToContents(1);
 }
 
-void MainWindow::activeGrants() {
+//Builds the display for grants data in the GUI if a grants file is opened
+void MainWindow::activeGrants()
+{
     //Readjusting the headers to match teaching summary
     ui->excelTree->clear();
     ui->excelTree->setColumnCount(0);
@@ -197,7 +217,9 @@ void MainWindow::activeGrants() {
     ui->excelTree->resizeColumnToContents(1);
 }
 
-void MainWindow::activeTeaching() {
+//Builds the display for teaching data in the GUI if a teaching file is opened
+void MainWindow::activeTeaching()
+{
     QTreeWidgetItem *teaching = new QTreeWidgetItem();
 
     //Readjusting the headers to match teaching summary
@@ -236,8 +258,9 @@ void MainWindow::activeTeaching() {
     ui->excelTree->resizeColumnToContents(1);
 }
 
-
-void MainWindow::activePublication() {
+//Builds the display for publications data in the GUI if a publications file is opened
+void MainWindow::activePublication()
+{
     QTreeWidgetItem *publicat = new QTreeWidgetItem();
 
     ui->excelTree->clear();
@@ -273,10 +296,12 @@ void MainWindow::activePublication() {
     ui->excelTree->resizeColumnToContents(1);
 }
 
-
-void MainWindow::insertNames(QTreeWidgetItem *parent) {
+//Inserts the names for all contributors in the file when a new file is opened
+void MainWindow::insertNames(QTreeWidgetItem *parent)
+{
     //While current item isn't a "-" and isn't empty do
-    while (parsedData.front()!="-" && !parsedData.empty()) {
+    while (parsedData.front()!="-" && !parsedData.empty())
+    {
         QTreeWidgetItem *newItem = new QTreeWidgetItem();                   //Create a new tree widget item
         newItem->setText(0, QString::fromStdString(parsedData.front()));    //Set its name to the next item in the parsed data
         parsedData.erase(parsedData.begin());                               //Pop the item off the list
@@ -295,11 +320,13 @@ void MainWindow::insertNames(QTreeWidgetItem *parent) {
     }
 }
 
+//Slot for action when a file is opened
 void MainWindow::on_actionOpen_triggered()
 {
     on_pushButton_clicked();
 }
 
+//Slot for action when a file is closed that causes the GUI to be cleared
 void MainWindow::on_actionCloseFile_triggered()
 {
     unactive();
@@ -312,18 +339,21 @@ void MainWindow::on_actionDisplay_Errors_triggered()
     d.exec();
 }
 
+//Allows a data display to be closed to show less data
 void MainWindow::on_excelTree_collapsed(const QModelIndex &index)
 {
     ui->excelTree->resizeColumnToContents(0);
     ui->excelTree->resizeColumnToContents(1);
 }
 
+//Allows a data display to be closed to show more data for a given section
 void MainWindow::on_excelTree_expanded(const QModelIndex &index)
 {
     ui->excelTree->resizeColumnToContents(0);
     ui->excelTree->resizeColumnToContents(1);
 }
 
+//Displays the graph for an inidivudal person if their name is clicked
 void MainWindow::on_excelTree_itemSelectionChanged()
 {
     QList<QTreeWidgetItem*> selected = ui->excelTree->selectedItems();
@@ -347,18 +377,21 @@ void MainWindow::on_excelTree_itemSelectionChanged()
     }
 }
 
+//Causes the program to enter full screen mode
 void MainWindow::on_actionExit_Fullscreen_triggered()
 {
     ui->actionExit_Fullscreen->setDisabled(true);
     ui->actionFullscreen->setDisabled(false);
 }
 
+//Allows the program to exit full screen mode
 void MainWindow::on_actionFullscreen_triggered()
 {
     ui->actionFullscreen->setDisabled(true);
     ui->actionExit_Fullscreen->setDisabled(false);
 }
 
+//Causes the dialog box that prompts the user to enter in a year range to be displayed
 void MainWindow::on_actionSet_Year_Range_triggered()
 {
     yearRange filter(&excel);
@@ -369,7 +402,7 @@ void MainWindow::on_actionSet_Year_Range_triggered()
     }
 }
 
-//reinitializes the window using the stored excelSheet object
+//Reinitializes the window using the stored excelSheet object
 void MainWindow::reset()
 {
     willReset = true;

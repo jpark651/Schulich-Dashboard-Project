@@ -1,5 +1,8 @@
 /**
-* This file implements the methods in Parser.h
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * This file implements the methods in Parser.h and parses a CSV file to get its respective rows
 */
 #include <iostream>
 #include <fstream>
@@ -15,6 +18,7 @@
 #include "Parser.h"
 #include "excelData.h"
 using namespace std;
+
 //Parser constructor
 Parser:: Parser (string name, int type)
 {
@@ -29,10 +33,11 @@ Parser:: Parser (string name, int type)
     parseDates(dateIndex);
     errorVector = getMissingFields(sheetType, rows);
 }
-//uninitialized Parser constructor
+
+//Uninitialized Parser constructor
 Parser:: Parser () {}
 
-//helps to handle situations where cells are missing at the end of a line
+//Helps to handle situations where cells are missing at the end of a line
 int Parser:: countCommas(string s)
 {
     int count =0;
@@ -45,6 +50,8 @@ int Parser:: countCommas(string s)
     }
     return count;
 }
+
+//Counts the number of column headers in a csv file
 int Parser:: colCount (string filename)
 {
     ifstream file;
@@ -104,7 +111,7 @@ int Parser:: colCount (string filename)
     return no;
 }
 
-//parse all CSV files and store all items in a vector of vectors
+//Parse all CSV files and store all items in a vector of vectors
 void Parser:: createRows(string filename)
 {
     ifstream myfile;
@@ -346,7 +353,7 @@ vector<string> Parser:: getCols()
     return cols;
 }
 
-//gets all of the column headers for the given file
+//Gets all of the column headers for the given file
 vector<string> Parser:: getCols(string filepath)
 {
     vector<string> temp = cols;
@@ -356,7 +363,7 @@ vector<string> Parser:: getCols(string filepath)
     return columns;
 }
 
-//gets index of the dates vector
+//Gets index of the dates vector
 int Parser:: getDateIndex()
 {
     int found = -1;
@@ -395,7 +402,7 @@ int Parser:: getDateIndex()
     return i;
 }
 
-//parses the dates in the dates vectors so that they are all in years
+//Parses the dates in the dates vectors so that they are all in years
 void Parser:: parseDates(int dateIndex)
 {
     vector <string> dates = rows[dateIndex];
@@ -420,7 +427,7 @@ vector <string> Parser:: getColumn(int index)
 }
 
 
-//removes all rows in grants clinical funding that is missing mandatory fields
+//Removes all rows in a grants clinical funding file that is missing mandatory fields
 vector<vector<string> > Parser:: getParsedFunding(vector<vector<string> >rows)
 {
     for (unsigned int i =0; i < rows.size(); i++)
@@ -481,7 +488,7 @@ vector<vector<string> > Parser:: getParsedFunding(vector<vector<string> >rows)
     return rows;
 }
 
-//removes all rows in publications that is missing mandatory fields
+//Removes all rows in a publications file that is missing mandatory fields
 vector<vector<string> >  Parser::  getParsedPublications(vector<vector<string> >rows)
 {
     for (unsigned int i =0; i < rows.size(); i++)
@@ -526,7 +533,7 @@ vector<vector<string> >  Parser::  getParsedPublications(vector<vector<string> >
     return rows;
 }
 
-//removes all rows in presentations that is missing mandatory fields
+//Removes all rows in a presentations file that is missing mandatory fields
 vector<vector<string> >  Parser:: getParsedPresentations(vector<vector<string> >rows)
 {
     for (unsigned int i =0; i < rows.size(); i++)
@@ -559,7 +566,7 @@ vector<vector<string> >  Parser:: getParsedPresentations(vector<vector<string> >
     return rows;
 }
 
-//removes all rows in teaching that are missing mandatory fields
+//Removes all rows in teaching that are missing mandatory fields
 vector<vector<string> >  Parser:: getParsedTeaching(vector<vector<string> >rows)
 {
     for (unsigned int i =0; i < rows.size(); i++)
@@ -634,7 +641,7 @@ vector<vector<string> > Parser:: getParsedFile (int sheetType, vector<vector<str
     return returnedRows;
 }
 
-//checks to see if a file is missing any mandatory fields and removes rows that are missing them
+//Checks to see if a file is missing any mandatory fields and removes rows that are missing them
 vector<vector<string> > Parser:: removeRows(int index, vector<vector<string> >inputRows)
 {
     vector<string>temp = inputRows[index];
@@ -655,7 +662,7 @@ vector<vector<string> > Parser:: removeRows(int index, vector<vector<string> >in
     return inputRows;
 }
 
-//Builds a vector containing the mandatory information that is missing for the rows in funding file
+//Builds a vector containing the mandatory information that is missing for the rows in a funding file
 vector<string> Parser:: getMissingFunding(vector<vector<string> >rows)
 {
     vector<string>missingRows(rows[0].size());
@@ -726,14 +733,14 @@ vector<string> Parser:: getMissingFunding(vector<vector<string> >rows)
     return missingRows;
 }
 
-//Builds a vector containing the mandatory information that is missing for the rows in publications file
+//Builds a vector containing the mandatory information that is missing for the rows in a publications file
 vector<string> Parser:: getMissingPublications(vector<vector<string> >rows)
 {
     vector<string>missingRows;
     vector<string>temp(rows[0].size());
     missingRows = temp;
-   int sz = missingRows.size();
-   for (int i =0; i < sz; i++)
+    int sz = missingRows.size();
+    for (int i =0; i < sz; i++)
     {
         stringstream ss;
         ss << "Row " << i + 1 << " is missing: ";
@@ -783,14 +790,14 @@ vector<string> Parser:: getMissingPublications(vector<vector<string> >rows)
     return missingRows;
 }
 
-//Builds a vector containing the mandatory information that is missing for the rows in presentations file
+//Builds a vector containing the mandatory information that is missing for the rows in a presentations file
 vector<string> Parser:: getMissingPresentations(vector<vector<string> >rows)
 {
     vector<string>missingRows;
     vector<string>temp(rows[0].size());
     missingRows = temp;
     int sz = missingRows.size();
-   for (int i =0; i < sz; i++)
+    for (int i =0; i < sz; i++)
     {
         stringstream ss;
         ss << "Row " << i + 1 << " is missing: ";
@@ -828,14 +835,14 @@ vector<string> Parser:: getMissingPresentations(vector<vector<string> >rows)
     return missingRows;
 }
 
-//Builds a vector containing the mandatory information that is missing for the rows in teaching file
+//Builds a vector containing the mandatory information that is missing for the rows in a teaching file
 vector<string> Parser:: getMissingTeaching(vector<vector<string> >rows)
 {
     vector<string>missingRows;
     vector<string>temp(rows[0].size());
     missingRows = temp;
-     int sz = missingRows.size();
-   for (int i =0; i < sz; i++)
+    int sz = missingRows.size();
+    for (int i =0; i < sz; i++)
     {
         stringstream ss;
         ss << "Row " << i + 1 << " is missing: ";
@@ -893,7 +900,7 @@ vector<string> Parser:: getMissingTeaching(vector<vector<string> >rows)
     return missingRows;
 }
 
-//Decides which missing fields method to call based off of sheet type
+//Decides which missing fields method to call based off of the sheet type
 vector<string> Parser:: getMissingFields (int sheetType, vector<vector<string> > rows)
 {
     vector<string> returnedRows;
@@ -915,7 +922,7 @@ vector<string> Parser:: getMissingFields (int sheetType, vector<vector<string> >
     return returnedRows;
 }
 
-//updates the error vector to specify which row numbers are missing a particular field
+//Updates the error vector to specify which row numbers are missing a particular field
 vector<string> Parser:: missingFields(int index, vector<vector<string> >inputRows, vector<string>errorVector)
 {
     vector<string>temp = inputRows[index];
@@ -929,7 +936,7 @@ vector<string> Parser:: missingFields(int index, vector<vector<string> >inputRow
     return errorVector;
 }
 
-//returns the vector containing all errors in the file
+//Returns the vector containing all errors in the file
 vector<string> Parser:: getErrorVector()
 {
     return errorVector;

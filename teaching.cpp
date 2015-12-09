@@ -1,5 +1,8 @@
 /**
-* Source file for the teaching class and its associated methods
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * Source file for the teaching class and its associated methods
 */
 #include <iostream>
 #include <iterator>
@@ -16,64 +19,66 @@
 #include "teaching.h"
 using namespace std;
 
-//teaching constructor (first/last year is set to the earliest/latest year in the file)
+//Teaching constructor (first/last year is set to the earliest/latest year in the file)
 teaching::teaching(string file)
 {
     excelData newData(file, 4);
     storedData = newData;
 }
-//teaching constructor (first/last year is set using the given parameters)
+
+//Teaching constructor (first/last year is set using the given parameters)
 teaching::teaching(string file, int firstYear, int lastYear)
 {
     excelData newData(file, firstYear, lastYear, 4);
     storedData = newData;
 }
-//uninitialized constructor
+
+//Uninitialized constructor
 teaching::teaching() {}
 
-//returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
+//Returns the information to be printed to the GUI, with each type's dataset separated by a single hyphen
 vector<string> teaching::guiTypeData()
 {
     return storedData.guiTypeData();
 }
 
-//shows a graph for the given person
+//Shows a graph for the given person
 void teaching::showGraph(string personName, int graphType, QCustomPlot *graph)
 {
     storedData.showGraph(personName, graphType, graph);
 }
 
-//get the total number of entries
+//Get the total number of entries
 int teaching::getTotalEntries()
 {
     return storedData.getTotalEntries();
 }
 
-//returns a pointer to the Parser object
+//Returns a pointer to the Parser object
 Parser *teaching::getParse()
 {
     return storedData.getParse();
 }
 
-//returns the start year
+//Returns the start year
 int teaching::getStartYear()
 {
     return storedData.getStartYear();
 }
 
-//returns the end year
+//Returns the end year
 int teaching::getEndYear()
 {
     return storedData.getEndYear();
 }
 
-//updates the graph
+//Updates the graph
 void teaching::updateGraph(int startYear, int endYear)
 {
     storedData.updateGraph(startYear, endYear);
 }
 
-//updates the years
+//Updates the years
 void teaching::updateYears(int startYear, int endYear)
 {
     storedData.updateYears(startYear, endYear);

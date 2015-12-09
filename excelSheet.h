@@ -1,5 +1,8 @@
 /**
-* Header file for the excelSheet class and its associated methods
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * Header file for the excelSheet class and its associated methods
 */
 #ifndef EXCELSHEET_H_INCLUDED
 #define EXCELSHEET_H_INCLUDED
@@ -18,11 +21,12 @@
 #include "Parser.h"
 using namespace std;
 
+//Defines the excelSheet class with its intance variables and associated methods
 class excelSheet
 {
 private:
-    /*------ Variables ------*/
 
+//Instance variables
     string filepath;
     int sheetType;
     funding sheetType1;
@@ -32,66 +36,66 @@ private:
     vector<string> errorVector;
     bool reset = false;
 
+//Private methods
 
-    /*------ Methods ------*/
-
-    //returns the type of Excel file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+//Returns the type of the csv file (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
     int getExcelType(string filename);
 
-    //sets the error vector
+//Sets the error vector which contains a list of missing mandatory fields from each row
     void setErrorVector();
 
 
 public:
-    /*------ Constructors ------*/
+//Public constructors
 
-    //first/last year is set to the earliest/latest year in the file
+//First/last year is set to the earliest/latest year in the file
     excelSheet(string file);
-    //first/last year is set using the given parameters
+
+//First/last year is set using the given parameters
     excelSheet(string file, int startYear, int endYear);
-    //uninitialized constructor
+
+//Uninitialized constructor
     excelSheet();
 
+//Public methods
 
-    /*------ Methods ------*/
-
-    //returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
+//Returns the type of Excel sheet (1 = funding, 2 = presentations, 3 = publications, 4 = teaching)
     int getExcelType();
 
-    //returns the information to be printed to the GUI, with each type's data separated by a single hyphen
+//Returns the information to be printed to the GUI, with each type's data separated by a single hyphen
     vector<string> guiTypeData();
 
-    //shows a graph for the given person
+//Shows a graph for the given person
     void showGraph(string personName, int graphType, QCustomPlot *graph);
 
-    //get the total number of entries
+//Get the total number of entries
     int getTotalEntries();
 
-    //returns a pointer to the Parser object
+//Returns a pointer to the Parser object
     Parser *getParse();
 
-    //returns the error vector
+//Returns the error vector containing a list of missing mandatory fields from each row
     vector<string> getErrorVector();
 
-    //returns the start year
+//Returns the start year
     int getStartYear();
 
-    //returns the end year
+//Returns the end year
     int getEndYear();
 
-    //returns the filepath
+//Returns the specified filepath
     string getFilepath();
 
-    //updates the graph
+//Updates a graph with a new start year and end year
     void updateGraph(int startYear, int endYear);
 
-    //updates the years
+//Updates the years for a funding, presentations, publications, or teaching object
     void updateYears(int startYear, int endYear);
 
-    //sets a boolean indicating whether mainwindow should reset
+//Sets a boolean indicating whether mainwindow should reset
     void setReset(bool reset);
 
-    //gets a boolean indicating whether mainwindow should reset
+//Gets a boolean indicating whether mainwindow should reset
     bool getReset();
 };
 

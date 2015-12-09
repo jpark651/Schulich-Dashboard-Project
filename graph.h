@@ -1,5 +1,8 @@
 /**
-* Header file for the graph class and its associated methods
+  * Author: Team HoneyDew
+  * Computer Science 3307, Group Project
+  * December 9, 2015
+  * Header file for the graph class and its associated methods
 */
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
@@ -17,10 +20,11 @@
 #include "graph.h"
 using namespace std;
 
+//Class that defines a graph to be displayed in the GUI
 class graph
 {
 private:
-    /*------ Variables ------*/
+//Instance variables
 
     int excelType;
     int graphType = 0;
@@ -39,43 +43,43 @@ private:
     int xRangeStart;
     int xRangeEnd;
 
+//Private methods
 
-    /*------ Methods ------*/
-
-    //initializes the variables required for graphing
+//Initializes the variables required for graphing
     void initializeObject();
 
-    //sets the y-axis label
+//Sets the y-axis label
     void setLabel();
 
-    //initializes the years for each graph to have empty totals
+//Initializes the years for each graph to have empty totals
     void initializeYears();
 
-    //groups data for each graph to be plotted
+//Groups data for each graph to be plotted
     void groupByGraph();
 
-    //returns a unique pen for differentiating graphs
+//Returns a unique pen for differentiating graphs
     QPen getNextPen(int graphNum);
 
 
 public:
-    /*------ Constructors ------*/
+//Public constructors
 
-    //graph constructor
+//Graph constructor
     graph(int excelType, QCustomPlot *plot, string name, vector<string> types, vector<int> years,
           vector<long long> money, vector<double> hours, int uniqueTypes, int startYear, int endYear);
-    //graph constructor (empty graph)
+
+//Graph constructor (empty graph)
     graph(QCustomPlot *plot);
-    //uninitialized constructor
+
+//Uninitialized constructor
     graph();
 
+//Public methods
 
-    /*------ Methods ------*/
-
-    //graphs the data using the given type
+//Builds the QCustomPlot that will allow the graph to be displayed
     void showGraph(int graphType);
 
-    //updates the graph
+//Updates the graph with a new start year and end year specfied by the user
     void updateGraph(int startYear, int endYear);
 };
 
