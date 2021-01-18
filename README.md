@@ -1,3 +1,3 @@
-#Schulich Dashboard Project
+# Schulich Dashboard Project
 
 A project for CS3307, UWO.
